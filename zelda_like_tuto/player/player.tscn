@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://player/player.gd" type="Script" id=1]
 [ext_resource path="res://player/player.png" type="Texture" id=2]
@@ -210,6 +210,9 @@ tracks/0/keys = {
 "values": [ 2, 3 ]
 }
 
+[sub_resource type="RectangleShape2D" id=14]
+extents = Vector2( 7, 8 )
+
 [node name="player" type="KinematicBody2D"]
 script = ExtResource( 1 )
 
@@ -217,7 +220,7 @@ script = ExtResource( 1 )
 texture = ExtResource( 2 )
 vframes = 2
 hframes = 8
-frame = 15
+frame = 1
 __meta__ = {
 "_edit_lock_": true
 }
@@ -240,3 +243,9 @@ anims/walk_down = SubResource( 10 )
 anims/walk_left = SubResource( 11 )
 anims/walk_right = SubResource( 12 )
 anims/walk_up = SubResource( 13 )
+
+[node name="hitbox" type="Area2D" parent="."]
+visible = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="hitbox"]
+shape = SubResource( 14 )
