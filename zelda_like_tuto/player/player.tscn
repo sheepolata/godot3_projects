@@ -218,6 +218,9 @@ texture = ExtResource( 2 )
 vframes = 2
 hframes = 8
 frame = 15
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false

@@ -19,6 +19,10 @@ config/name="Zelda-like-tuto"
 run/main_scene="res://areas/test.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+dir="*res://engine/directions.gd"
+
 [display]
 
 window/size/width=160
