@@ -1,7 +1,5 @@
 extends KinematicBody2D
 
-var max_health = 2
-
 var type = "enemy"
 var speed = 0
 
@@ -9,8 +7,9 @@ var move_direction = dir.center
 var knock_direction = dir.center
 var sprite_direction = "down"
 
-var health = max_health
 var hitstun = 0
+
+var health = 0
 
 var texture_default = null
 var texture_hurt = null
