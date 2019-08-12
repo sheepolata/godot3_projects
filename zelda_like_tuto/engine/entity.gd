@@ -42,12 +42,19 @@ func anim_switch(animation):
 func damage_loop():
 	if hitstun > 0:
 		hitstun -= 1
-	for body in $hitbox.get_overlapping_bodies():
+	for area in $hitbox.get_overlapping_areas():
+		var body = area.get_parent()
 		if hitstun == 0 and body.get("damage") != null and body.get("type") != type:
 			health -= body.get("damage")
 			hitstun = 10
-			knock_direction = transform.origin - body.transform.origin
+			knock_direction = global_transform.origin - body.global_transform.origin
 
+func use_item(item):
+	var newitem = item.instance()
+	newitem.add_to_group(str(newitem.get_name(), self))
+	add_child(newitem)
+	if get_tree().get_nodes_in_group(str(newitem.get_name(), self)).size() > newitem.max_amount:
+		newitem.queue_free()
 
 
 

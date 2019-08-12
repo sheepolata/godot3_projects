@@ -13,7 +13,19 @@ format = 1
 tile_data = PoolIntArray( 0, 0, 0, 1, 0, 0, 2, 0, 0, 3, 0, 0, 4, 0, 0, 5, 0, 0, 6, 0, 0, 7, 0, 0, 8, 0, 0, 9, 0, 0, 65536, 0, 0, 65545, 0, 0, 131072, 0, 0, 131081, 0, 0, 196608, 0, 0, 196617, 0, 0, 262144, 0, 0, 262153, 0, 0, 327680, 0, 0, 327689, 0, 0, 393216, 0, 0, 393225, 0, 0, 458752, 0, 0, 458761, 0, 0, 524288, 0, 0, 524289, 0, 0, 524290, 0, 0, 524291, 0, 0, 524292, 0, 0, 524293, 0, 0, 524294, 0, 0, 524295, 0, 0, 524296, 0, 0, 524297, 0, 0 )
 
 [node name="player" parent="." instance=ExtResource( 2 )]
-position = Vector2( 56.4747, 58.9925 )
+position = Vector2( 73.7823, 64.9366 )
 
 [node name="stalfos" parent="." instance=ExtResource( 3 )]
-position = Vector2( 99.6498, 52.4473 )
+position = Vector2( 109.09, 43.0068 )
+
+[node name="stalfos2" parent="." instance=ExtResource( 3 )]
+position = Vector2( 119.055, 84.2653 )
+
+[node name="stalfos3" parent="." instance=ExtResource( 3 )]
+position = Vector2( 37.4124, 90.0345 )
+
+[node name="stalfos4" parent="." instance=ExtResource( 3 )]
+position = Vector2( 54.0207, 28.6712 )
+
+[node name="stalfos5" parent="." instance=ExtResource( 3 )]
+position = Vector2( 82.517, 99.3001 )
