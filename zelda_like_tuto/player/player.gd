@@ -5,6 +5,7 @@ var state = "default"
 func _ready():
 	type = "player"
 	set_physics_process(true)
+	set_collision_mask_bit(1,0)
 	speed = 70
 
 func _physics_process(delta):
