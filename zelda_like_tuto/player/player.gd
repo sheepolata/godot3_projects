@@ -3,7 +3,8 @@ extends "res://engine/entity.gd"
 var state = "default"
 
 func _ready():
-	type = "PLAYER"
+	type = "player"
+	set_physics_process(true)
 	speed = 70
 
 func _physics_process(delta):

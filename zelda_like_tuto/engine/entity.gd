@@ -16,6 +16,8 @@ var texture_default = null
 var texture_hurt = null
 
 func _ready():
+	if type == "enemy":
+		set_physics_process(false)
 	texture_default = $Sprite.texture
 	texture_hurt = load($Sprite.texture.get_path().replace(".png", "_hurt.png"))
 	
@@ -29,7 +31,7 @@ func movement_loop():
 	else:
 		motion = knock_direction.normalized() * 125
 	
-	move_and_slide(motion, Vector2(0, 0))
+	var r = move_and_slide(motion, Vector2(0, 0))
 	
 func sprite_direction_loop():
 	match move_direction:
