@@ -85,7 +85,7 @@ func instance_scene(scene):
 	get_parent().add_child(new_scene)
 
 func set_health(value):
-	health = min(value, max_health)
+	health = max(0, min(value, max_health))
 
 
 
