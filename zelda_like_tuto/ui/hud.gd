@@ -5,6 +5,8 @@ onready var player = get_node("../player")
 const HEART_ROW_SIZE = 8
 const HEART_OFFSET = 8
 
+onready var previous_max_health = player.max_health
+
 func _ready():
 	for i in player.max_health:
 		var new_heart = Sprite.new()
@@ -13,6 +15,16 @@ func _ready():
 		$hearts.add_child(new_heart)
 
 func _process(delta):
+	if player.max_health != previous_max_health:
+		for h in $hearts.get_children():
+			h.queue_free()
+		for i in player.max_health:
+			var new_heart = Sprite.new()
+			new_heart.texture = $hearts.texture
+			new_heart.hframes = $hearts.hframes
+			$hearts.add_child(new_heart)
+		previous_max_health = player.max_health
+	
 	for heart in $hearts.get_children():
 		var index = heart.get_index()
 		

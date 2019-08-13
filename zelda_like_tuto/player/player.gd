@@ -3,15 +3,18 @@ extends "res://engine/entity.gd"
 var state	= "default"
 var keys	= 0
 
-var max_health = 3
+#var max_health = 3
 
 func _ready():
+	._ready()
+	
 	type = "player"
 	set_physics_process(true)
 	set_collision_mask_bit(1,0)
 	
 	speed = 70
 	
+	max_health = 3
 	health = max_health
 
 func _physics_process(delta):

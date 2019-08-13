@@ -5,14 +5,17 @@ var move_timer = 0
 
 var damage = 0.25
 
-var max_health = 1
+#var max_health = 1
 
 func _ready():
+	._ready()
+	
 	speed = 40
 	
 	$anim.play("default")
 	move_direction = dir.rand()
 	
+	max_health = 1
 	health = max_health
 
 func _physics_process(delta):

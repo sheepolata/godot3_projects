@@ -18,3 +18,8 @@ func _on_area_body_entered(body):
 func _on_area_body_exited(body):
 	if body.get("type") == "enemy":
 		body.set_physics_process(false)
+
+
+func _on_area_area_exited(area):
+	if area.get("disappears") == true:
+		area.queue_free()

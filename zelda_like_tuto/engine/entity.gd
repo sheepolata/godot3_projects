@@ -9,7 +9,8 @@ var sprite_direction = "down"
 
 var hitstun = 0
 
-var health = 0
+var health = 0 setget set_health
+var max_health = 1
 
 var texture_default = null
 var texture_hurt = null
@@ -56,9 +57,12 @@ func damage_loop():
 	else:
 		$Sprite.texture = texture_default
 		if type == "enemy" and  health <= 0:
-			var death_anim = preload("res://enemies/enemy_death.tscn").instance()
-			get_parent().add_child(death_anim)
-			death_anim.global_transform = get_global_transform()
+			var drop = randi() % 3
+			if drop == 0:
+				instance_scene(preload("res://pickups/heart.tscn"))
+			
+			instance_scene(preload("res://enemies/enemy_death.tscn"))
+			
 			queue_free()
 		
 	for area in $hitbox.get_overlapping_areas():
@@ -75,8 +79,13 @@ func use_item(item):
 	if get_tree().get_nodes_in_group(str(newitem.get_name(), self)).size() > newitem.max_amount:
 		newitem.queue_free()
 
+func instance_scene(scene):
+	var new_scene = scene.instance()
+	new_scene.global_position = global_position
+	get_parent().add_child(new_scene)
 
-
+func set_health(value):
+	health = min(value, max_health)
 
 
 
