@@ -46,6 +46,9 @@ shape = SubResource( 3 )
 [node name="right" type="CollisionShape2D" parent="StaticBody2D"]
 position = Vector2( 158, 80 )
 shape = SubResource( 3 )
+
+[node name="Tween" type="Tween" parent="."]
 [connection signal="area_exited" from="area" to="." method="_on_area_area_exited"]
 [connection signal="body_entered" from="area" to="." method="_on_area_body_entered"]
 [connection signal="body_exited" from="area" to="." method="_on_area_body_exited"]
+[connection signal="tween_completed" from="Tween" to="." method="_on_Tween_tween_completed"]

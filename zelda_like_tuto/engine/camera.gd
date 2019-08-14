@@ -4,13 +4,35 @@ const screen_size = Vector2(160, 128)
 const hud_thickness = 16
 var grid_pos = Vector2(0, 0)
 
+onready var previous_position = global_position
+onready var previous_grid_pos = grid_pos
+
+onready var tween = $Tween
+
 func _ready():
 	pass
 	
 func _process(delta):
 	var player_grid_pos = get_grid_pos(get_node("../player").global_position)
-	global_position = player_grid_pos * screen_size
-	grid_pos = player_grid_pos
+	
+	if player_grid_pos != grid_pos:
+		print("change cam pos")
+		
+		previous_position = global_position
+		previous_grid_pos = grid_pos
+		
+		#global_position = player_grid_pos * screen_size
+		tween.interpolate_property(self, "global_position", global_position, player_grid_pos*screen_size, 0.4, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
+		tween.start()
+		
+		$StaticBody2D/top.disabled = true
+		$StaticBody2D/bottom.disabled = true
+		$StaticBody2D/left.disabled = true
+		$StaticBody2D/right.disabled = true
+		
+		
+		grid_pos = player_grid_pos
+	
 	
 func get_grid_pos(pos):
 	pos.y -= hud_thickness
@@ -38,3 +60,10 @@ func _on_area_body_exited(body):
 func _on_area_area_exited(area):
 	if area.get("disappears") == true:
 		area.queue_free()
+
+
+func _on_Tween_tween_completed(object, key):
+	$StaticBody2D/top.disabled = false
+	$StaticBody2D/bottom.disabled = false
+	$StaticBody2D/left.disabled = false
+	$StaticBody2D/right.disabled = false
