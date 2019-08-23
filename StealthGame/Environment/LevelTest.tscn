@@ -2,8 +2,8 @@
 
 [ext_resource path="res://Environment/LevelTest.gd" type="Script" id=1]
 [ext_resource path="res://Environment/base_tileset.tres" type="TileSet" id=2]
-[ext_resource path="res://Characters/Enemies/Waypoints.gd" type="Script" id=3]
-[ext_resource path="res://Characters/Player/Player.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Characters/Player/Player.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Characters/Enemies/Waypoints.gd" type="Script" id=4]
 [ext_resource path="res://Characters/Enemies/Enemy.tscn" type="PackedScene" id=5]
 
 [node name="LevelTest" type="Node2D"]
@@ -18,59 +18,59 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="Waypoints" type="Node2D" parent="."]
+[node name="Player" parent="." instance=ExtResource( 3 )]
+position = Vector2( 470, 610 )
+
+[node name="Waypoints_all" type="Node2D" parent="."]
+
+[node name="Waypoints" type="Node2D" parent="Waypoints_all"]
 editor/display_folded = true
 position = Vector2( 0, -20 )
-script = ExtResource( 3 )
+script = ExtResource( 4 )
 line_color = Color( 0.654902, 0.2, 0.2, 1 )
 triange_color = Color( 1, 0, 0, 1 )
 line_width = 6.0
 
-[node name="start" type="Position2D" parent="Waypoints"]
-position = Vector2( 140, 590 )
+[node name="start" type="Position2D" parent="Waypoints_all/Waypoints"]
+position = Vector2( 200, 590 )
 
-[node name="start2" type="Position2D" parent="Waypoints"]
-position = Vector2( 140, 120 )
+[node name="start2" type="Position2D" parent="Waypoints_all/Waypoints"]
+position = Vector2( 200, 120 )
 
-[node name="start3" type="Position2D" parent="Waypoints"]
-position = Vector2( 420, 120 )
+[node name="start3" type="Position2D" parent="Waypoints_all/Waypoints"]
+position = Vector2( 370, 120 )
 
-[node name="start4" type="Position2D" parent="Waypoints"]
-position = Vector2( 420, 590 )
+[node name="start4" type="Position2D" parent="Waypoints_all/Waypoints"]
+position = Vector2( 370, 590 )
 
-[node name="Waypoints2" type="Node2D" parent="."]
+[node name="Waypoints2" type="Node2D" parent="Waypoints_all"]
 editor/display_folded = true
 position = Vector2( 50, 40 )
-script = ExtResource( 3 )
+script = ExtResource( 4 )
 
-[node name="start" type="Position2D" parent="Waypoints2"]
+[node name="start" type="Position2D" parent="Waypoints_all/Waypoints2"]
 
-[node name="start7" type="Position2D" parent="Waypoints2"]
+[node name="start7" type="Position2D" parent="Waypoints_all/Waypoints2"]
 position = Vector2( 700, 0 )
 
-[node name="start2" type="Position2D" parent="Waypoints2"]
+[node name="start2" type="Position2D" parent="Waypoints_all/Waypoints2"]
 position = Vector2( 1100, 60 )
 
-[node name="start4" type="Position2D" parent="Waypoints2"]
+[node name="start4" type="Position2D" parent="Waypoints_all/Waypoints2"]
 position = Vector2( 830, 290 )
 
-[node name="start5" type="Position2D" parent="Waypoints2"]
+[node name="start5" type="Position2D" parent="Waypoints_all/Waypoints2"]
 position = Vector2( 570, 420 )
 
-[node name="start6" type="Position2D" parent="Waypoints2"]
+[node name="start6" type="Position2D" parent="Waypoints_all/Waypoints2"]
 position = Vector2( 570, 640 )
 
-[node name="start3" type="Position2D" parent="Waypoints2"]
+[node name="start3" type="Position2D" parent="Waypoints_all/Waypoints2"]
 position = Vector2( 0, 640 )
 
-[node name="Player" parent="." instance=ExtResource( 4 )]
-position = Vector2( 1110, 480 )
+[node name="Enemies" type="Node2D" parent="."]
 
-[node name="Enemy" parent="." instance=ExtResource( 5 )]
-position = Vector2( 140, 570 )
-rotation = -1.5708
-waypoint_path = NodePath("../Waypoints")
-
-[node name="Enemy2" parent="." instance=ExtResource( 5 )]
-position = Vector2( 50, 40 )
-waypoint_path = NodePath("../Waypoints2")
+[node name="Enemy" parent="Enemies" instance=ExtResource( 5 )]
+position = Vector2( 200, 570 )
+rotation = 4.71239
+waypoint_path = NodePath("../../Waypoints_all/Waypoints")

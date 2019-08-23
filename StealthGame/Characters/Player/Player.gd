@@ -8,6 +8,7 @@ var state = "DEFAULT"
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	add_to_group("player")
+	add_to_group("detectable")
 	set_physics_process(true)
 
 func _physics_process(delta):
