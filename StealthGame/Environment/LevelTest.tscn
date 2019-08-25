@@ -72,5 +72,9 @@ position = Vector2( 0, 640 )
 
 [node name="Enemy" parent="Enemies" instance=ExtResource( 5 )]
 position = Vector2( 200, 570 )
-rotation = 4.71239
+rotation = -1.5708
 waypoint_path = NodePath("../../Waypoints_all/Waypoints")
+
+[node name="Enemy2" parent="Enemies" instance=ExtResource( 5 )]
+position = Vector2( 50, 40 )
+waypoint_path = NodePath("../../Waypoints_all/Waypoints2")

@@ -34,6 +34,12 @@ config/icon="res://i2con.png"
 
 Directions="*res://Engine/Directions.gd"
 
+[debug]
+
+gdscript/warnings/unused_variable=false
+gdscript/warnings/unused_class_variable=false
+gdscript/warnings/unused_argument=false
+
 [display]
 
 window/size/width=1280

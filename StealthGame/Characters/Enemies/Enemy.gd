@@ -4,8 +4,9 @@ extends KinematicBody2D
 onready var wait_timer: Timer = $Timer
 
 export var editor_process: = false setget set_editor_process
-export var speed: = 200.0
-export var rotation_duration := 0.5
+export var speed: = 125.0
+export var rotation_duration := 0.8
+export var wait_time : = 1.5
 
 export var waypoint_path: = NodePath()
 
@@ -31,6 +32,8 @@ func _ready():
 	$Detection/CollisionShape2D.shape = shape
 	
 	$Sprite.self_modulate.r = 0.5
+	
+	wait_timer.wait_time = wait_time
 	
 	if not Engine.editor_hint:
 		can_move = true
@@ -127,24 +130,12 @@ func _draw():
 	#draw_line(Vector2.ZERO, Directions.point_from_angle_rad(Vector2.ZERO, deg2rad(-fov.view_angle / 2.0), fov.view_radius), Color(0, 0, 0, 0.25), 3.0)
 	#draw_line(Vector2.ZERO, Directions.point_from_angle_rad(Vector2.ZERO, deg2rad(fov.view_angle / 2.0), fov.view_radius), Color(0, 0, 0, 0.25), 3.0)
 	
-	draw_field_of_view()
+	fov.draw_field_of_view(global_position)
 	
 	if targets.size() > 0:
 		for hit in hit_pos:
 			draw_circle((hit - position).rotated(-rotation), 5, Color.red)
 			draw_line(Vector2.ZERO, (hit - position).rotated(-rotation), Color.red, 2)
-
-func draw_field_of_view() -> void:
-	var step_count : int = int(round( fov.view_angle * fov.mesh_resolution ))
-	var step_angle_size : float = fov.view_angle / step_count
-	
-	
-	for i in range(step_count+1):
-		var angle : float = rotation_degrees - fov.view_angle/2.0 + step_angle_size*i
-
-		angle = deg2rad(90 + angle)
-
-		draw_line(Vector2.ZERO, Directions.point_from_angle_rad(Vector2.ZERO, angle, fov.view_radius), Color.white)
 
 func _on_Timer_timeout():
 	#set_physics_process(true)

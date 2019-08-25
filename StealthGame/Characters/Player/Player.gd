@@ -28,7 +28,6 @@ func state_default():
 	controls_loop()
 	movement_loop()
 
-
 func movement_loop():
 	var motion = move_direction.normalized() * SPEED
 	

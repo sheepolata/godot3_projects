@@ -16,6 +16,9 @@ __meta__ = {
 
 [node name="FieldOfView" type="Node" parent="."]
 script = ExtResource( 2 )
+mesh_resolution = 0.25
+edge_resolve_iteration = 15
+edge_distance_treshold = 0.1
 
 [node name="Sprite" type="Sprite" parent="."]
 modulate = Color( 1, 0, 0, 1 )
@@ -33,7 +36,6 @@ __meta__ = {
 }
 
 [node name="Timer" type="Timer" parent="."]
-wait_time = 0.75
 
 [node name="Tween" type="Tween" parent="."]
 
