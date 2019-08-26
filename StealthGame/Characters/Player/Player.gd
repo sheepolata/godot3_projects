@@ -5,6 +5,10 @@ var SPEED = 400
 
 var state = "DEFAULT"
 
+var debug_dict : Dictionary = {}
+
+onready var camera = $Camera2D
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	add_to_group("player")
@@ -12,13 +16,11 @@ func _ready():
 	set_physics_process(true)
 
 func _physics_process(delta):
+	update()
 	
 	look_at(get_global_mouse_position())
-	
-	#$Tween.interpolate_property(self, "rotation_degrees", self.rotation_degrees, rad2deg(self.global_position.angle_to_point(get_global_mouse_position())), 0.5, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	#$Tween.start()
-	
-	#yield($Tween, "tween_all_completed")
+
+	offset_camera_from_mouse()
 	
 	match state:
 		"DEFAULT":
@@ -46,3 +48,38 @@ func controls_loop():
 	
 	move_direction.x = -int(LEFT) + int(RIGHT)
 	move_direction.y = -int(UP) + int(DOWN)
+
+
+func offset_camera_from_mouse() -> void:
+	
+	var local_mouse : Vector2 = get_local_mouse_position()
+	var dist_to_mouse : float = Vector2.ZERO.distance_to(local_mouse)
+	var angle_to_mouse : float = Vector2.ZERO.angle_to(local_mouse)
+	
+	var offset_factor : float = 0.3
+	
+	var aspect_ratio = Globals.height / Globals.width
+	
+	camera.offset = Vector2(local_mouse.x * offset_factor, local_mouse.y * offset_factor * aspect_ratio).rotated(rotation).rotated(angle_to_mouse)
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

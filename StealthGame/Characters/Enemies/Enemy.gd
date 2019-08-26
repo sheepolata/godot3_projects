@@ -130,7 +130,7 @@ func _draw():
 	#draw_line(Vector2.ZERO, Directions.point_from_angle_rad(Vector2.ZERO, deg2rad(-fov.view_angle / 2.0), fov.view_radius), Color(0, 0, 0, 0.25), 3.0)
 	#draw_line(Vector2.ZERO, Directions.point_from_angle_rad(Vector2.ZERO, deg2rad(fov.view_angle / 2.0), fov.view_radius), Color(0, 0, 0, 0.25), 3.0)
 	
-	fov.draw_field_of_view(global_position)
+	#fov.draw_field_of_view(global_position)
 	
 	if targets.size() > 0:
 		for hit in hit_pos:

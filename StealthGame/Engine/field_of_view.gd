@@ -4,7 +4,7 @@ class_name FieldOfView
 
 export(float, 0, 3000) var view_radius : float = 160
 export(float, 0, 360) var view_angle : float = 90
-export(float, 0, 1) var mesh_resolution : float = 0.3
+export(float, 0, 1) var mesh_resolution : float = 0.15
 export(int) var edge_resolve_iteration : int = 6
 export(float) var edge_distance_treshold : float = 1
 
@@ -98,7 +98,7 @@ func view_cast(angle : float, global_position : Vector2) -> Dictionary:
 	if ray_cast:
 		result['hit'] = true
 		result['point'] = get_parent().to_local(ray_cast.get('position'))
-		
+		print("hit")
 		#result['dist'] = global_position.distance_to(ray_cast.get('position'))
 		result['dist'] = Vector2.ZERO.distance_to(result['point'])
 		result['angle'] = angle

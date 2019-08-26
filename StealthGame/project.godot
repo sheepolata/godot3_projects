@@ -33,6 +33,7 @@ config/icon="res://i2con.png"
 [autoload]
 
 Directions="*res://Engine/Directions.gd"
+Globals="*res://Engine/Globals.gd"
 
 [debug]
 
@@ -104,4 +105,7 @@ reset={
 
 [rendering]
 
+quality/driver/driver_name="GLES2"
+quality/2d/gles2_use_nvidia_rect_flicker_workaround=true
+quality/2d/use_pixel_snap=true
 environment/default_environment="res://default_env.tres"
