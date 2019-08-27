@@ -1,8 +1,7 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Characters/Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Data/Sprites/Player_boat.png" type="Texture" id=2]
-[ext_resource path="res://Environments/water/textures/light.png" type="Texture" id=3]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 30.0
@@ -33,21 +32,20 @@ texture = ExtResource( 2 )
 rotation = 1.5708
 shape = SubResource( 1 )
 
-[node name="WaveEffectSpawnPoint" type="Position2D" parent="."]
-position = Vector2( -72, -19 )
-
-[node name="WaveEffectSpawnPoint2" type="Position2D" parent="."]
-position = Vector2( -72, 19 )
-
-[node name="TrailEffect" type="Timer" parent="."]
-wait_time = 0.2
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/bg_anim = SubResource( 2 )
 
-[node name="Light2D" type="Light2D" parent="."]
-visible = false
-texture = ExtResource( 3 )
-range_layer_min = -1
-range_layer_max = -1
-[connection signal="timeout" from="TrailEffect" to="." method="_on_WaterEffect_timeout"]
+[node name="CrashTween" type="Tween" parent="."]
+
+[node name="TrailEffect_node" type="Node2D" parent="."]
+editor/display_folded = true
+
+[node name="TrailEffect" type="Timer" parent="TrailEffect_node"]
+wait_time = 0.2
+
+[node name="WaveEffectSpawnPoint" type="Position2D" parent="TrailEffect_node"]
+position = Vector2( -72, -19 )
+
+[node name="WaveEffectSpawnPoint2" type="Position2D" parent="TrailEffect_node"]
+position = Vector2( -72, 19 )
+[connection signal="timeout" from="TrailEffect_node/TrailEffect" to="." method="_on_WaterEffect_timeout"]

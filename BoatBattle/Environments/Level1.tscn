@@ -1,14 +1,23 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://Characters/Player/Player.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Environments/Planet.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Environments/Planet.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Characters/Player/Player.tscn" type="PackedScene" id=2]
 
 [node name="Level1" type="Node2D"]
 
-[node name="Player" parent="." instance=ExtResource( 1 )]
-position = Vector2( 962.583, 1867.54 )
-
 [node name="Planets" type="Node" parent="."]
 
-[node name="Planet" parent="Planets" instance=ExtResource( 2 )]
-position = Vector2( 1374.8, 1304.16 )
+[node name="Planet" parent="Planets" instance=ExtResource( 1 )]
+position = Vector2( 1384.35, 1227.73 )
+rotation = 414.852
+
+[node name="Planet2" parent="Planets" instance=ExtResource( 1 )]
+position = Vector2( 4708.64, 5983.84 )
+rotation = 302.912
+
+[node name="Planet3" parent="Planets" instance=ExtResource( 1 )]
+position = Vector2( 5287.49, 2461.92 )
+rotation = 367.495
+
+[node name="Player" parent="." instance=ExtResource( 2 )]
+position = Vector2( 4561.67, 2545.02 )
