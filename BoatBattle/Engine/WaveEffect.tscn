@@ -7,6 +7,8 @@
 z_index = -10
 texture = ExtResource( 1 )
 script = ExtResource( 2 )
+max_scale = 2.25
+min_scale = 0.5
 
 [node name="Tween" type="Tween" parent="."]
 [connection signal="tween_all_completed" from="Tween" to="." method="_on_Tween_tween_all_completed"]

@@ -1,9 +1,8 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Characters/Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Data/Sprites/Player_boat.png" type="Texture" id=2]
-[ext_resource path="res://Environments/water/UVTextureOffset/water_texture_offset.material" type="Material" id=3]
-[ext_resource path="res://Environments/water/textures/water_diffuse.png" type="Texture" id=4]
+[ext_resource path="res://Environments/water/textures/light.png" type="Texture" id=3]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 30.0
@@ -13,30 +12,6 @@ height = 100.0
 resource_name = "bg_anim"
 length = 2.0
 loop = true
-tracks/0/type = "value"
-tracks/0/path = NodePath("ParallaxBackground/ParallaxLayer/Sprite:flip_h")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.5, 1.5 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
-"update": 1,
-"values": [ false, true, false ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("ParallaxBackground/ParallaxLayer/Sprite:flip_v")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0, 1, 2 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
-"update": 1,
-"values": [ false, true, false ]
-}
 
 [node name="Player" type="KinematicBody2D"]
 script = ExtResource( 1 )
@@ -58,23 +33,21 @@ texture = ExtResource( 2 )
 rotation = 1.5708
 shape = SubResource( 1 )
 
-[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
-
-[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
-motion_mirroring = Vector2( 4096, 4096 )
-
-[node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer"]
-material = ExtResource( 3 )
-scale = Vector2( 16, 16 )
-texture = ExtResource( 4 )
-centered = false
-
 [node name="WaveEffectSpawnPoint" type="Position2D" parent="."]
-position = Vector2( -73, 0 )
+position = Vector2( -72, -19 )
 
-[node name="WaterEffect" type="Timer" parent="."]
+[node name="WaveEffectSpawnPoint2" type="Position2D" parent="."]
+position = Vector2( -72, 19 )
+
+[node name="TrailEffect" type="Timer" parent="."]
 wait_time = 0.2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/bg_anim = SubResource( 2 )
-[connection signal="timeout" from="WaterEffect" to="." method="_on_WaterEffect_timeout"]
+
+[node name="Light2D" type="Light2D" parent="."]
+visible = false
+texture = ExtResource( 3 )
+range_layer_min = -1
+range_layer_max = -1
+[connection signal="timeout" from="TrailEffect" to="." method="_on_WaterEffect_timeout"]

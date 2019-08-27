@@ -4,39 +4,41 @@ var move_direction = Vector2.ZERO
 var current_speeds : Vector2 = Vector2.ZERO
 
 export(int) var SPEED = 550
-export(float, 0, 50) var SPEED_INCREMENT = 4
+export(float, 0, 50) var SPEED_INCREMENT = 2
 var current_speed_increment : float = 0
-export var speed_increment_factor : float = 1.01
+export var speed_increment_factor : float = 0.05
+export var speed_incr_factor_decrease : float = 0.999
+var current_speed_increment_factor : float = 0.05
 
-export(int, 0, 90) var TURN_SPEED = 90
-export(float, 0, 1) var TURN_SPEED_INCREMENT = 3
+
+export(int, 0, 90) var TURN_SPEED = 80
+export(float, 0, 1) var TURN_SPEED_INCREMENT = 2.5
 
 var state = "DEFAULT"
-
-var debug_dict : Dictionary = {}
 
 var collision_info : KinematicCollision2D = null
 
 onready var cam = $Camera2D
-var max_zoom_in = 0.9; var max_zoom_out = 1.8;
+var max_zoom_in = 1; var max_zoom_out = 2.0;
 
-onready var water_effect = $WaterEffect
+onready var trail_effect = $TrailEffect
 
-onready var anim = $AnimationPlayer
+#onready var anim = $AnimationPlayer
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	add_to_group("player")
 	set_physics_process(true)
 	
-	water_effect.start()
+	trail_effect.start()
 	#anim.play("bg_anim")
 
 func _physics_process(delta : float):
 	update()
 
 	var v = Utils.normalise(abs(current_speeds.y), max_zoom_in, max_zoom_out, 0, SPEED)
-	cam.zoom = Vector2(v, v)
+#	cam.zoom = Vector2(v, v)
+	cam.zoom = cam.zoom.linear_interpolate(Vector2(v, v), delta)
 	
 	match state:
 		"DEFAULT":
@@ -57,32 +59,32 @@ func movement_loop(delta : float):
 		current_speeds.x = min(current_speeds.x + move_direction.x * TURN_SPEED_INCREMENT, TURN_SPEED)
 	elif move_direction.x < 0:
 		current_speeds.x = max(current_speeds.x + move_direction.x * TURN_SPEED_INCREMENT, -TURN_SPEED)
-	else:
-		if current_speeds.x > 0:
-			current_speeds.x = max(0, current_speeds.x - TURN_SPEED_INCREMENT)
-		else:
-			current_speeds.x = min(0, current_speeds.x + TURN_SPEED_INCREMENT)
+#	else:
+#		if current_speeds.x > 0:
+#			current_speeds.x = max(0, current_speeds.x - TURN_SPEED_INCREMENT)
+#		else:
+#			current_speeds.x = min(0, current_speeds.x + TURN_SPEED_INCREMENT)
 	
 	if move_direction.y > 0:
 		if current_speed_increment == 0:
 			current_speed_increment = 0.1
 		else:
-			current_speed_increment = max(SPEED_INCREMENT, current_speed_increment * speed_increment_factor)
+			current_speed_increment = max(SPEED_INCREMENT, current_speed_increment * (1+current_speed_increment_factor))
 			
 		current_speeds.y = min(current_speeds.y + move_direction.y * current_speed_increment, SPEED)
 	elif move_direction.y < 0:
 		if current_speed_increment == 0:
 			current_speed_increment = 0.1
 		else:
-			current_speed_increment = max(SPEED_INCREMENT, current_speed_increment * speed_increment_factor)
+			current_speed_increment = max(SPEED_INCREMENT, current_speed_increment * (1+current_speed_increment_factor))
 			
 		current_speeds.y = max(current_speeds.y + move_direction.y * current_speed_increment, -SPEED)
 	else:
 		current_speed_increment = 0
-		if current_speeds.y > 0:
-			current_speeds.y = max(0, current_speeds.y - SPEED_INCREMENT*2)
-		else:
-			current_speeds.y = min(0, current_speeds.y + SPEED_INCREMENT*2)
+#		if current_speeds.y > 0:
+#			current_speeds.y = max(0, current_speeds.y - SPEED_INCREMENT*2)
+#		else:
+#			current_speeds.y = min(0, current_speeds.y + SPEED_INCREMENT*2)
 	
 	rotation_degrees += current_speeds.x * delta
 	#print(current_speeds)
@@ -93,7 +95,10 @@ func controls_loop():
 	if Input.is_action_just_pressed("ui_cancel"):
 		get_tree().quit()
 	if Input.is_action_just_pressed("reset"):
-		get_tree().reload_current_scene()
+		if get_tree().reload_current_scene() == 0:
+			print("Reload OK")
+		else:
+			print("Reload went wrong")
 		
 	var LEFT	= Input.is_action_pressed("left")
 	var RIGHT	= Input.is_action_pressed("right")
@@ -106,14 +111,24 @@ func controls_loop():
 
 func _on_WaterEffect_timeout():
 	var this_effect = preload("res://Engine/WaveEffect.tscn").instance()
-	this_effect.min_scale = 0
-	this_effect.max_scale = Utils.normalise(abs(current_speeds.y), 2, this_effect._MAX_SCALE, 0, SPEED)
+	#this_effect.min_scale = 0
+	this_effect.max_scale = Utils.normalise(abs(current_speeds.y), this_effect.min_scale, this_effect.max_scale, 0, SPEED)
 	
-	water_effect.wait_time = Utils.normalise(SPEED - abs(current_speeds.y), 0.1, 0.35, 0, SPEED)
+	trail_effect.wait_time = Utils.normalise(SPEED - abs(current_speeds.y), 0.1, 0.25, 0, SPEED)
 	
 	get_parent().add_child(this_effect)
 	
 	this_effect.position = to_global($WaveEffectSpawnPoint.position)
+	
+	var this_effect2 = preload("res://Engine/WaveEffect.tscn").instance()
+	#this_effect2.min_scale = 0
+	this_effect2.max_scale = Utils.normalise(abs(current_speeds.y), this_effect.min_scale, this_effect2.max_scale, 0, SPEED)
+	
+	trail_effect.wait_time = Utils.normalise(SPEED - abs(current_speeds.y), 0.1, 0.25, 0, SPEED)
+	
+	get_parent().add_child(this_effect2)
+	
+	this_effect2.position = to_global($WaveEffectSpawnPoint2.position)
 
 	
 	

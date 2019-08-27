@@ -1,9 +1,8 @@
 extends Sprite
 
 export(float) var duration : float = 0.5
-const _MAX_SCALE : float = 5.0;
-var min_scale : float = 0 setget set_min_scale; 
-var max_scale : float = 3 setget set_max_scale;
+export(float) var max_scale : float = 7.0;
+export var min_scale : float = 0 setget set_min_scale; 
 
 onready var tween = $Tween
 
