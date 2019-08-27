@@ -7,7 +7,5 @@
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
 position = Vector2( 461.106, 405.455 )
-SPEED_INCREMENT = 4.0
-TURN_SPEED = 90
 
 [node name="Island" parent="." instance=ExtResource( 2 )]
