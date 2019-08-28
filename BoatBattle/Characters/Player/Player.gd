@@ -10,6 +10,8 @@ export var speed_increment_factor : float = 0.05
 var current_speed_increment_factor : float = 0.05
 
 var all_stop : bool = false
+var thruster_stop : bool = false
+var rotation_stop : bool = false
 
 export(int, 0, 90) var TURN_SPEED = 90
 export(float, 0, 1) var TURN_SPEED_INCREMENT = 14
@@ -59,7 +61,6 @@ func _physics_process(delta : float):
 		"DEAD":
 			dead_state(delta)
 
-			
 func state_default(delta : float):
 	var v = Utils.normalise(abs(current_speeds.y), max_zoom_in, max_zoom_out, 0, SPEED)
 	cam.zoom = cam.zoom.linear_interpolate(Vector2(v, v), delta)
@@ -96,12 +97,16 @@ func movement_loop(delta : float):
 	
 	if current_speeds == Vector2.ZERO:
 		all_stop = false
+	elif current_speeds.x == 0:
+		rotation_stop = false
+	elif current_speeds.y == 0:
+		thruster_stop = false
 	
 	if move_direction.x > 0:
 		current_speeds.x = min(current_speeds.x + move_direction.x * TURN_SPEED_INCREMENT, TURN_SPEED)
 	elif move_direction.x < 0:
 		current_speeds.x = max(current_speeds.x + move_direction.x * TURN_SPEED_INCREMENT, -TURN_SPEED)
-	elif all_stop:
+	elif all_stop or rotation_stop:
 		if current_speeds.x > 0:
 			current_speeds.x = max(0, current_speeds.x - TURN_SPEED_INCREMENT)
 		else:
@@ -121,7 +126,7 @@ func movement_loop(delta : float):
 			current_speed_increment = min(SPEED_INCREMENT, current_speed_increment * (1+current_speed_increment_factor))
 			
 		current_speeds.y = max(current_speeds.y + move_direction.y * current_speed_increment, -SPEED)
-	elif all_stop:
+	elif all_stop or thruster_stop:
 		current_speed_increment = 0
 		if current_speeds.y > 0:
 			current_speeds.y = max(0, current_speeds.y - SPEED_INCREMENT*2)
@@ -144,10 +149,6 @@ func basic_control_loop():
 			print("Reload went wrong")
 
 func move_controls_loop():
-	
-	if Input.is_action_pressed("all_stop"):
-		move_direction = Vector2.ZERO
-		all_stop = true
 		
 	var LEFT	= Input.is_action_pressed("left")
 	var RIGHT	= Input.is_action_pressed("right")
@@ -156,6 +157,16 @@ func move_controls_loop():
 	
 	move_direction.x = -int(LEFT) + int(RIGHT)
 	move_direction.y = -int(DOWN) + int(UP)
+	
+	if Input.is_action_pressed("all_stop"):
+		move_direction = Vector2.ZERO
+		all_stop = true
+	elif Input.is_action_pressed("rotation_stop") or rotation_stop:
+		move_direction.x = 0
+		rotation_stop = true
+	elif Input.is_action_pressed("thruster_stop") or thruster_stop:
+		move_direction.y = 0
+		thruster_stop = true
 
 func _on_WaterEffect_timeout():
 	var this_effect = preload("res://Engine/WaveEffect.tscn").instance()
@@ -177,7 +188,6 @@ func _on_WaterEffect_timeout():
 	get_parent().add_child(this_effect2)
 	
 	this_effect2.position = to_global($TrailEffect_node/WaveEffectSpawnPoint2.position)
-#	this_effect2.position = (position + $TrailEffect_node/WaveEffectSpawnPoint2.position.rotated(rotation))
 
 func crashing(delta):
 	cam.zoom = cam.zoom.linear_interpolate(Vector2(.45, .45), delta)
@@ -195,16 +205,12 @@ func _on_CrashTween_tween_all_completed():
 	$Sprite.hide()
 	is_dead = true
 	
-
 func dead_state(delta : float):
 	cam.zoom = cam.zoom.linear_interpolate(Vector2(2.5, 2.5), delta*.1)
 
 func _draw():
 	pass
-#	if not is_dead:
-#		draw_line(Vector2.ZERO, (planets_gravity*150).rotated(-rotation), Color.red, 5)
-	
-	
+
 	
 	
 	

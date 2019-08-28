@@ -4,7 +4,7 @@
 [ext_resource path="res://Engine/WaveEffect.gd" type="Script" id=2]
 
 [node name="WaveEffect" type="Sprite"]
-z_index = -10
+z_index = -1
 texture = ExtResource( 1 )
 script = ExtResource( 2 )
 max_scale = 2.25

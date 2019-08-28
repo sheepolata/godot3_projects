@@ -7,17 +7,17 @@
 radius = 256.0
 
 [node name="Planet" type="StaticBody2D"]
-rotation = 37.2337
+rotation = 66.8398
 scale = Vector2( 0.989452, 0.989452 )
-z_index = -1
+z_index = -2
 script = ExtResource( 1 )
-angular_velocity = 0.150023
+angular_velocity = 0.140616
 gravity = 500.0
 
 [node name="Sprite" type="Sprite" parent="."]
-scale = Vector2( 1.14, 1.14 )
+scale = Vector2( 1.09079, 1.09079 )
 texture = ExtResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-scale = Vector2( 0.969002, 0.969002 )
+scale = Vector2( 0.927173, 0.927173 )
 shape = SubResource( 1 )

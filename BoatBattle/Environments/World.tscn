@@ -17,20 +17,20 @@ random_target_offset_range = 256
 
 [node name="Planet" parent="Planets" instance=ExtResource( 2 )]
 position = Vector2( 1556, 3917 )
-rotation = 61.4798
-angular_velocity = 0.135908
+rotation = 51.8876
+angular_velocity = 0.0745019
 gravity = 200.0
 
 [node name="Planet2" parent="Planets" instance=ExtResource( 2 )]
 position = Vector2( 7208, 7922 )
-rotation = -6.7824
-angular_velocity = 0.143384
+rotation = -2.62097
+angular_velocity = 0.0212225
 gravity = 200.0
 
 [node name="Planet3" parent="Planets" instance=ExtResource( 2 )]
 position = Vector2( 8015, 642 )
-rotation = -12.4624
-angular_velocity = 0.0761119
+rotation = -1.4904
+angular_velocity = 0.0581221
 gravity = 200.0
 
 [node name="Asteroids" type="Node" parent="."]
@@ -39,5 +39,5 @@ gravity = 200.0
 wait_time = 5.0
 
 [node name="Player" parent="." instance=ExtResource( 3 )]
-position = Vector2( 2524, 3405 )
+position = Vector2( 877.197, 473.518 )
 [connection signal="timeout" from="Asteroids/Spawner" to="." method="spaw_asteroid"]
