@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Characters/Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Data/Sprites/Player_boat.png" type="Texture" id=2]
+[ext_resource path="res://Data/Sprites/arrow_white.png" type="Texture" id=3]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 30.0
@@ -38,7 +39,6 @@ anims/bg_anim = SubResource( 2 )
 [node name="CrashTween" type="Tween" parent="."]
 
 [node name="TrailEffect_node" type="Node2D" parent="."]
-editor/display_folded = true
 
 [node name="TrailEffect" type="Timer" parent="TrailEffect_node"]
 wait_time = 0.2
@@ -48,4 +48,22 @@ position = Vector2( -72, -19 )
 
 [node name="WaveEffectSpawnPoint2" type="Position2D" parent="TrailEffect_node"]
 position = Vector2( -72, 19 )
+
+[node name="UILayer" type="CanvasLayer" parent="."]
+
+[node name="SpeedInfo" type="Label" parent="UILayer"]
+margin_left = 20.0
+margin_top = 20.0
+margin_right = 60.0
+margin_bottom = 34.0
+rect_scale = Vector2( 3, 3 )
+text = "0 spd, 0 deg"
+
+[node name="GravityDirection" type="TextureRect" parent="UILayer"]
+margin_left = 1642.0
+margin_top = 802.0
+margin_right = 1898.0
+margin_bottom = 1058.0
+texture = ExtResource( 3 )
+[connection signal="tween_all_completed" from="CrashTween" to="." method="_on_CrashTween_tween_all_completed"]
 [connection signal="timeout" from="TrailEffect_node/TrailEffect" to="." method="_on_WaterEffect_timeout"]

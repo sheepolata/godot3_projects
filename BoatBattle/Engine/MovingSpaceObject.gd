@@ -6,6 +6,19 @@ var planets_gravity : Vector2 = Vector2.ZERO
 
 var gravity_influence_factor : float = 1.0
 
+export(float) var hull_point_max : = 100.0
+var hull_point : float
+
+var is_dead = false
+
+func _ready():
+	hull_point = hull_point_max
+
+func take_hull_damage(value : float) -> void:
+	hull_point -= value
+	if hull_point < 0:
+		is_dead = true
+
 func apply_forces_from_planets(delta : float):
 	planets_gravity = Vector2.ZERO
 	
@@ -26,7 +39,5 @@ func apply_forces_from_planets(delta : float):
 		weighted_mean_gravity /= planets.size()
 	else:
 		weighted_mean_gravity = 0
-	
-#	print(planets_gravity * delta * weighted_mean_gravity)
 	
 	collision_info = move_and_collide(planets_gravity * delta * weighted_mean_gravity)

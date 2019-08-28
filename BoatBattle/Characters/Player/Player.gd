@@ -3,22 +3,20 @@ extends "res://Engine/MovingSpaceObject.gd"
 var move_direction = Vector2.ZERO
 var current_speeds : Vector2 = Vector2.ZERO
 
-export(int) var SPEED = 550
-export(float, 0, 50) var SPEED_INCREMENT = 4
+export(int) var SPEED = 800
+export(float, 0, 50) var SPEED_INCREMENT = 6
 var current_speed_increment : float = 0
-export var speed_increment_factor : float = 0.025
+export var speed_increment_factor : float = 0.05
 var current_speed_increment_factor : float = 0.05
 
 var all_stop : bool = false
 
-export(int, 0, 90) var TURN_SPEED = 80
-export(float, 0, 1) var TURN_SPEED_INCREMENT = 8
+export(int, 0, 90) var TURN_SPEED = 90
+export(float, 0, 1) var TURN_SPEED_INCREMENT = 14
 
 var state = "DEFAULT"
 
 #var collision_info : KinematicCollision2D = null
-
-var is_dead = false
 
 onready var cam = $Camera2D
 var max_zoom_in = 1; var max_zoom_out = 2.0;
@@ -31,12 +29,14 @@ onready var trail_effect = $TrailEffect_node/TrailEffect
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	._ready()
 	randomize()
 	
 	add_to_group("player")
 	set_physics_process(true)
 	
 	trail_effect.start()
+	$UILayer/GravityDirection.rect_pivot_offset = $UILayer/GravityDirection.rect_size/2
 	#anim.play("bg_anim")
 
 func _physics_process(delta : float):
@@ -44,6 +44,12 @@ func _physics_process(delta : float):
 	
 	basic_control_loop()
 	
+	update_UI(delta)
+	
+	collision_check()
+	
+	if is_dead:
+		state = "DEAD"
 	
 	match(state):
 		"DEFAULT":
@@ -58,11 +64,26 @@ func state_default(delta : float):
 	var v = Utils.normalise(abs(current_speeds.y), max_zoom_in, max_zoom_out, 0, SPEED)
 	cam.zoom = cam.zoom.linear_interpolate(Vector2(v, v), delta)
 		
-	move_controls_loop()
+	if not all_stop:
+		move_controls_loop()
 	
 	apply_forces_from_planets(delta)
 	movement_loop(delta)
+
+func update_UI(delta : float) -> void:
+	$UILayer/SpeedInfo.text = str(int(round(current_speeds.y))) + " spd, " + str(int(round(current_speeds.x))) + " deg"
 	
+	if planets_gravity != Vector2.ZERO:
+		$UILayer/GravityDirection.rect_scale = Vector2.ONE
+		var gravity_angle = planets_gravity.angle()
+		var _rot : Vector2 = Vector2($UILayer/GravityDirection.rect_rotation, $UILayer/GravityDirection.rect_rotation)
+		_rot = _rot.linear_interpolate(Vector2(rad2deg(gravity_angle) + 90, rad2deg(gravity_angle) + 90), delta*10)
+	#	$UILayer/GravityDirection.rect_rotation = _rot.x
+		$UILayer/GravityDirection.rect_rotation = rad2deg(gravity_angle) + 90
+	else:
+		$UILayer/GravityDirection.rect_scale = Vector2.ZERO
+
+func collision_check():
 	if collision_info:
 		if "planets" in collision_info.collider.get_groups():
 			current_speeds = Vector2.ZERO
@@ -144,8 +165,8 @@ func _on_WaterEffect_timeout():
 	trail_effect.wait_time = Utils.normalise(SPEED - abs(current_speeds.y), 0.1, 0.25, 0, SPEED)
 	
 	get_parent().add_child(this_effect)
-	
 	this_effect.position = to_global($TrailEffect_node/WaveEffectSpawnPoint.position)
+#	this_effect.position = (position + $TrailEffect_node/WaveEffectSpawnPoint.position.rotated(rotation))
 	
 	var this_effect2 = preload("res://Engine/WaveEffect.tscn").instance()
 	#this_effect2.min_scale = 0
@@ -156,24 +177,32 @@ func _on_WaterEffect_timeout():
 	get_parent().add_child(this_effect2)
 	
 	this_effect2.position = to_global($TrailEffect_node/WaveEffectSpawnPoint2.position)
+#	this_effect2.position = (position + $TrailEffect_node/WaveEffectSpawnPoint2.position.rotated(rotation))
 
 func crashing(delta):
 	cam.zoom = cam.zoom.linear_interpolate(Vector2(.45, .45), delta)
 	rotate( deg2rad(TURN_SPEED * 2 * delta) )
+	
+	var collider_pos : Vector2 = collision_info.collider.position
+	
 	move_and_slide(position.direction_to(collision_info.collider.position) * collision_info.collider.gravity * 50 * delta)
-	$CrashTween.interpolate_property(self, "scale", scale, Vector2(0.2, 0.2), 3.5, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
-	$CrashTween.start()
-	yield($CrashTween, "tween_completed")
+		
+	if not $CrashTween.is_active():
+		$CrashTween.interpolate_property(self, "scale", scale, Vector2(0.05, 0.05), 4, Tween.TRANS_LINEAR, Tween.EASE_IN)
+		$CrashTween.start()
+
+func _on_CrashTween_tween_all_completed():
 	$Sprite.hide()
 	is_dead = true
-	state = "DEAD"
+	
 
 func dead_state(delta : float):
 	cam.zoom = cam.zoom.linear_interpolate(Vector2(2.5, 2.5), delta*.1)
 
 func _draw():
-	if not is_dead:
-		draw_line(Vector2.ZERO, (planets_gravity*150).rotated(-rotation), Color.red, 5)
+	pass
+#	if not is_dead:
+#		draw_line(Vector2.ZERO, (planets_gravity*150).rotated(-rotation), Color.red, 5)
 	
 	
 	
@@ -190,3 +219,4 @@ func _draw():
 	
 	
 	
+

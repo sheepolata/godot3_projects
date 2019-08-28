@@ -12,9 +12,11 @@ func _ready():
 	randomize()
 	
 	var _scale = randf() * (1.2 - 0.8) + 0.8
-	scale = Vector2(_scale, _scale)
+	$Sprite.scale = Vector2(_scale, _scale)
+	$CollisionShape2D.scale = Vector2(_scale, _scale) * 0.85
 	
 	rotation_dir = rand_range(-1, 1)
+	angular_velocity = randf() * PI * 0.05
 	
 	rotate(randf()*PI)
 
