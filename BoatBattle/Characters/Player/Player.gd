@@ -25,6 +25,8 @@ var max_zoom_in = 1; var max_zoom_out = 2.0;
 
 onready var trail_effect = $TrailEffect_node/TrailEffect
 
+onready var turret = $Turret1
+
 #var planets_gravity : Vector2 = Vector2.ZERO
 
 #onready var anim = $AnimationPlayer
@@ -39,7 +41,6 @@ func _ready():
 	
 	trail_effect.start()
 	$UILayer/GravityDirection.rect_pivot_offset = $UILayer/GravityDirection.rect_size/2
-	#anim.play("bg_anim")
 
 func _physics_process(delta : float):
 	update()
@@ -64,9 +65,17 @@ func _physics_process(delta : float):
 func state_default(delta : float):
 	var v = Utils.normalise(abs(current_speeds.y), max_zoom_in, max_zoom_out, 0, SPEED)
 	cam.zoom = cam.zoom.linear_interpolate(Vector2(v, v), delta)
+#	var d = Vector2(cos(rotation), sin(rotation))
+#	cam.offset_h = d.x
+#	cam.offset_v = d.y
+
+	turret.look_at(get_global_mouse_position())
+	turret.rotate(deg2rad(90))
 		
 	if not all_stop:
 		move_controls_loop()
+	
+	fire_control_loop()
 	
 	apply_forces_from_planets(delta)
 	movement_loop(delta)
@@ -97,10 +106,11 @@ func movement_loop(delta : float):
 	
 	if current_speeds == Vector2.ZERO:
 		all_stop = false
-	elif current_speeds.x == 0:
+	elif current_speeds.x == 0 and current_speeds.y != 0:
 		rotation_stop = false
-	elif current_speeds.y == 0:
+	elif current_speeds.y == 0 and current_speeds.x != 0:
 		thruster_stop = false
+			
 	
 	if move_direction.x > 0:
 		current_speeds.x = min(current_speeds.x + move_direction.x * TURN_SPEED_INCREMENT, TURN_SPEED)
@@ -161,12 +171,16 @@ func move_controls_loop():
 	if Input.is_action_pressed("all_stop"):
 		move_direction = Vector2.ZERO
 		all_stop = true
-	elif Input.is_action_pressed("rotation_stop") or rotation_stop:
+	elif Input.is_action_pressed("rotation_stop") :
 		move_direction.x = 0
 		rotation_stop = true
-	elif Input.is_action_pressed("thruster_stop") or thruster_stop:
+	elif Input.is_action_pressed("thruster_stop") :
 		move_direction.y = 0
 		thruster_stop = true
+
+func fire_control_loop():
+	if Input.is_action_pressed("fire_turret"):
+		turret.fire()
 
 func _on_WaterEffect_timeout():
 	var this_effect = preload("res://Engine/WaveEffect.tscn").instance()

@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Characters/Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Data/Sprites/Player_boat.png" type="Texture" id=2]
-[ext_resource path="res://Data/Sprites/arrow_white.png" type="Texture" id=3]
+[ext_resource path="res://Characters/Turrets/Turret.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Data/Sprites/arrow_white.png" type="Texture" id=4]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 30.0
@@ -21,7 +22,6 @@ TURN_SPEED_INCREMENT = 1.0
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
-zoom = Vector2( 2, 2 )
 drag_margin_left = 0.05
 drag_margin_top = 0.05
 drag_margin_right = 0.05
@@ -35,12 +35,16 @@ texture = ExtResource( 2 )
 rotation = 1.5708
 shape = SubResource( 1 )
 
+[node name="Turret1" parent="." instance=ExtResource( 3 )]
+position = Vector2( 28, 0 )
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/bg_anim = SubResource( 2 )
 
 [node name="CrashTween" type="Tween" parent="."]
 
 [node name="TrailEffect_node" type="Node2D" parent="."]
+editor/display_folded = true
 
 [node name="TrailEffect" type="Timer" parent="TrailEffect_node"]
 wait_time = 0.2
@@ -52,6 +56,7 @@ position = Vector2( -72, -19 )
 position = Vector2( -72, 19 )
 
 [node name="UILayer" type="CanvasLayer" parent="."]
+editor/display_folded = true
 
 [node name="SpeedInfo" type="Label" parent="UILayer"]
 margin_left = 20.0
@@ -66,6 +71,6 @@ margin_left = 1642.0
 margin_top = 802.0
 margin_right = 1898.0
 margin_bottom = 1058.0
-texture = ExtResource( 3 )
+texture = ExtResource( 4 )
 [connection signal="tween_all_completed" from="CrashTween" to="." method="_on_CrashTween_tween_all_completed"]
 [connection signal="timeout" from="TrailEffect_node/TrailEffect" to="." method="_on_WaterEffect_timeout"]

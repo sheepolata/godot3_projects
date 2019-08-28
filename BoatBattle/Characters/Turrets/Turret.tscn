@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Data/Sprites/turret1.png" type="Texture" id=1]
+[ext_resource path="res://Characters/Turrets/Turret.gd" type="Script" id=2]
+
+[node name="Turret" type="Sprite"]
+rotation = 1.5708
+texture = ExtResource( 1 )
+script = ExtResource( 2 )
+
+[node name="FirePoint" type="Position2D" parent="."]
+position = Vector2( -7.24792e-005, -20 )
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+position = Vector2( -30.0001, -32.9999 )
+enabled = true
+
+[node name="LaserDuration" type="Timer" parent="."]
+one_shot = true
+
+[node name="LaserCooldown" type="Timer" parent="."]

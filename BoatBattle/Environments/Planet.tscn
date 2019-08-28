@@ -7,7 +7,7 @@
 radius = 256.0
 
 [node name="Planet" type="StaticBody2D"]
-rotation = 66.8398
+rotation = 66.9325
 scale = Vector2( 0.989452, 0.989452 )
 z_index = -2
 script = ExtResource( 1 )
