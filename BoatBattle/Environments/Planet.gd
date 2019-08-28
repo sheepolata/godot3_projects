@@ -11,6 +11,9 @@ func _ready():
 	
 	randomize()
 	
+	var _scale = randf() * (1.2 - 0.8) + 0.8
+	scale = Vector2(_scale, _scale)
+	
 	rotation_dir = rand_range(-1, 1)
 	
 	rotate(randf()*PI)

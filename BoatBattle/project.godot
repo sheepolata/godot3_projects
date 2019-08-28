@@ -16,7 +16,7 @@ _global_script_class_icons={
 [application]
 
 config/name="SpaceBattle"
-run/main_scene="res://Environments/Level1.tscn"
+run/main_scene="res://Environments/World.tscn"
 config/icon="res://i2con.png"
 
 [autoload]
