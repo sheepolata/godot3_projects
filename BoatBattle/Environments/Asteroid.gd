@@ -15,7 +15,7 @@ func _ready():
 	
 	add_to_group("asteroid")
 	
-	rot_speed = randf() * PI * .25
+	rot_speed = randf() * PI * .5
 	
 	var _scale = randf() * (0.8 - 0.2) + 0.2
 	scale = Vector2(_scale, _scale)
@@ -63,8 +63,8 @@ func _physics_process(delta):
 						var a = randf() * PI * 2
 						fly_direction = Vector2(position.x + 128 * cos(a), position.y + 128 * sin(a))
 		"CRASH":
-			rotate( deg2rad(rot_speed * 2 * delta) )
-			move_and_slide(position.direction_to(collision_info.collider.position) * collision_info.collider.gravity * 50 * delta)
+			$Sprite.rotate( deg2rad(rot_speed * 2 * delta) )
+			move_and_slide(position.direction_to(collision_info.collider.position) * collision_info.collider.gravity * delta * collision_info.collider.gravity/20)
 			if not $Tween.is_active():
 				$Tween.interpolate_property(self, "scale", scale, Vector2(0, 0), 3.5, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 				$Tween.start()

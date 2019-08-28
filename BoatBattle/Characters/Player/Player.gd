@@ -185,7 +185,7 @@ func crashing(delta):
 	
 	var collider_pos : Vector2 = collision_info.collider.position
 	
-	move_and_slide(position.direction_to(collision_info.collider.position) * collision_info.collider.gravity * 50 * delta)
+	move_and_slide(position.direction_to(collision_info.collider.position) * collision_info.collider.gravity * delta * collision_info.collider.gravity/20)
 		
 	if not $CrashTween.is_active():
 		$CrashTween.interpolate_property(self, "scale", scale, Vector2(0.05, 0.05), 4, Tween.TRANS_LINEAR, Tween.EASE_IN)

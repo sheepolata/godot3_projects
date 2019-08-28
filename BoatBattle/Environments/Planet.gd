@@ -4,10 +4,12 @@ extends StaticBody2D
 export(float) var angular_velocity : float = 0.3
 var rotation_dir = 0
 export(int) var gravity_distance : int = 4096
-export(float) var gravity : float = 50
+export(float) var gravity : float = 200
 
 func _ready():
 	add_to_group("planets")
+	
+#	$CollisionShape2D.disabled = true
 	
 	randomize()
 	

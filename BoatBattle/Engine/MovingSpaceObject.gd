@@ -33,6 +33,7 @@ func apply_forces_from_planets(delta : float):
 	for planet in planets:
 		if planet.position.distance_to(position) < planet.gravity_distance:
 			planets_gravity += position.direction_to(planet.position) * (planet.gravity/sum_gravities) * gravity_influence_factor
+#			planets_gravity += position.direction_to(planet.position) * planet.gravity * (1 - (position.distance_to(planet.position) / planet.gravity_distance )) * gravity_influence_factor * (planet.gravity/sum_gravities)
 			weighted_mean_gravity += planet.gravity
 	
 	if planets.size() > 0:
@@ -41,3 +42,14 @@ func apply_forces_from_planets(delta : float):
 		weighted_mean_gravity = 0
 	
 	collision_info = move_and_collide(planets_gravity * delta * weighted_mean_gravity)
+#	collision_info = move_and_collide(planets_gravity * delta)
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

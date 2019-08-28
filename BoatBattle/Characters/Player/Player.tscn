@@ -14,6 +14,8 @@ length = 2.0
 loop = true
 
 [node name="Player" type="KinematicBody2D"]
+collision_layer = 2
+collision_mask = 2
 script = ExtResource( 1 )
 TURN_SPEED_INCREMENT = 1.0
 
