@@ -4,7 +4,7 @@ var move_direction = Vector2.ZERO
 var current_speeds : Vector2 = Vector2.ZERO
 
 export(int) var SPEED = 800
-export(float, 0, 50) var SPEED_INCREMENT = 6
+export(float, 0, 50) var SPEED_INCREMENT = 16
 var current_speed_increment : float = 0
 export var speed_increment_factor : float = 0.05
 var current_speed_increment_factor : float = 0.05
@@ -180,6 +180,7 @@ func move_controls_loop():
 
 func fire_control_loop():
 	if Input.is_action_pressed("fire_turret"):
+		#print("HEY")
 		turret.fire()
 
 func _on_WaterEffect_timeout():

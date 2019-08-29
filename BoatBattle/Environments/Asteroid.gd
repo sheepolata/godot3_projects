@@ -9,6 +9,9 @@ var STATE = "DEFAULT"
 
 var force : float = 0
 
+var min_scale : float = 0.2; var max_scale : float = 0.8;
+var min_hullpoint : float = 2; var max_hullpoint : float = 8;
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	randomize()
@@ -17,7 +20,7 @@ func _ready():
 	
 	rot_speed = randf() * PI * .5
 	
-	var _scale = randf() * (0.8 - 0.2) + 0.2
+	var _scale = randf() * (max_scale - min_scale) + min_scale
 	scale = Vector2(_scale, _scale)
 	
 	speed = randf() * (700 - 300) + 300
@@ -25,8 +28,13 @@ func _ready():
 	gravity_influence_factor = randf() * (4.0 - 0.5) + 0.2
 	
 	force = pow((1+scale.x), 2) + speed*0.1
+	
+	hull_point_max = Utils.normalise(_scale, 0, (max_hullpoint - min_hullpoint), min_scale, max_scale) + min_hullpoint
+	print(hull_point_max)
+	hull_point = hull_point_max
 
 func _physics_process(delta):
+	update()
 	
 	match(STATE):
 		"DEFAULT":
@@ -62,6 +70,10 @@ func _physics_process(delta):
 							set("STATE", "EXPLODE")
 						var a = randf() * PI * 2
 						fly_direction = Vector2(position.x + 128 * cos(a), position.y + 128 * sin(a))
+			
+			if is_dead:
+				STATE = "EXPLODE"
+		
 		"CRASH":
 			$Sprite.rotate( deg2rad(rot_speed * 2 * delta) )
 			move_and_slide(position.direction_to(collision_info.collider.position) * collision_info.collider.gravity * delta * collision_info.collider.gravity/20)
@@ -69,6 +81,7 @@ func _physics_process(delta):
 				$Tween.interpolate_property(self, "scale", scale, Vector2(0, 0), 3.5, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 				$Tween.start()
 		"EXPLODE":
+			
 			queue_free()
 
 func _on_Tween_tween_all_completed():
