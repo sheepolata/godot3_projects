@@ -11,12 +11,14 @@ var hull_point : float
 
 var is_dead = false
 
+var score_value : int = 0
+
 func _ready():
 	hull_point = hull_point_max
 
 func take_hull_damage(value : float) -> void:
-	hull_point -= value
-	if hull_point < 0:
+	hull_point = max(0, hull_point - value)
+	if hull_point <= 0:
 		is_dead = true
 #	print(hull_point, "hp")
 

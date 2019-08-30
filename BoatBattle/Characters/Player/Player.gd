@@ -16,6 +16,8 @@ var rotation_stop : bool = false
 export(int, 0, 90) var TURN_SPEED = 90
 export(float, 0, 1) var TURN_SPEED_INCREMENT = 14
 
+var score : int = 0
+
 var state = "DEFAULT"
 
 #var collision_info : KinematicCollision2D = null
@@ -81,11 +83,15 @@ func state_default(delta : float):
 	movement_loop(delta)
 
 func update_UI(delta : float) -> void:
-	$UILayer/SpeedInfo.text = (str(int(round(current_speeds.y))) + " spd, " 
+	$UILayer/VBoxContainer/SpeedInfo.text = (str(int(round(current_speeds.y))) + " spd, " 
 								+ str(int(round(current_speeds.x))) + " deg"
 							)
 	if turrets.size() > 0:
-		$UILayer/SpeedInfo.text = $UILayer/SpeedInfo.text + ", autofire " + str(turrets[0].autotarget)
+		$UILayer/VBoxContainer/SpeedInfo.text = $UILayer/VBoxContainer/SpeedInfo.text + ", autofire " + str(turrets[0].autotarget)
+		
+	$UILayer/VBoxContainer/HullPoints.text = "Hull : " + str(round((hull_point/hull_point_max) * 100)) + "%"
+	
+	$UILayer/Score.text = str(score) + " Pts"
 	
 	if planets_gravity != Vector2.ZERO:
 		$UILayer/GravityDirection.rect_scale = Vector2.ONE
@@ -232,6 +238,9 @@ func _on_CrashTween_tween_all_completed():
 	
 func dead_state(delta : float):
 	cam.zoom = cam.zoom.linear_interpolate(Vector2(2.5, 2.5), delta*.1)
+	$TrailEffect_node/TrailEffect.stop()
+	hide()
+	$CollisionShape2D.disabled = true
 
 func _draw():
 	pass

@@ -69,9 +69,11 @@ func _process(delta):
 	if $RayCast2D.is_colliding():
 		if $RayCast2D.get_collider() and $RayCast2D.get_collider().has_method("take_hull_damage"):
 			$RayCast2D.get_collider().take_hull_damage(laser_damage * delta)
+			if $RayCast2D.get_collider().is_dead:
+				get_parent().get_parent().score += $RayCast2D.get_collider().score_value
+				$RayCast2D.get_collider().score_value = 0
 	
 func _draw():
-	
 #	draw_circle(Vector2.ZERO, $AutotargetRange/CollisionShape2D.shape.radius, Color.green)
 	if $RayCast2D.enabled:
 #		draw_line($RayCast2D.position, $RayCast2D.cast_to, Color.red, 3)

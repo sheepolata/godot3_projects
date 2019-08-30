@@ -49,7 +49,6 @@ anims/bg_anim = SubResource( 2 )
 [node name="CrashTween" type="Tween" parent="."]
 
 [node name="TrailEffect_node" type="Node2D" parent="."]
-editor/display_folded = true
 __meta__ = {
 "_edit_lock_": true
 }
@@ -64,21 +63,42 @@ position = Vector2( -72, -19 )
 position = Vector2( -72, 19 )
 
 [node name="UILayer" type="CanvasLayer" parent="."]
-editor/display_folded = true
+layer = 2
 
-[node name="SpeedInfo" type="Label" parent="UILayer"]
-margin_left = 20.0
-margin_top = 20.0
-margin_right = 60.0
-margin_bottom = 34.0
+[node name="Score" type="Label" parent="UILayer"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -39.0
+margin_right = 39.0
+margin_bottom = 14.0
 rect_scale = Vector2( 3, 3 )
-text = "0 spd, 0 deg"
+text = "Score"
+align = 1
+valign = 1
 
 [node name="GravityDirection" type="TextureRect" parent="UILayer"]
-margin_left = 1642.0
-margin_top = 802.0
-margin_right = 1898.0
-margin_bottom = 1058.0
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -256.0
+margin_top = -256.0
 texture = ExtResource( 4 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UILayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_scale = Vector2( 3, 3 )
+
+[node name="SpeedInfo" type="Label" parent="UILayer/VBoxContainer"]
+margin_right = 1920.0
+margin_bottom = 14.0
+text = "0 spd, 0 deg"
+
+[node name="HullPoints" type="Label" parent="UILayer/VBoxContainer"]
+margin_top = 18.0
+margin_right = 1920.0
+margin_bottom = 32.0
+text = "HP PERCENT"
 [connection signal="tween_all_completed" from="CrashTween" to="." method="_on_CrashTween_tween_all_completed"]
 [connection signal="timeout" from="TrailEffect_node/TrailEffect" to="." method="_on_WaterEffect_timeout"]

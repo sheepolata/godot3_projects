@@ -31,6 +31,8 @@ func _ready():
 	
 	hull_point_max = Utils.normalise(_scale, 0, (max_hullpoint - min_hullpoint), min_scale, max_scale) + min_hullpoint
 	hull_point = hull_point_max
+	
+	score_value = int(round(force))
 
 func _physics_process(delta):
 	update()
@@ -54,21 +56,24 @@ func _physics_process(delta):
 					$CollisionShape2D.disabled = true
 					STATE = "CRASH"
 				elif "player" in collision_info.collider.get_groups():
+					collision_info.collider.take_hull_damage(force)
 					$CollisionShape2D.disabled = true
 					STATE = "EXPLODE"
 				elif "asteroid" in collision_info.collider.get_groups():
 					if force > collision_info.collider.get("force"):
-						var a2 = randf() * PI * 2
-						collision_info.collider.set("fly_direction", 
-														Vector2(collision_info.collider.position.x + 128 * cos(a2), 
-																collision_info.collider.position.y + 128 * sin(a2)))
 						if force > collision_info.collider.get("force")*1.2:
 							collision_info.collider.set("STATE", "EXPLODE")
+						else:
+							var a2 = randf() * PI * 2
+							collision_info.collider.set("fly_direction", 
+															Vector2(collision_info.collider.position.x + 128 * cos(a2), 
+																	collision_info.collider.position.y + 128 * sin(a2)))
 					else:
 						if force*1.2 < collision_info.collider.get("force"):
 							set("STATE", "EXPLODE")
-						var a = randf() * PI * 2
-						fly_direction = Vector2(position.x + 128 * cos(a), position.y + 128 * sin(a))
+						else:
+							var a = randf() * PI * 2
+							fly_direction = Vector2(position.x + 128 * cos(a), position.y + 128 * sin(a))
 			
 			if is_dead:
 				STATE = "EXPLODE"
