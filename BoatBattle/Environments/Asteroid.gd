@@ -27,10 +27,9 @@ func _ready():
 	
 	gravity_influence_factor = randf() * (4.0 - 0.5) + 0.2
 	
-	force = pow((1+scale.x), 2) + speed*0.1
+	force = pow((1+scale.x), 2) + speed*0.01
 	
 	hull_point_max = Utils.normalise(_scale, 0, (max_hullpoint - min_hullpoint), min_scale, max_scale) + min_hullpoint
-	print(hull_point_max)
 	hull_point = hull_point_max
 
 func _physics_process(delta):

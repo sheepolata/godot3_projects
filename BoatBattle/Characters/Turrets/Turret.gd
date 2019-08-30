@@ -9,7 +9,10 @@ export(float) var rotation_speed : float = 180
 export(Vector2) var laser_random_offset_limits : Vector2 = Vector2(0, 0)
 
 var autotarget : bool = false
-var autotarget_group : String = ""
+var autotarget_groups : Array = []
+var possible_autotargets : Array = []
+var target_position : Vector2 = Vector2.ZERO
+var autotarget_speed_factor : float = 2.0
 
 func _ready():
 	if laser_cooldown > 0:
@@ -35,15 +38,31 @@ func _ready():
 func _process(delta):
 	update()
 	
-	var target_position = get_global_mouse_position()
-	var rot_delta = Utils.slide(0, get_angle_to(target_position) + deg2rad(90), deg2rad(rotation_speed) * delta)
+	var _t = get_closest_target()
+	if not autotarget:
+		 target_position = get_global_mouse_position()
+	else:
+		if _t:
+			target_position = get_closest_target().position
+	var _spd_factor
+	if autotarget:
+		_spd_factor = autotarget_speed_factor
+	else:
+		_spd_factor = 1.0
+	var rot_delta = Utils.slide(0, get_angle_to(target_position) + deg2rad(90), deg2rad(rotation_speed) * delta * _spd_factor)
 	rotate(rot_delta)
+	
+	if autotarget and _t and abs(get_angle_to(_t.position) - rotation) < rad2deg(20):
+#		print(int(rad2deg(get_angle_to(_t.position)))%360, "/", int(rad2deg(rotation-deg2rad(90)))%360)
+		print(abs(int(rad2deg(get_angle_to(_t.position)))%360) - abs(int(rad2deg(rotation-deg2rad(90)))%360))
+		fire()
 	
 	if $RayCast2D.is_colliding():
 		if $RayCast2D.get_collider() and $RayCast2D.get_collider().has_method("take_hull_damage"):
 			$RayCast2D.get_collider().take_hull_damage(laser_damage * delta)
 	
 func _draw():
+	
 #	draw_circle(Vector2.ZERO, $AutotargetRange/CollisionShape2D.shape.radius, Color.green)
 	if $RayCast2D.enabled:
 #		draw_line($RayCast2D.position, $RayCast2D.cast_to, Color.red, 3)
@@ -72,6 +91,19 @@ func fire():
 		else:
 			$LaserDuration.start(0.1)
 	
+func get_closest_target() -> PhysicsBody2D:
+	if possible_autotargets.size() == 1:
+		return possible_autotargets[0]
+		
+	var res = null	
+	if possible_autotargets.size() > 1:
+		res = possible_autotargets[0]
+		for p in possible_autotargets:
+			if res.position.distance_to(position) > p.position.distance_to(position):
+				res = p
+	
+	return res
+
 func _on_LaserCooldown_timeout():
 	$LaserCooldown.stop()
 
@@ -80,3 +112,43 @@ func _on_LaserDuration_timeout():
 	if laser_cooldown > 0:
 		$LaserCooldown.start()
 	$LaserDuration.stop()
+
+func _on_AutotargetRange_body_entered(body : PhysicsBody2D):
+	if not body:
+		return
+		
+	var valid = false
+	for gr in autotarget_groups:
+		if gr in body.get_groups():
+			valid = true
+			break
+	if valid:
+		possible_autotargets.append(body)
+
+func _on_AutotargetRange_body_exited(body):
+	if body:
+		if body in possible_autotargets:
+			possible_autotargets.remove(possible_autotargets.find(body))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

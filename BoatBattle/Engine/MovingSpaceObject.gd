@@ -18,7 +18,7 @@ func take_hull_damage(value : float) -> void:
 	hull_point -= value
 	if hull_point < 0:
 		is_dead = true
-	print(hull_point)
+#	print(hull_point, "hp")
 
 func apply_forces_from_planets(delta : float):
 	planets_gravity = Vector2.ZERO

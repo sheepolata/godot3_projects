@@ -41,6 +41,8 @@ func _ready():
 	
 	trail_effect.start()
 	$UILayer/GravityDirection.rect_pivot_offset = $UILayer/GravityDirection.rect_size/2
+	
+	turret.autotarget_groups.append("asteroid")
 
 func _physics_process(delta : float):
 	update()
@@ -78,7 +80,10 @@ func state_default(delta : float):
 	movement_loop(delta)
 
 func update_UI(delta : float) -> void:
-	$UILayer/SpeedInfo.text = str(int(round(current_speeds.y))) + " spd, " + str(int(round(current_speeds.x))) + " deg"
+	$UILayer/SpeedInfo.text = (str(int(round(current_speeds.y))) + " spd, " 
+								+ str(int(round(current_speeds.x))) + " deg, autofire "
+								+ str(turret.autotarget)
+							)
 	
 	if planets_gravity != Vector2.ZERO:
 		$UILayer/GravityDirection.rect_scale = Vector2.ONE
@@ -176,8 +181,12 @@ func move_controls_loop():
 		thruster_stop = true
 
 func fire_control_loop():
+	if Input.is_action_just_pressed("autotarget"):
+		turret.autotarget = not turret.autotarget
+		
 	if Input.is_action_pressed("fire_turret"):
 		#print("HEY")
+		turret.autotarget = false
 		turret.fire()
 
 func _on_WaterEffect_timeout():
