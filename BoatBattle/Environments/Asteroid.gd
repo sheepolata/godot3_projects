@@ -23,7 +23,7 @@ func _ready():
 	var _scale = randf() * (max_scale - min_scale) + min_scale
 	scale = Vector2(_scale, _scale)
 	
-	speed = randf() * (700 - 300) + 300
+	speed = randf() * (550 - 200) + 200
 	
 	gravity_influence_factor = randf() * (4.0 - 0.5) + 0.2
 	
@@ -53,10 +53,10 @@ func _physics_process(delta):
 				if "planets" in collision_info.collider.get_groups():
 					$CollisionShape2D.disabled = true
 					STATE = "CRASH"
-				if "player" in collision_info.collider.get_groups():
+				elif "player" in collision_info.collider.get_groups():
 					$CollisionShape2D.disabled = true
 					STATE = "EXPLODE"
-				if "asteroid" in collision_info.collider.get_groups():
+				elif "asteroid" in collision_info.collider.get_groups():
 					if force > collision_info.collider.get("force"):
 						var a2 = randf() * PI * 2
 						collision_info.collider.set("fly_direction", 

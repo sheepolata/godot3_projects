@@ -12,9 +12,11 @@ var autotarget : bool = false
 var autotarget_groups : Array = []
 var possible_autotargets : Array = []
 var target_position : Vector2 = Vector2.ZERO
-var autotarget_speed_factor : float = 2.0
+var autotarget_speed_factor : float = 4.0
 
 func _ready():
+	add_to_group("turret")
+	
 	if laser_cooldown > 0:
 		$LaserCooldown.wait_time = laser_cooldown
 	if laser_duration > 0:
@@ -30,6 +32,7 @@ func _ready():
 	
 	$RayCast2D.enabled = false
 	$RayCast2D.add_exception(get_parent())
+	$RayCast2D.add_exception(get_parent().get_parent())
 	
 	$AutotargetRange/CollisionShape2D.shape.radius = laser_range
 	
@@ -37,6 +40,9 @@ func _ready():
 	
 func _process(delta):
 	update()
+	
+#	rotation_degrees = Utils.clamp_angle_degrees(rotation_degrees)
+#	print(rotation_degrees)
 	
 	var _t = get_closest_target()
 	if not autotarget:
@@ -47,14 +53,17 @@ func _process(delta):
 	var _spd_factor
 	if autotarget:
 		_spd_factor = autotarget_speed_factor
+#		look_at(target_position)
+#		rotate(deg2rad(90))
 	else:
 		_spd_factor = 1.0
-	var rot_delta = Utils.slide(0, get_angle_to(target_position) + deg2rad(90), deg2rad(rotation_speed) * delta * _spd_factor)
-	rotate(rot_delta)
+#		var rot_delta = Utils.slide(0, rad2deg(get_angle_to(target_position)) + 90, (rotation_speed) * delta)
+#		rotate(deg2rad(rot_delta))
+		
+	var rot_delta = Utils.slide(0, rad2deg(get_angle_to(target_position)) + 90, (rotation_speed) * delta * _spd_factor)
+	rotate(deg2rad(rot_delta))
 	
-	if autotarget and _t and abs(get_angle_to(_t.position) - rotation) < rad2deg(20):
-#		print(int(rad2deg(get_angle_to(_t.position)))%360, "/", int(rad2deg(rotation-deg2rad(90)))%360)
-		print(abs(int(rad2deg(get_angle_to(_t.position)))%360) - abs(int(rad2deg(rotation-deg2rad(90)))%360))
+	if autotarget and _t and Utils.near(rad2deg(get_angle_to(_t.position)), -90, 2):
 		fire()
 	
 	if $RayCast2D.is_colliding():
@@ -92,17 +101,14 @@ func fire():
 			$LaserDuration.start(0.1)
 	
 func get_closest_target() -> PhysicsBody2D:
-	if possible_autotargets.size() == 1:
-		return possible_autotargets[0]
+	if possible_autotargets.size() <= 0:
+		return null
 		
-	var res = null	
-	if possible_autotargets.size() > 1:
-		res = possible_autotargets[0]
-		for p in possible_autotargets:
-			if res.position.distance_to(position) > p.position.distance_to(position):
-				res = p
-	
-	return res
+	possible_autotargets.sort_custom(self, "_compare_asteroid_distance")
+	return possible_autotargets[0]
+
+func _compare_asteroid_distance(a, b):
+	return a.global_position.distance_to(global_position) < b.global_position.distance_to(global_position)
 
 func _on_LaserCooldown_timeout():
 	$LaserCooldown.stop()

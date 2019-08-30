@@ -1,8 +1,7 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Environments/World.gd" type="Script" id=1]
-[ext_resource path="res://Environments/Planet.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Characters/Player/Player.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Characters/Player/Player.tscn" type="PackedScene" id=2]
 
 [node name="World" type="Node2D"]
 script = ExtResource( 1 )
@@ -10,34 +9,17 @@ __meta__ = {
 "_edit_lock_": true,
 "_edit_vertical_guides_": [  ]
 }
-max_nb_asteroid = 8
-random_target_offset_range = 256
+max_nb_asteroid = 25
+asteroid_freq_limits = Vector2( 0.5, 0.5 )
+random_target_offset_range = 128
 
 [node name="Planets" type="Node" parent="."]
-
-[node name="Planet" parent="Planets" instance=ExtResource( 2 )]
-position = Vector2( 1556, 3917 )
-rotation = 61.7538
-angular_velocity = 0.121835
-gravity = 200.0
-
-[node name="Planet2" parent="Planets" instance=ExtResource( 2 )]
-position = Vector2( 7208, 7922 )
-rotation = -9.55072
-angular_velocity = 0.126158
-gravity = 200.0
-
-[node name="Planet3" parent="Planets" instance=ExtResource( 2 )]
-position = Vector2( 8015, 642 )
-rotation = 6.75881
-angular_velocity = 0.0400635
-gravity = 200.0
 
 [node name="Asteroids" type="Node" parent="."]
 
 [node name="Spawner" type="Timer" parent="Asteroids"]
 wait_time = 5.0
 
-[node name="Player" parent="." instance=ExtResource( 3 )]
+[node name="Player" parent="." instance=ExtResource( 2 )]
 position = Vector2( 877.197, 473.518 )
 [connection signal="timeout" from="Asteroids/Spawner" to="." method="spaw_asteroid"]

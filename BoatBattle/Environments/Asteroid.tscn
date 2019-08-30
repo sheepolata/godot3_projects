@@ -3,9 +3,8 @@
 [ext_resource path="res://Environments/Asteroid.gd" type="Script" id=1]
 [ext_resource path="res://Data/Sprites/asteroid.png" type="Texture" id=2]
 
-[sub_resource type="CapsuleShape2D" id=1]
-radius = 32.8719
-height = 76.7751
+[sub_resource type="CircleShape2D" id=1]
+radius = 44.6943
 
 [node name="Asteroid" type="KinematicBody2D"]
 collision_layer = 7
@@ -16,8 +15,7 @@ script = ExtResource( 1 )
 texture = ExtResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( -0.19371, -3.87423 )
-rotation = 0.898845
+position = Vector2( -3.05861, -7.54455 )
 shape = SubResource( 1 )
 
 [node name="Tween" type="Tween" parent="."]

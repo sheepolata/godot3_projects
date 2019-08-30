@@ -25,7 +25,7 @@ var max_zoom_in = 1; var max_zoom_out = 2.0;
 
 onready var trail_effect = $TrailEffect_node/TrailEffect
 
-onready var turret = $Turret1
+onready var turrets : Array = $turrets.get_children()
 
 #var planets_gravity : Vector2 = Vector2.ZERO
 
@@ -42,7 +42,8 @@ func _ready():
 	trail_effect.start()
 	$UILayer/GravityDirection.rect_pivot_offset = $UILayer/GravityDirection.rect_size/2
 	
-	turret.autotarget_groups.append("asteroid")
+	for t in turrets:
+		t.autotarget_groups.append("asteroid")
 
 func _physics_process(delta : float):
 	update()
@@ -81,9 +82,10 @@ func state_default(delta : float):
 
 func update_UI(delta : float) -> void:
 	$UILayer/SpeedInfo.text = (str(int(round(current_speeds.y))) + " spd, " 
-								+ str(int(round(current_speeds.x))) + " deg, autofire "
-								+ str(turret.autotarget)
+								+ str(int(round(current_speeds.x))) + " deg"
 							)
+	if turrets.size() > 0:
+		$UILayer/SpeedInfo.text = $UILayer/SpeedInfo.text + ", autofire " + str(turrets[0].autotarget)
 	
 	if planets_gravity != Vector2.ZERO:
 		$UILayer/GravityDirection.rect_scale = Vector2.ONE
@@ -182,12 +184,14 @@ func move_controls_loop():
 
 func fire_control_loop():
 	if Input.is_action_just_pressed("autotarget"):
-		turret.autotarget = not turret.autotarget
+		for t in turrets:
+			t.autotarget = not t.autotarget
 		
 	if Input.is_action_pressed("fire_turret"):
 		#print("HEY")
-		turret.autotarget = false
-		turret.fire()
+		for t in turrets:
+			t.autotarget = false
+			t.fire()
 
 func _on_WaterEffect_timeout():
 	var this_effect = preload("res://Engine/WaveEffect.tscn").instance()
