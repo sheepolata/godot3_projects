@@ -1,10 +1,11 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Data/Sprites/turret1.png" type="Texture" id=1]
 [ext_resource path="res://Characters/Turrets/Turret.gd" type="Script" id=2]
 
+[sub_resource type="CircleShape2D" id=1]
+
 [node name="Turret" type="Sprite"]
-rotation = 1.5708
 texture = ExtResource( 1 )
 script = ExtResource( 2 )
 
@@ -20,5 +21,12 @@ collision_mask = 4
 one_shot = true
 
 [node name="LaserCooldown" type="Timer" parent="."]
+
+[node name="AutotargetRange" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AutotargetRange"]
+shape = SubResource( 1 )
+
+[node name="Tween" type="Tween" parent="."]
 [connection signal="timeout" from="LaserDuration" to="." method="_on_LaserDuration_timeout"]
 [connection signal="timeout" from="LaserCooldown" to="." method="_on_LaserCooldown_timeout"]

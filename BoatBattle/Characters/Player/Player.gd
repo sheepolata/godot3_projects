@@ -68,9 +68,6 @@ func state_default(delta : float):
 #	var d = Vector2(cos(rotation), sin(rotation))
 #	cam.offset_h = d.x
 #	cam.offset_v = d.y
-
-	turret.look_at(get_global_mouse_position())
-	turret.rotate(deg2rad(90))
 		
 	if not all_stop:
 		move_controls_loop()
@@ -95,7 +92,7 @@ func update_UI(delta : float) -> void:
 
 func collision_check():
 	if collision_info:
-		if "planets" in collision_info.collider.get_groups():
+		if collision_info.collider and "planets" in collision_info.collider.get_groups():
 			current_speeds = Vector2.ZERO
 			$CollisionShape2D.disabled = true
 			state = "CRASH"

@@ -17,20 +17,20 @@ random_target_offset_range = 256
 
 [node name="Planet" parent="Planets" instance=ExtResource( 2 )]
 position = Vector2( 1556, 3917 )
-rotation = 60.0378
-angular_velocity = 0.0374249
+rotation = 61.7538
+angular_velocity = 0.121835
 gravity = 200.0
 
 [node name="Planet2" parent="Planets" instance=ExtResource( 2 )]
 position = Vector2( 7208, 7922 )
-rotation = -10.0545
-angular_velocity = 0.148365
+rotation = -9.55072
+angular_velocity = 0.126158
 gravity = 200.0
 
 [node name="Planet3" parent="Planets" instance=ExtResource( 2 )]
 position = Vector2( 8015, 642 )
-rotation = 5.56369
-angular_velocity = 0.011139
+rotation = 6.75881
+angular_velocity = 0.0400635
 gravity = 200.0
 
 [node name="Asteroids" type="Node" parent="."]

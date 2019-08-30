@@ -4,8 +4,12 @@ export(float) var laser_cooldown : float = 0
 export(float) var laser_range : float = 600
 export(float) var laser_duration : float = 0
 export(float) var laser_damage : float = 10
+export(float) var rotation_speed : float = 180
 
 export(Vector2) var laser_random_offset_limits : Vector2 = Vector2(0, 0)
+
+var autotarget : bool = false
+var autotarget_group : String = ""
 
 func _ready():
 	if laser_cooldown > 0:
@@ -24,15 +28,23 @@ func _ready():
 	$RayCast2D.enabled = false
 	$RayCast2D.add_exception(get_parent())
 	
+	$AutotargetRange/CollisionShape2D.shape.radius = laser_range
+	
+#	rotation = deg2rad(90)
 	
 func _process(delta):
 	update()
+	
+	var target_position = get_global_mouse_position()
+	var rot_delta = Utils.slide(0, get_angle_to(target_position) + deg2rad(90), deg2rad(rotation_speed) * delta)
+	rotate(rot_delta)
 	
 	if $RayCast2D.is_colliding():
 		if $RayCast2D.get_collider() and $RayCast2D.get_collider().has_method("take_hull_damage"):
 			$RayCast2D.get_collider().take_hull_damage(laser_damage * delta)
 	
 func _draw():
+#	draw_circle(Vector2.ZERO, $AutotargetRange/CollisionShape2D.shape.radius, Color.green)
 	if $RayCast2D.enabled:
 #		draw_line($RayCast2D.position, $RayCast2D.cast_to, Color.red, 3)
 		if $RayCast2D.is_colliding() and $RayCast2D.get_collider():
@@ -42,7 +54,6 @@ func _draw():
 		else:
 #			print("HIT NOTHING")
 			draw_line($RayCast2D.position, $RayCast2D.cast_to, Color.red, 3)
-			
 
 func fire():
 	if ( ($LaserCooldown.is_stopped() or laser_cooldown <= 0) 
@@ -63,7 +74,6 @@ func fire():
 	
 func _on_LaserCooldown_timeout():
 	$LaserCooldown.stop()
-
 
 func _on_LaserDuration_timeout():
 	$RayCast2D.enabled = false
