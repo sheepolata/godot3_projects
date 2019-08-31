@@ -12,7 +12,7 @@ var autotarget : bool = false
 var autotarget_groups : Array = []
 var possible_autotargets : Array = []
 var target_position : Vector2 = Vector2.ZERO
-var autotarget_speed_factor : float = 4.0
+var autotarget_speed_factor : float = 1.0
 
 func _ready():
 	add_to_group("turret")
@@ -41,9 +41,6 @@ func _ready():
 func _process(delta):
 	update()
 	
-#	rotation_degrees = Utils.clamp_angle_degrees(rotation_degrees)
-#	print(rotation_degrees)
-	
 	var _t = get_closest_target()
 	if not autotarget:
 		 target_position = get_global_mouse_position()
@@ -70,8 +67,9 @@ func _process(delta):
 		if $RayCast2D.get_collider() and $RayCast2D.get_collider().has_method("take_hull_damage"):
 			$RayCast2D.get_collider().take_hull_damage(laser_damage * delta)
 			if $RayCast2D.get_collider().is_dead:
-				get_parent().get_parent().score += $RayCast2D.get_collider().score_value
-				$RayCast2D.get_collider().score_value = 0
+				if get_parent().get_parent().get("score") != null:
+					get_parent().get_parent().score += $RayCast2D.get_collider().score_value
+					$RayCast2D.get_collider().nullify_score()
 	
 func _draw():
 #	draw_circle(Vector2.ZERO, $AutotargetRange/CollisionShape2D.shape.radius, Color.green)

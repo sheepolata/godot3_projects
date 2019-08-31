@@ -9,8 +9,9 @@ var STATE = "DEFAULT"
 
 var force : float = 0
 
-var min_scale : float = 0.2; var max_scale : float = 0.8;
-var min_hullpoint : float = 2; var max_hullpoint : float = 8;
+var min_scale : float = 0.6; var max_scale : float = 2.4;
+var min_speed : float = 300; var max_speed : float = 650;
+var min_hullpoint : float = 3; var max_hullpoint : float = 10;
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -23,7 +24,7 @@ func _ready():
 	var _scale = randf() * (max_scale - min_scale) + min_scale
 	scale = Vector2(_scale, _scale)
 	
-	speed = randf() * (550 - 200) + 200
+	speed = rand_range(min_speed, max_speed)
 	
 	gravity_influence_factor = randf() * (4.0 - 0.5) + 0.2
 	

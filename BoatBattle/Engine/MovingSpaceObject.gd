@@ -11,7 +11,7 @@ var hull_point : float
 
 var is_dead = false
 
-var score_value : int = 0
+var score_value : int = 0 setget set_score_value
 
 func _ready():
 	hull_point = hull_point_max
@@ -46,9 +46,12 @@ func apply_forces_from_planets(delta : float):
 	
 	collision_info = move_and_collide(planets_gravity * delta * weighted_mean_gravity)
 #	collision_info = move_and_collide(planets_gravity * delta)
-	
-	
-	
+
+func nullify_score():
+	score_value = 0
+
+func set_score_value(value):
+	score_value = value
 	
 	
 	

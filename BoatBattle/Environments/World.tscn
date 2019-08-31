@@ -12,6 +12,7 @@ __meta__ = {
 max_nb_asteroid = 25
 asteroid_freq_limits = Vector2( 0.5, 0.5 )
 random_target_offset_range = 128
+asteroid_spawn_radius = 4096
 
 [node name="Planets" type="Node" parent="."]
 

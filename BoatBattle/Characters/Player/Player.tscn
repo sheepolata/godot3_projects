@@ -18,7 +18,6 @@ loop = true
 collision_layer = 6
 collision_mask = 6
 script = ExtResource( 1 )
-TURN_SPEED_INCREMENT = 1.0
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
@@ -39,16 +38,51 @@ shape = SubResource( 1 )
 
 [node name="Turret1" parent="turrets" instance=ExtResource( 3 )]
 position = Vector2( 28, 0 )
+laser_range = 800.0
 
 [node name="Turret" parent="turrets" instance=ExtResource( 3 )]
 position = Vector2( -28, 0 )
+laser_range = 800.0
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/bg_anim = SubResource( 2 )
+[node name="missiles_front" type="Node2D" parent="."]
 
-[node name="CrashTween" type="Tween" parent="."]
+[node name="RayCast2D" type="RayCast2D" parent="missiles_front"]
+position = Vector2( 62, 0 )
+cast_to = Vector2( 50, 0 )
+
+[node name="Cooldown_front" type="Timer" parent="missiles_front"]
+
+[node name="missiles_right" type="Node2D" parent="."]
+
+[node name="Cooldown_right" type="Timer" parent="missiles_right"]
+
+[node name="RayCast2D" type="RayCast2D" parent="missiles_right"]
+position = Vector2( 38, 17 )
+
+[node name="RayCast2D2" type="RayCast2D" parent="missiles_right"]
+position = Vector2( 8, 17 )
+
+[node name="RayCast2D3" type="RayCast2D" parent="missiles_right"]
+position = Vector2( -21, 17 )
+
+[node name="missile_left" type="Node2D" parent="."]
+
+[node name="Cooldown_left" type="Timer" parent="missile_left"]
+
+[node name="RayCast2D" type="RayCast2D" parent="missile_left"]
+position = Vector2( -21, -17 )
+cast_to = Vector2( 0, -50 )
+
+[node name="RayCast2D2" type="RayCast2D" parent="missile_left"]
+position = Vector2( 8, -17 )
+cast_to = Vector2( 0, -50 )
+
+[node name="RayCast2D3" type="RayCast2D" parent="missile_left"]
+position = Vector2( 38, -17 )
+cast_to = Vector2( 0, -50 )
 
 [node name="TrailEffect_node" type="Node2D" parent="."]
+editor/display_folded = true
 __meta__ = {
 "_edit_lock_": true
 }
@@ -61,6 +95,11 @@ position = Vector2( -72, -19 )
 
 [node name="WaveEffectSpawnPoint2" type="Position2D" parent="TrailEffect_node"]
 position = Vector2( -72, 19 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/bg_anim = SubResource( 2 )
+
+[node name="CrashTween" type="Tween" parent="."]
 
 [node name="UILayer" type="CanvasLayer" parent="."]
 layer = 2
@@ -100,5 +139,8 @@ margin_top = 18.0
 margin_right = 1920.0
 margin_bottom = 32.0
 text = "HP PERCENT"
-[connection signal="tween_all_completed" from="CrashTween" to="." method="_on_CrashTween_tween_all_completed"]
+[connection signal="timeout" from="missiles_front/Cooldown_front" to="." method="_on_Cooldown_front_timeout"]
+[connection signal="timeout" from="missiles_right/Cooldown_right" to="." method="_on_Cooldown_right_timeout"]
+[connection signal="timeout" from="missile_left/Cooldown_left" to="." method="_on_Cooldown_left_timeout"]
 [connection signal="timeout" from="TrailEffect_node/TrailEffect" to="." method="_on_WaterEffect_timeout"]
+[connection signal="tween_all_completed" from="CrashTween" to="." method="_on_CrashTween_tween_all_completed"]
