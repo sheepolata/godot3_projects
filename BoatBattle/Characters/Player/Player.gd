@@ -201,6 +201,20 @@ func fire_control_loop():
 #		for t in turrets:
 #			t.autotarget = false
 #			t.fire()
+
+	if Input.is_action_pressed("fire_missiles"):
+		var relative_angle = get_angle_to(get_global_mouse_position())
+		print(rad2deg(relative_angle))
+		if relative_angle > -30 and relative_angle < 30:
+			if $missiles_front/Cooldown_front.is_stopped():
+				front_aim = true
+		elif relative_angle >= 30:
+			if $missiles_right/Cooldown_right.is_stopped():
+				right_aim = true
+		elif relative_angle <= -30:
+			if $missile_left/Cooldown_left.is_stopped():
+				left_aim = true
+	
 			
 	if Input.is_action_just_released("fire_front"):
 		front_aim = false
