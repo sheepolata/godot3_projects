@@ -37,6 +37,9 @@ export(float) var left_missile_cd = 1.2
 #export(PackedScene) var left_missile
 var left_aim : bool = false
 
+var default_aim_front : Vector2 = Vector2.ZERO
+var default_aim_left  : Vector2 = Vector2.ZERO
+var default_aim_right : Vector2 = Vector2.ZERO
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -54,6 +57,23 @@ func _ready():
 		t.autotarget = true
 	
 	$missiles_front/Cooldown_front.wait_time = front_missile_cd
+	
+	for m in $missiles_front.get_children():
+		if m is Timer:
+			continue
+		default_aim_front = m.cast_to
+		break
+	for m in $missile_left.get_children():
+		if m is Timer:
+			continue
+		default_aim_left = m.cast_to
+		break
+	for m in $missiles_right.get_children():
+		if m is Timer:
+			continue
+		default_aim_right = m.cast_to
+		break
+	
 
 func _physics_process(delta : float):
 	update()
@@ -269,71 +289,6 @@ func fire_control_loop():
 		right_aim = false
 		left_aim = false
 
-
-	
-			
-#	if Input.is_action_just_released("fire_front"):
-#		front_aim = false
-#		if $missiles_front/Cooldown_front.is_stopped():
-#			for m in $missiles_front.get_children():
-#				if m is Timer:
-#					continue
-##				var rot = m.global_position.angle_to_point(to_global(m.cast_to))# + rand_range(-deg2rad(rand_angle_front), deg2rad(rand_angle_front))
-#				var rot = m.cast_to.angle() + rotation
-#				var missile = preload("res://Characters/Ammo/Missile1.tscn").instance()
-#				get_parent().add_child(missile)
-#				missile.position = m.global_position
-#				missile.speed += current_speeds.y
-#				missile.target_groups = ["asteroid", "enemy"]
-#				missile.rotate(rot)
-#				missile.sender = self
-#
-#			$missiles_front/Cooldown_front.start()
-#	elif Input.is_action_pressed("fire_front"):
-#		if $missiles_front/Cooldown_front.is_stopped():
-#			front_aim = true
-#
-#	if Input.is_action_just_released("fire_right"):
-#		right_aim = false
-#		if $missiles_right/Cooldown_right.is_stopped():
-#			for m in $missiles_right.get_children():
-#				if m is Timer:
-#					continue
-##				var rot = m.global_position.angle_to_point(to_global(m.cast_to))# + rand_range(-deg2rad(rand_angle_front), deg2rad(rand_angle_front))
-#				var rot = m.cast_to.angle() + rotation
-#				var missile = preload("res://Characters/Ammo/Missile1.tscn").instance()
-#				get_parent().add_child(missile)
-#				missile.position = m.global_position
-#				missile.speed += current_speeds.y
-#				missile.target_groups = ["asteroid", "enemy"]
-#				missile.rotate(rot)
-#				missile.sender = self
-#
-#			$missiles_right/Cooldown_right.start()
-#	elif Input.is_action_pressed("fire_right"):
-#		if $missiles_right/Cooldown_right.is_stopped():
-#			right_aim = true
-#
-#	if Input.is_action_just_released("fire_left"):
-#		left_aim = false
-#		if $missile_left/Cooldown_left.is_stopped():
-#			for m in $missile_left.get_children():
-#				if m is Timer:
-#					continue
-##				var rot = m.global_position.angle_to_point(to_global(m.cast_to))# + rand_range(-deg2rad(rand_angle_front), deg2rad(rand_angle_front))
-#				var rot = m.cast_to.angle() + rotation
-#				var missile = preload("res://Characters/Ammo/Missile1.tscn").instance()
-#				get_parent().add_child(missile)
-#				missile.position = m.global_position
-#				missile.speed += current_speeds.y
-#				missile.target_groups = ["asteroid", "enemy"]
-#				missile.rotate(rot)
-#				missile.sender = self
-#
-#			$missile_left/Cooldown_left.start()
-#	elif Input.is_action_pressed("fire_left"):
-#		if $missile_left/Cooldown_left.is_stopped():
-#			left_aim = true
 			
 func _on_WaterEffect_timeout():
 	var this_effect = preload("res://Engine/WaveEffect.tscn").instance()

@@ -3,7 +3,7 @@ extends KinematicBody2D
 #var direction : Vector2 = Vector2.ZERO
 export(float) var speed : float = 1000
 var current_speed : float = 0
-export(float) var life_span : float = 2.5
+export(float) var life_span : float = 4
 export(float) var damage = 50
 
 var collision_info : KinematicCollision2D = null
@@ -42,13 +42,12 @@ func _physics_process(delta):
 						collision_info.collider.take_hull_damage(damage)
 						if collision_info.collider.get("is_dead") and collision_info.collider.score_value > 0:
 							if sender and sender.get("score") != null:
-								print("ADD SCORE")
+								#print("ADD SCORE")
 								sender.score += collision_info.collider.score_value
 								collision_info.collider.nullify_score()
 		"EXPLODE":
-			$AnimationPlayer.stop()
 			$AnimationPlayer.play("explode")
-			#yield($AnimationPlayer, "animation_finished")
+			yield($AnimationPlayer, "animation_finished")
 			queue_free()
 
 func _on_Lifespan_timeout():
