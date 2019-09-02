@@ -41,6 +41,11 @@ var default_aim_front : Vector2 = Vector2.ZERO
 var default_aim_left  : Vector2 = Vector2.ZERO
 var default_aim_right : Vector2 = Vector2.ZERO
 
+var front_aim_arc_angle = 15
+var side_aim_arc_angle_low = 35; var side_aim_arc_angle_high = 145;
+
+var _current_delta : float = 0
+var previous_arc_transparancy : float = 0.0; var previous_aim_missile_transparancy : float = 0.0;
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	._ready()
@@ -63,7 +68,7 @@ func _ready():
 			continue
 		default_aim_front = m.cast_to
 		break
-	for m in $missile_left.get_children():
+	for m in $missiles_left.get_children():
 		if m is Timer:
 			continue
 		default_aim_left = m.cast_to
@@ -76,6 +81,8 @@ func _ready():
 	
 
 func _physics_process(delta : float):
+	_current_delta = delta
+	
 	update()
 	
 	basic_control_loop()
@@ -214,29 +221,43 @@ func fire_control_loop():
 #			t.autotarget = not t.autotarget
 		
 #	if Input.is_action_pressed("fire_turret"):
-#		#print("HEY")
 #		for t in turrets:
 #			t.autotarget = false
 #			t.fire()
 
 	if Input.is_action_pressed("fire_missiles"):
 		var relative_angle = rad2deg(get_angle_to(get_global_mouse_position()))
-#		print(relative_angle)
-		var aim_angle = 30
-		if relative_angle > -aim_angle and relative_angle < aim_angle and not front_aim:
+		if relative_angle > -front_aim_arc_angle and relative_angle < front_aim_arc_angle:
 			front_aim = true
 			right_aim = false
 			left_aim = false
-		elif relative_angle >= aim_angle and not right_aim:
+			for m in $missiles_front.get_children():
+				if m is Timer:
+					continue
+				m.cast_to = default_aim_front.rotated(deg2rad(relative_angle))
+#				print(m.cast_to)
+		elif relative_angle >= side_aim_arc_angle_low and relative_angle < side_aim_arc_angle_high:
 			front_aim = false
 			right_aim = true
 			left_aim = false
-		elif relative_angle <= -aim_angle and not left_aim:
+			for m in $missiles_right.get_children():
+				if m is Timer:
+					continue
+				m.cast_to = default_aim_front.rotated(deg2rad(relative_angle))
+#				print(m.cast_to)
+		elif relative_angle <= -side_aim_arc_angle_low and relative_angle > -side_aim_arc_angle_high:
 			front_aim = false
 			right_aim = false
 			left_aim = true
+			for m in $missiles_left.get_children():
+				if m is Timer:
+					continue
+				m.cast_to = default_aim_front.rotated(deg2rad(relative_angle))
+		else:
+			front_aim = false
+			right_aim = false
+			left_aim = false
 	elif Input.is_action_just_released("fire_missiles"):
-		
 		if front_aim:
 			if $missiles_front/Cooldown_front.is_stopped():
 				for m in $missiles_front.get_children():
@@ -270,8 +291,8 @@ func fire_control_loop():
 				$missiles_right/Cooldown_right.start()
 		
 		if left_aim:
-			if $missile_left/Cooldown_left.is_stopped():
-				for m in $missile_left.get_children():
+			if $missiles_left/Cooldown_left.is_stopped():
+				for m in $missiles_left.get_children():
 					if m is Timer:
 						continue
 					var rot = m.cast_to.angle() + rotation
@@ -283,11 +304,23 @@ func fire_control_loop():
 					missile.rotate(rot)
 					missile.sender = self
 	
-				$missile_left/Cooldown_left.start()
+				$missiles_left/Cooldown_left.start()
 		
 		front_aim = false
 		right_aim = false
 		left_aim = false
+		for m in $missiles_front.get_children():
+			if m is Timer:
+				continue
+			m.cast_to = default_aim_front
+		for m in $missiles_left.get_children():
+			if m is Timer:
+				continue
+			m.cast_to = default_aim_left
+		for m in $missiles_right.get_children():
+			if m is Timer:
+				continue
+			m.cast_to = default_aim_right
 
 			
 func _on_WaterEffect_timeout():
@@ -332,27 +365,69 @@ func dead_state(delta : float):
 		t.autotarget = false
 
 func _draw():
+	
+	var arc_display_distance = 4096;
+	var _t = min(0.1, previous_arc_transparancy + 0.1*_current_delta*(1/0.2))
+	var _t2 = min(.5, previous_aim_missile_transparancy + .5*_current_delta*(1/0.2))
+	var _cone_color = Color(1, 1, 1, _t)
+	var _missile_aim_color = Color(1, 0, 0, _t2)
+	previous_arc_transparancy = _t
+	previous_aim_missile_transparancy = _t2
 	if front_aim:
 		for m in $missiles_front.get_children():
 			if m is Timer:
 				continue
 			var rot = m.cast_to.angle()
-			draw_line(m.position, Vector2(m.position.x + 4096*cos(rot), m.position.y + 4096*sin(rot)), Color(1, 0, 0, .5), 5)
-	
+			draw_line(m.position, Vector2(m.position.x + 4096*cos(rot), m.position.y + 4096*sin(rot)), _missile_aim_color, 5)
+		
 	if left_aim:
-		for m in $missile_left.get_children():
+		for m in $missiles_left.get_children():
 			if m is Timer:
 				continue
 			var rot = m.cast_to.angle()
-			draw_line(m.position, Vector2(m.position.x + 4096*cos(rot), m.position.y + 4096*sin(rot)), Color(1, 0, 0, .5), 5)
-	
+			draw_line(m.position, Vector2(m.position.x + 4096*cos(rot), m.position.y + 4096*sin(rot)), _missile_aim_color, 5)
+		
 	if right_aim:
 		for m in $missiles_right.get_children():
 			if m is Timer:
 				continue
 			var rot = m.cast_to.angle()
-			draw_line(m.position, Vector2(m.position.x + 4096*cos(rot), m.position.y + 4096*sin(rot)), Color(1, 0, 0, .5), 5)
+			draw_line(m.position, Vector2(m.position.x + 4096*cos(rot), m.position.y + 4096*sin(rot)), _missile_aim_color, 5)
+		
+	if not right_aim and not left_aim and not front_aim:
+		previous_aim_missile_transparancy = 0
 
+	if Input.is_action_pressed("fire_missiles"):
+	#	var front_aim_arc_angle = 15
+	#	var side_aim_arc_angle_low = 35; var side_aim_arc_angle_high = 145;
+		#Front arc
+		var _avg : Vector2 = Vector2.ZERO; var count = 0;
+		for m in $missiles_front.get_children():
+			if m is Timer:
+				continue
+			_avg += m.position
+			count += 1
+		draw_circle_arc_poly(_avg/count, arc_display_distance, -front_aim_arc_angle+90, front_aim_arc_angle+90, _cone_color)
+	
+		#Side arcs
+		_avg = Vector2.ZERO; count = 0;
+		for m in $missiles_left.get_children():
+			if m is Timer:
+				continue
+			_avg += m.position
+			count += 1
+		draw_circle_arc_poly(_avg/count, arc_display_distance, -side_aim_arc_angle_low+90, -side_aim_arc_angle_high+90, _cone_color)
+	
+		_avg = Vector2.ZERO; count = 0;
+		for m in $missiles_right.get_children():
+			if m is Timer:
+				continue
+			_avg += m.position
+			count += 1
+		draw_circle_arc_poly(_avg/count, arc_display_distance, side_aim_arc_angle_low+90, side_aim_arc_angle_high+90, _cone_color)
+	else:
+		previous_arc_transparancy = 0.0
+		
 func _on_CrashTween_tween_all_completed():
 	$Sprite.hide()
 	is_dead = true
@@ -361,7 +436,7 @@ func _on_Cooldown_right_timeout():
 	$missiles_right/Cooldown_right.stop()
 
 func _on_Cooldown_left_timeout():
-	$missile_left/Cooldown_left.stop()
+	$missiles_left/Cooldown_left.stop()
 
 func _on_Cooldown_front_timeout():
 	$missiles_front/Cooldown_front.stop()

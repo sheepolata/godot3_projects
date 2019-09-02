@@ -31,13 +31,13 @@ func _physics_process(delta):
 			collision_info = move_and_collide(Vector2(current_speed * cos(rotation), current_speed * sin(rotation)) * delta)
 			
 			if collision_info:
-				state = "EXPLODE"
 				var ok : bool = false
 				for _t_group in target_groups:
 					if _t_group in collision_info.collider.get_groups():
 						ok = true
 						break
 				if ok:
+					state = "EXPLODE"
 					if collision_info.collider.has_method("take_hull_damage"):
 						collision_info.collider.take_hull_damage(damage)
 						if collision_info.collider.get("is_dead") and collision_info.collider.score_value > 0:
