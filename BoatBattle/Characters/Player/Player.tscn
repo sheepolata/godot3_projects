@@ -56,7 +56,6 @@ cast_to = Vector2( 50, 0 )
 [node name="Cooldown_front" type="Timer" parent="missiles_front"]
 
 [node name="missiles_right" type="Node2D" parent="."]
-editor/display_folded = true
 
 [node name="Cooldown_right" type="Timer" parent="missiles_right"]
 
@@ -119,6 +118,9 @@ rect_scale = Vector2( 3, 3 )
 text = "Score"
 align = 1
 valign = 1
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="GravityDirection" type="TextureRect" parent="UILayer"]
 anchor_left = 1.0
@@ -128,11 +130,30 @@ anchor_bottom = 1.0
 margin_left = -256.0
 margin_top = -256.0
 texture = ExtResource( 4 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="CooldownDisplay" type="Label" parent="UILayer"]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -42.0
+margin_right = 69.0
+margin_bottom = -28.0
+rect_scale = Vector2( 3, 3 )
+text = "Cooldowns"
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UILayer"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 rect_scale = Vector2( 3, 3 )
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="SpeedInfo" type="Label" parent="UILayer/VBoxContainer"]
 margin_right = 1920.0
@@ -150,6 +171,9 @@ text = "HP PERCENT"
 [node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
 motion_scale = Vector2( 0.1, 0.1 )
 motion_mirroring = Vector2( 1920, 1080 )
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer"]
 texture = ExtResource( 5 )
@@ -158,6 +182,9 @@ centered = false
 [node name="ParallaxLayer2" type="ParallaxLayer" parent="ParallaxBackground"]
 motion_scale = Vector2( 0.15, 0.15 )
 motion_mirroring = Vector2( 1920, 1080 )
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer2"]
 texture = ExtResource( 6 )

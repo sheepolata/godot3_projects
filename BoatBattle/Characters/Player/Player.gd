@@ -143,6 +143,39 @@ func update_UI(delta : float) -> void:
 		$UILayer/GravityDirection.rect_rotation = rad2deg(gravity_angle) + 90
 	else:
 		$UILayer/GravityDirection.rect_scale = Vector2.ZERO
+		
+	var cd_text = ""
+	if $missiles_front.get_child_count() > 0:
+		var _text = "Front : "
+		if $missiles_front/Cooldown_front.is_stopped():
+			_text += "OK"
+		else:
+			var _t = "%.1fs"
+			_t = _t % $missiles_front/Cooldown_front.time_left
+			_text += _t
+		cd_text += _text
+		
+	if $missiles_right.get_child_count() > 0:
+		var _text = " Right : "
+		if $missiles_right/Cooldown_right.is_stopped():
+			_text += "OK"
+		else:
+			var _t = "%.1fs"
+			_t = _t % $missiles_right/Cooldown_right.time_left
+			_text += _t
+		cd_text += _text
+		
+	if $missiles_left.get_child_count() > 0:
+		var _text = " Left : "
+		if $missiles_left/Cooldown_left.is_stopped():
+			_text += "OK"
+		else:
+			var _t = "%.1fs"
+			_t = _t % $missiles_left/Cooldown_left.time_left
+			_text += _t
+		cd_text += _text
+	
+	$UILayer/CooldownDisplay.text = cd_text
 
 func collision_check():
 	if collision_info:
@@ -234,7 +267,7 @@ func fire_control_loop():
 #			t.autotarget = false
 #			t.fire()
 
-	if Input.is_action_pressed("fire_missiles"):
+	if Input.is_action_pressed("aim_missiles"):
 		var relative_angle = rad2deg(get_angle_to(get_global_mouse_position()))
 		if relative_angle > -front_aim_arc_angle and relative_angle < front_aim_arc_angle:
 			front_aim = true
@@ -266,55 +299,57 @@ func fire_control_loop():
 			front_aim = false
 			right_aim = false
 			left_aim = false
-	elif Input.is_action_just_released("fire_missiles"):
-		if front_aim:
-			if $missiles_front/Cooldown_front.is_stopped():
-				for m in $missiles_front.get_children():
-					if m is Timer:
-						continue
-					var rot = m.cast_to.angle() + rotation
-					var missile = preload("res://Characters/Ammo/Missile1.tscn").instance()
-					get_parent().add_child(missile)
-					missile.position = m.global_position
-					missile.speed += current_speeds.y
-					missile.target_groups = ["asteroid", "enemy"]
-					missile.rotate(rot)
-					missile.sender = self
-	
-				$missiles_front/Cooldown_front.start()
+			
+		if Input.is_action_pressed("fire_missiles"):
+			if front_aim:
+				if $missiles_front/Cooldown_front.is_stopped():
+					for m in $missiles_front.get_children():
+						if m is Timer:
+							continue
+						var rot = m.cast_to.angle() + rotation
+						var missile = preload("res://Characters/Ammo/Missile1.tscn").instance()
+						get_parent().add_child(missile)
+						missile.position = m.global_position
+						missile.speed += current_speeds.y
+						missile.target_groups = ["asteroid", "enemy"]
+						missile.rotate(rot)
+						missile.sender = self
 		
-		if right_aim:
-			if $missiles_right/Cooldown_right.is_stopped():
-				for m in $missiles_right.get_children():
-					if m is Timer:
-						continue
-					var rot = m.cast_to.angle() + rotation
-					var missile = preload("res://Characters/Ammo/Missile1.tscn").instance()
-					get_parent().add_child(missile)
-					missile.position = m.global_position
-					missile.speed += current_speeds.y
-					missile.target_groups = ["asteroid", "enemy"]
-					missile.rotate(rot)
-					missile.sender = self
-	
-				$missiles_right/Cooldown_right.start()
+					$missiles_front/Cooldown_front.start()
+			
+			if right_aim:
+				if $missiles_right/Cooldown_right.is_stopped():
+					for m in $missiles_right.get_children():
+						if m is Timer:
+							continue
+						var rot = m.cast_to.angle() + rotation
+						var missile = preload("res://Characters/Ammo/Missile1.tscn").instance()
+						get_parent().add_child(missile)
+						missile.position = m.global_position
+						missile.speed += current_speeds.y
+						missile.target_groups = ["asteroid", "enemy"]
+						missile.rotate(rot)
+						missile.sender = self
 		
-		if left_aim:
-			if $missiles_left/Cooldown_left.is_stopped():
-				for m in $missiles_left.get_children():
-					if m is Timer:
-						continue
-					var rot = m.cast_to.angle() + rotation
-					var missile = preload("res://Characters/Ammo/Missile1.tscn").instance()
-					get_parent().add_child(missile)
-					missile.position = m.global_position
-					missile.speed += current_speeds.y
-					missile.target_groups = ["asteroid", "enemy"]
-					missile.rotate(rot)
-					missile.sender = self
-	
-				$missiles_left/Cooldown_left.start()
+					$missiles_right/Cooldown_right.start()
+			
+			if left_aim:
+				if $missiles_left/Cooldown_left.is_stopped():
+					for m in $missiles_left.get_children():
+						if m is Timer:
+							continue
+						var rot = m.cast_to.angle() + rotation
+						var missile = preload("res://Characters/Ammo/Missile1.tscn").instance()
+						get_parent().add_child(missile)
+						missile.position = m.global_position
+						missile.speed += current_speeds.y
+						missile.target_groups = ["asteroid", "enemy"]
+						missile.rotate(rot)
+						missile.sender = self
 		
+					$missiles_left/Cooldown_left.start()
+				
+	elif Input.is_action_just_released("aim_missiles"):
 		front_aim = false
 		right_aim = false
 		left_aim = false
@@ -330,6 +365,7 @@ func fire_control_loop():
 			if m is Timer:
 				continue
 			m.cast_to = default_aim_right
+			
 
 func _on_WaterEffect_timeout():
 	var this_effect = preload("res://Engine/WaveEffect.tscn").instance()
@@ -381,21 +417,28 @@ func _draw():
 	var _missile_aim_color = Color(1, 0, 0, _t2)
 	previous_arc_transparancy = _t
 	previous_aim_missile_transparancy = _t2
-	if front_aim:
+	
+	if $missiles_front and front_aim:
+		if not $missiles_front/Cooldown_front.is_stopped():
+			_missile_aim_color.a /= 4
 		for m in $missiles_front.get_children():
 			if m is Timer:
 				continue
 			var rot = m.cast_to.angle()
 			draw_line(m.position, Vector2(m.position.x + 4096*cos(rot), m.position.y + 4096*sin(rot)), _missile_aim_color, 5)
 		
-	if left_aim:
+	if $missiles_left and left_aim:
+		if not $missiles_left/Cooldown_left.is_stopped():
+			_missile_aim_color.a /= 4
 		for m in $missiles_left.get_children():
 			if m is Timer:
 				continue
 			var rot = m.cast_to.angle()
 			draw_line(m.position, Vector2(m.position.x + 4096*cos(rot), m.position.y + 4096*sin(rot)), _missile_aim_color, 5)
 		
-	if right_aim:
+	if $missiles_right and right_aim:
+		if not $missiles_right/Cooldown_right.is_stopped():
+			_missile_aim_color.a /= 4
 		for m in $missiles_right.get_children():
 			if m is Timer:
 				continue
@@ -405,7 +448,7 @@ func _draw():
 	if not right_aim and not left_aim and not front_aim:
 		previous_aim_missile_transparancy = 0
 
-	if Input.is_action_pressed("fire_missiles"):
+	if Input.is_action_pressed("aim_missiles"):
 	#	var front_aim_arc_angle = 15
 	#	var side_aim_arc_angle_low = 35; var side_aim_arc_angle_high = 145;
 		#Front arc
