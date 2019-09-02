@@ -28,14 +28,17 @@ onready var turrets : Array = $turrets.get_children()
 export(float) var front_missile_cd = 1.2
 #export(PackedScene) var front_missile
 var front_aim : bool = false
+export(float) var front_damage = 20
 
 export(float) var right_missile_cd = 1.2
 #export(PackedScene) var right_missile
 var right_aim : bool = false
+export(float) var right_damage = 35
 
 export(float) var left_missile_cd = 1.2
 #export(PackedScene) var left_missile
 var left_aim : bool = false
+export(float) var left_damage = 35
 
 var default_aim_front : Vector2 = Vector2.ZERO
 var default_aim_left  : Vector2 = Vector2.ZERO
@@ -315,6 +318,7 @@ func fire_control_loop():
 						missile.target_groups = ["asteroid", "enemy"]
 						missile.rotate(rot)
 						missile.sender = self
+						missile.damage = front_damage
 		
 					$missiles_front/Cooldown_front.start()
 			
@@ -331,6 +335,7 @@ func fire_control_loop():
 						missile.target_groups = ["asteroid", "enemy"]
 						missile.rotate(rot)
 						missile.sender = self
+						missile.damage = right_damage
 		
 					$missiles_right/Cooldown_right.start()
 			
@@ -347,6 +352,7 @@ func fire_control_loop():
 						missile.target_groups = ["asteroid", "enemy"]
 						missile.rotate(rot)
 						missile.sender = self
+						missile.damage = left_damage
 		
 					$missiles_left/Cooldown_left.start()
 				
@@ -491,9 +497,10 @@ func _on_Cooldown_left_timeout():
 func _on_Cooldown_front_timeout():
 	$missiles_front/Cooldown_front.stop()
 
-func _on_ScoreAddDisplay_timeout():
+func _on_UILayer_ScoreAddDisplay_timeout(_timer):
+	_timer.stop()
 	$UILayer/ScoreAdd.text = ""
-	
+
 func set_score(value):
 	var change = value - score
 	score = value

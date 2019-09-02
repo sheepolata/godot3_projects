@@ -22,15 +22,19 @@ func _ready():
 	$Lifespan.wait_time = life_span
 	$Lifespan.start()
 	$AnimationPlayer.play("fly")
+	
+	$CollisionShape2D.disabled = true
 
 func _physics_process(delta):
 	
 	match state:
 		"DEFAULT":
 			current_speed = min(speed, current_speed + (speed*(1.0/accel)*delta))
+#			collision_info = move_and_collide(Vector2(current_speed * cos(rotation), current_speed * sin(rotation)) * delta)
 			collision_info = move_and_collide(Vector2(current_speed * cos(rotation), current_speed * sin(rotation)) * delta)
 			
 			if collision_info:
+				print("WHY!?")
 				var ok : bool = false
 				for _t_group in target_groups:
 					if _t_group in collision_info.collider.get_groups():
@@ -56,3 +60,16 @@ func _physics_process(delta):
 
 func _on_Lifespan_timeout():
 	state = "EXPLODE"
+
+func _on_Area2D_body_entered(body):
+	if "asteroid" in body.get_groups():
+		state = "EXPLODE"
+		body.take_hull_damage(damage)
+		if body.score_value > 0:
+			if sender and sender.get("score") != null:
+				#print("ADD SCORE")
+				if "asteroid" in body.get_groups():
+					sender.score += body.score_value * 2
+				else:
+					sender.score += body.score_value
+				body.nullify_score()

@@ -20,6 +20,12 @@ loop = true
 collision_layer = 6
 collision_mask = 6
 script = ExtResource( 1 )
+front_missile_cd = 0.2
+front_damage = 5.0
+right_missile_cd = 0.8
+right_damage = 30.0
+left_missile_cd = 0.8
+left_damage = 30.0
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
@@ -136,4 +142,5 @@ anims/bg_anim = SubResource( 2 )
 [connection signal="timeout" from="missiles_right/Cooldown_right" to="." method="_on_Cooldown_right_timeout"]
 [connection signal="timeout" from="missiles_left/Cooldown_left" to="." method="_on_Cooldown_left_timeout"]
 [connection signal="timeout" from="TrailEffect_node/TrailEffect" to="." method="_on_WaterEffect_timeout"]
+[connection signal="ScoreAddDisplay_timeout" from="UILayer" to="." method="_on_UILayer_ScoreAddDisplay_timeout"]
 [connection signal="tween_all_completed" from="CrashTween" to="." method="_on_CrashTween_tween_all_completed"]

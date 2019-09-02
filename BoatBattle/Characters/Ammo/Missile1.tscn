@@ -1,8 +1,11 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Characters/Ammo/Missile1.gd" type="Script" id=1]
 [ext_resource path="res://Data/Sprites/missile1.png" type="Texture" id=2]
 [ext_resource path="res://Data/Sprites/missile1_explosion.png" type="Texture" id=3]
+
+[sub_resource type="CircleShape2D" id=4]
+radius = 12.0
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 12.0
@@ -64,6 +67,8 @@ tracks/0/keys = {
 }
 
 [node name="Missile1" type="KinematicBody2D"]
+collision_layer = 0
+collision_mask = 4
 script = ExtResource( 1 )
 speed = 1250.0
 
@@ -72,7 +77,14 @@ rotation = 1.5708
 texture = ExtResource( 2 )
 hframes = 4
 
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2( 12, 0 )
+shape = SubResource( 4 )
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2( 12, 0 )
 rotation = 1.5708
 shape = SubResource( 1 )
@@ -87,4 +99,5 @@ texture = ExtResource( 3 )
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/explode = SubResource( 2 )
 anims/fly = SubResource( 3 )
+[connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
 [connection signal="timeout" from="Lifespan" to="." method="_on_Lifespan_timeout"]
