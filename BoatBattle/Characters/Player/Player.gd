@@ -12,7 +12,7 @@ var rotation_stop : bool = false
 export(int, 0, 90) var turn_speed_max = 120
 export(float) var turn_speed = 180
 
-var score : int = 0
+var score : int = 0 setget set_score
 
 var state = "DEFAULT"
 
@@ -64,6 +64,7 @@ func _ready():
 	
 	trail_effect.start()
 	$UILayer/GravityDirection.rect_pivot_offset = $UILayer/GravityDirection.rect_size/2
+	$UILayer/ScoreAdd.text = ""
 	
 	for t in turrets:
 		t.autotarget_groups.append("asteroid")
@@ -365,7 +366,6 @@ func fire_control_loop():
 			if m is Timer:
 				continue
 			m.cast_to = default_aim_right
-			
 
 func _on_WaterEffect_timeout():
 	var this_effect = preload("res://Engine/WaveEffect.tscn").instance()
@@ -409,7 +409,6 @@ func dead_state(delta : float):
 		t.autotarget = false
 
 func _draw():
-	
 	var arc_display_distance = 4096;
 	var _t = min(0.1, previous_arc_transparancy + 0.1*_current_delta*(1/0.2))
 	var _t2 = min(.5, previous_aim_missile_transparancy + .5*_current_delta*(1/0.2))
@@ -425,7 +424,7 @@ func _draw():
 			if m is Timer:
 				continue
 			var rot = m.cast_to.angle()
-			draw_line(m.position, Vector2(m.position.x + 4096*cos(rot), m.position.y + 4096*sin(rot)), _missile_aim_color, 5)
+			draw_line(m.position, Vector2(m.position.x + arc_display_distance*cos(rot), m.position.y + arc_display_distance*sin(rot)), _missile_aim_color, 5)
 		
 	if $missiles_left and left_aim:
 		if not $missiles_left/Cooldown_left.is_stopped():
@@ -434,7 +433,7 @@ func _draw():
 			if m is Timer:
 				continue
 			var rot = m.cast_to.angle()
-			draw_line(m.position, Vector2(m.position.x + 4096*cos(rot), m.position.y + 4096*sin(rot)), _missile_aim_color, 5)
+			draw_line(m.position, Vector2(m.position.x + arc_display_distance*cos(rot), m.position.y + arc_display_distance*sin(rot)), _missile_aim_color, 5)
 		
 	if $missiles_right and right_aim:
 		if not $missiles_right/Cooldown_right.is_stopped():
@@ -443,7 +442,7 @@ func _draw():
 			if m is Timer:
 				continue
 			var rot = m.cast_to.angle()
-			draw_line(m.position, Vector2(m.position.x + 4096*cos(rot), m.position.y + 4096*sin(rot)), _missile_aim_color, 5)
+			draw_line(m.position, Vector2(m.position.x + arc_display_distance*cos(rot), m.position.y + arc_display_distance*sin(rot)), _missile_aim_color, 5)
 		
 	if not right_aim and not left_aim and not front_aim:
 		previous_aim_missile_transparancy = 0
@@ -491,3 +490,29 @@ func _on_Cooldown_left_timeout():
 
 func _on_Cooldown_front_timeout():
 	$missiles_front/Cooldown_front.stop()
+
+func _on_ScoreAddDisplay_timeout():
+	$UILayer/ScoreAdd.text = ""
+	
+func set_score(value):
+	var change = value - score
+	score = value
+	if change == 0:
+		return
+	
+	$UILayer/ScoreAdd.text = "+"+str(change)
+	$UILayer/ScoreAdd/ScoreAddDisplay.start(2.0)
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+

@@ -33,7 +33,8 @@ func _ready():
 	hull_point_max = Utils.normalise(_scale, 0, (max_hullpoint - min_hullpoint), min_scale, max_scale) + min_hullpoint
 	hull_point = hull_point_max
 	
-	score_value = int(round(force))
+	default_score_value = int(round(force))
+	score_value = default_score_value
 
 func _physics_process(delta):
 	update()

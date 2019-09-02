@@ -43,7 +43,10 @@ func _physics_process(delta):
 						if collision_info.collider.get("is_dead") and collision_info.collider.score_value > 0:
 							if sender and sender.get("score") != null:
 								#print("ADD SCORE")
-								sender.score += collision_info.collider.score_value
+								if "asteroid" in collision_info.collider.get_groups():
+									sender.score += collision_info.collider.score_value * 2
+								else:
+									sender.score += collision_info.collider.score_value
 								collision_info.collider.nullify_score()
 		"EXPLODE":
 			$CollisionShape2D.disabled = true
