@@ -51,6 +51,14 @@ func _ready():
 	._ready()
 	randomize()
 	
+#	$ParallaxBackground.scale = Vector2(max_zoom_out, max_zoom_out)
+	for pbg in $ParallaxBackground.get_children():
+		if pbg is ParallaxLayer:
+			for _sprite in pbg.get_children():
+				if _sprite is Sprite:
+					_sprite.scale = Vector2(max_zoom_out, max_zoom_out)
+			pbg.motion_mirroring *= Vector2(max_zoom_out, max_zoom_out)
+	
 	add_to_group("player")
 	set_physics_process(true)
 	
@@ -79,7 +87,6 @@ func _ready():
 		default_aim_right = m.cast_to
 		break
 	
-
 func _physics_process(delta : float):
 	_current_delta = delta
 	
@@ -188,6 +195,8 @@ func basic_control_loop():
 			print("Reload OK")
 		else:
 			print("Reload went wrong")
+	if Input.is_action_just_pressed("fullscreen"):
+		OS.window_fullscreen = !OS.window_fullscreen
 
 func move_controls_loop():
 		
@@ -322,7 +331,6 @@ func fire_control_loop():
 				continue
 			m.cast_to = default_aim_right
 
-			
 func _on_WaterEffect_timeout():
 	var this_effect = preload("res://Engine/WaveEffect.tscn").instance()
 	#this_effect.min_scale = 0

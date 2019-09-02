@@ -17,6 +17,8 @@ func _ready():
 	
 	ast_timer.wait_time = rand_range(asteroid_freq_limits.x, asteroid_freq_limits.y)
 	ast_timer.start()
+	
+#	$ParallaxBackground.scale = Vector2(player.max_zoom_out, player.max_zoom_out)
 
 func _process(delta):
 	

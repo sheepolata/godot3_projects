@@ -46,6 +46,7 @@ func _physics_process(delta):
 								sender.score += collision_info.collider.score_value
 								collision_info.collider.nullify_score()
 		"EXPLODE":
+			$CollisionShape2D.disabled = true
 			$AnimationPlayer.play("explode")
 			yield($AnimationPlayer, "animation_finished")
 			queue_free()
