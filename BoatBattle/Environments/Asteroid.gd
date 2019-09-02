@@ -86,7 +86,7 @@ func _physics_process(delta):
 				$Tween.interpolate_property(self, "scale", scale, Vector2(0, 0), 3.5, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 				$Tween.start()
 		"EXPLODE":
-			
+			$CollisionShape2D.disabled = true
 			queue_free()
 
 func _on_Tween_tween_all_completed():

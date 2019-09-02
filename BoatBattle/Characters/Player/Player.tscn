@@ -36,15 +36,12 @@ rotation = 1.5708
 shape = SubResource( 1 )
 
 [node name="turrets" type="Node2D" parent="."]
-editor/display_folded = true
 
 [node name="Turret1" parent="turrets" instance=ExtResource( 3 )]
 position = Vector2( 28, 0 )
-laser_range = 800.0
 
 [node name="Turret" parent="turrets" instance=ExtResource( 3 )]
 position = Vector2( -28, 0 )
-laser_range = 800.0
 
 [node name="missiles_front" type="Node2D" parent="."]
 
