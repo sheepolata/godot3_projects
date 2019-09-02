@@ -9,8 +9,8 @@ __meta__ = {
 "_edit_lock_": true,
 "_edit_vertical_guides_": [  ]
 }
-max_nb_asteroid = 25
-asteroid_freq_limits = Vector2( 0.5, 0.5 )
+max_nb_asteroid = 0
+asteroid_freq_limits = Vector2( 2, 3 )
 random_target_offset_range = 128
 asteroid_spawn_radius = 4096
 

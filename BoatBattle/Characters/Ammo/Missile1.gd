@@ -11,6 +11,9 @@ var collision_info : KinematicCollision2D = null
 var state = "DEFAULT"
 var target_groups : Array = []
 
+#How many second does if take to reach max speed
+var accel = 0.5
+
 var sender
 
 # Called when the node enters the scene tree for the first time.
@@ -24,7 +27,7 @@ func _physics_process(delta):
 	
 	match state:
 		"DEFAULT":
-			current_speed = min(speed, current_speed + (speed*0.6*delta))
+			current_speed = min(speed, current_speed + (speed*(1.0/accel)*delta))
 			collision_info = move_and_collide(Vector2(current_speed * cos(rotation), current_speed * sin(rotation)) * delta)
 			
 			if collision_info:
