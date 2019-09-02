@@ -3,7 +3,7 @@
 [ext_resource path="res://Characters/Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Data/Sprites/Player_boat.png" type="Texture" id=2]
 [ext_resource path="res://Characters/Turrets/Turret.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Data/Sprites/arrow_white.png" type="Texture" id=4]
+[ext_resource path="res://Engine/UIPlayer.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Data/Sprites/stars_bg_far.png" type="Texture" id=5]
 [ext_resource path="res://Data/Sprites/stars_bg_close.png" type="Texture" id=6]
 
@@ -47,6 +47,7 @@ position = Vector2( 28, 0 )
 position = Vector2( -28, 0 )
 
 [node name="missiles_front" type="Node2D" parent="."]
+editor/display_folded = true
 
 [node name="RayCast2D" type="RayCast2D" parent="missiles_front"]
 position = Vector2( 62, 0 )
@@ -55,6 +56,7 @@ cast_to = Vector2( 50, 0 )
 [node name="Cooldown_front" type="Timer" parent="missiles_front"]
 
 [node name="missiles_right" type="Node2D" parent="."]
+editor/display_folded = true
 
 [node name="Cooldown_right" type="Timer" parent="missiles_right"]
 
@@ -99,83 +101,10 @@ position = Vector2( -72, -19 )
 [node name="WaveEffectSpawnPoint2" type="Position2D" parent="TrailEffect_node"]
 position = Vector2( -72, 19 )
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/bg_anim = SubResource( 2 )
-
-[node name="CrashTween" type="Tween" parent="."]
-
-[node name="UILayer" type="CanvasLayer" parent="."]
-layer = 2
-
-[node name="Score" type="Label" parent="UILayer"]
-anchor_left = 0.5
-anchor_right = 0.5
-margin_left = -39.0
-margin_right = 39.0
-margin_bottom = 14.0
-rect_scale = Vector2( 3, 3 )
-text = "Score"
-align = 1
-valign = 1
-
-[node name="ScoreAdd" type="Label" parent="UILayer"]
-anchor_left = 0.5
-anchor_right = 0.5
-margin_left = -40.0
-margin_top = 38.0
-margin_right = 38.0
-margin_bottom = 52.0
-rect_scale = Vector2( 3, 3 )
-text = "+smth"
-align = 1
-valign = 1
-
-[node name="ScoreAddDisplay" type="Timer" parent="UILayer/ScoreAdd"]
-
-[node name="GravityDirection" type="TextureRect" parent="UILayer"]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -256.0
-margin_top = -256.0
-texture = ExtResource( 4 )
-__meta__ = {
-"_edit_lock_": true
-}
-
-[node name="CooldownDisplay" type="Label" parent="UILayer"]
-anchor_top = 1.0
-anchor_bottom = 1.0
-margin_top = -42.0
-margin_right = 69.0
-margin_bottom = -28.0
-rect_scale = Vector2( 3, 3 )
-text = "Cooldowns"
-__meta__ = {
-"_edit_lock_": true
-}
-
-[node name="VBoxContainer" type="VBoxContainer" parent="UILayer"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-rect_scale = Vector2( 3, 3 )
-__meta__ = {
-"_edit_lock_": true
-}
-
-[node name="SpeedInfo" type="Label" parent="UILayer/VBoxContainer"]
-margin_right = 1920.0
-margin_bottom = 14.0
-text = "0 spd, 0 deg"
-
-[node name="HullPoints" type="Label" parent="UILayer/VBoxContainer"]
-margin_top = 18.0
-margin_right = 1920.0
-margin_bottom = 32.0
-text = "HP PERCENT"
+[node name="UILayer" parent="." instance=ExtResource( 4 )]
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+editor/display_folded = true
 
 [node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
 motion_scale = Vector2( 0.1, 0.1 )
@@ -198,9 +127,13 @@ __meta__ = {
 [node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer2"]
 texture = ExtResource( 6 )
 centered = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/bg_anim = SubResource( 2 )
+
+[node name="CrashTween" type="Tween" parent="."]
 [connection signal="timeout" from="missiles_front/Cooldown_front" to="." method="_on_Cooldown_front_timeout"]
 [connection signal="timeout" from="missiles_right/Cooldown_right" to="." method="_on_Cooldown_right_timeout"]
 [connection signal="timeout" from="missiles_left/Cooldown_left" to="." method="_on_Cooldown_left_timeout"]
 [connection signal="timeout" from="TrailEffect_node/TrailEffect" to="." method="_on_WaterEffect_timeout"]
 [connection signal="tween_all_completed" from="CrashTween" to="." method="_on_CrashTween_tween_all_completed"]
-[connection signal="timeout" from="UILayer/ScoreAdd/ScoreAddDisplay" to="." method="_on_ScoreAddDisplay_timeout"]

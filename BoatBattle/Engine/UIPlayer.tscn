@@ -1,0 +1,75 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Data/Sprites/arrow_white.png" type="Texture" id=1]
+
+[node name="UILayer" type="CanvasLayer"]
+layer = 2
+
+[node name="GravityDirection" type="TextureRect" parent="."]
+visible = false
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -256.0
+margin_top = -256.0
+texture = ExtResource( 1 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="CooldownDisplay" type="Label" parent="."]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -42.0
+margin_right = 69.0
+margin_bottom = -28.0
+rect_scale = Vector2( 3, 3 )
+text = "Cooldowns"
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/separation = 40
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="SpeedInfo" type="Label" parent="VBoxContainer"]
+margin_right = 1920.0
+margin_bottom = 14.0
+text = "0 spd, 0 deg"
+
+[node name="HullPoints" type="Label" parent="VBoxContainer"]
+margin_top = 54.0
+margin_right = 1920.0
+margin_bottom = 68.0
+text = "HP PERCENT"
+
+[node name="Score" type="Label" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -17.5
+margin_right = 17.5
+margin_bottom = 14.0
+rect_scale = Vector2( 3, 3 )
+text = "Score"
+align = 1
+valign = 1
+
+[node name="ScoreAdd" type="Label" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -20.5
+margin_top = 40.0
+margin_right = 20.5
+margin_bottom = 54.0
+rect_scale = Vector2( 3, 3 )
+text = "+smth"
+align = 1
+valign = 1
+
+[node name="ScoreAddDisplay" type="Timer" parent="ScoreAdd"]

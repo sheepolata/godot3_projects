@@ -128,10 +128,10 @@ func update_UI(delta : float) -> void:
 	$UILayer/VBoxContainer/SpeedInfo.text = (str(int(round(current_speeds.y))) + " spd, " 
 								+ str(int(round(current_speeds.x))) + " deg"
 							)
-	if turrets.size() > 0:
-		$UILayer/VBoxContainer/SpeedInfo.text = $UILayer/VBoxContainer/SpeedInfo.text + ", autofire " + str(turrets[0].autotarget)
-		
+	$UILayer/VBoxContainer/SpeedInfo.rect_scale = Vector2(3, 3)
+	
 	$UILayer/VBoxContainer/HullPoints.text = "Hull : " + str(round((hull_point/hull_point_max) * 100)) + "%"
+	$UILayer/VBoxContainer/HullPoints.rect_scale = Vector2(3, 3)
 	
 	$UILayer/Score.text = str(score) + " Pts"
 	
