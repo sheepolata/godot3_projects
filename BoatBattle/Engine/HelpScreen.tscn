@@ -40,8 +40,8 @@ valign = 1
 margin_top = 196.0
 margin_right = 539.0
 margin_bottom = 244.0
-text = "FIRE : Right mouse button
-AIM : Left mouse button
+text = "FIRE : Left  mouse button
+AIM : Aim mouse button
 You don't need to aim in order to fire, but aiming allows you to fire at specific angles"
 align = 1
 valign = 1
