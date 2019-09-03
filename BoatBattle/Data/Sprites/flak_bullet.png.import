@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/i2con.png-ecbcab59c729a3f4c2c97aa9bd63e346.stex"
+path="res://.import/flak_bullet.png-79e8d4400561cb85e492ae42dd87b63f.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://i2con.png"
-dest_files=[ "res://.import/i2con.png-ecbcab59c729a3f4c2c97aa9bd63e346.stex" ]
+source_file="res://Data/Sprites/flak_bullet.png"
+dest_files=[ "res://.import/flak_bullet.png-79e8d4400561cb85e492ae42dd87b63f.stex" ]
 
 [params]
 

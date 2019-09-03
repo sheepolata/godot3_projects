@@ -23,4 +23,7 @@ wait_time = 5.0
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
 position = Vector2( 877.197, 473.518 )
+front_missile_cd = 1.0
+right_missile_cd = 0.15
+left_missile_cd = 0.15
 [connection signal="timeout" from="Asteroids/Spawner" to="." method="spaw_asteroid"]

@@ -1,10 +1,10 @@
 extends KinematicBody2D
 
 #var direction : Vector2 = Vector2.ZERO
-export(float) var speed : float = 1000
+export(float) var speed : float = 1500
 var current_speed : float = 0
-export(float) var life_span : float = 4
-export(float) var damage = 50
+export(float) var life_span : float = 1
+export(float) var damage = 4
 
 var collision_info : KinematicCollision2D = null
 
@@ -12,18 +12,17 @@ var state = "DEFAULT"
 var target_groups : Array = []
 
 #How many second does if take to reach max speed
-export(float) var accel = 0.5
-
-export(float, 0, 180) var dispersion = 0
+export(float) var accel = 0
 
 var sender
+
+export(float, 0, 180) var dispersion = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	add_to_group("ammo")
 	$Lifespan.wait_time = life_span
 	$Lifespan.start()
-	$AnimationPlayer.play("fly")
 	
 	$CollisionShape2D.disabled = true
 
@@ -59,8 +58,8 @@ func _physics_process(delta):
 								collision_info.collider.nullify_score()
 		"EXPLODE":
 			$CollisionShape2D.disabled = true
-			$AnimationPlayer.play("explode")
-			yield($AnimationPlayer, "animation_finished")
+#			$AnimationPlayer.play("explode")
+#			yield($AnimationPlayer, "animation_finished")
 			queue_free()
 
 func _on_Lifespan_timeout():
@@ -78,6 +77,7 @@ func _on_Area2D_body_entered(body):
 				else:
 					sender.score += body.score_value
 				body.nullify_score()
+
 				
 func my_rotation(angle):
 	rotate(angle)

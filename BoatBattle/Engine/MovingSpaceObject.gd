@@ -18,6 +18,7 @@ func _ready():
 	hull_point = hull_point_max
 
 func take_hull_damage(value : float) -> void:
+	print("take " + str(value) + " dmg")
 	hull_point = max(0, hull_point - value)
 	if hull_point <= 0:
 		is_dead = true
