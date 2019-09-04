@@ -18,7 +18,7 @@ var state = "DEFAULT"
 
 #var collision_info : KinematicCollision2D = null
 
-onready var cam = $Camera2D
+onready var cam = $MainCamera
 var max_zoom_in = 1.6; var max_zoom_out = 3.2;
 
 onready var trail_effect = $TrailEffect_node/TrailEffect
@@ -50,10 +50,14 @@ var side_aim_arc_angle_low = 40; var side_aim_arc_angle_high = 170;
 
 var _current_delta : float = 0
 var previous_arc_transparancy : float = 0.0; var previous_aim_missile_transparancy : float = 0.0;
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	._ready()
 	randomize()
+	
+	
 	
 #	$ParallaxBackground.scale = Vector2(max_zoom_out, max_zoom_out)
 	for pbg in $ParallaxBackground.get_children():
@@ -190,6 +194,8 @@ func collision_check():
 			current_speeds = Vector2.ZERO
 			$CollisionShape2D.disabled = true
 			state = "CRASH"
+#		elif "asteroid" in collision_info.collider.get_groups():
+#			print("OOPS")
 
 func movement_loop(delta : float):
 	#var motion = move_direction.normalized() * speed_max

@@ -57,28 +57,35 @@ func _physics_process(delta):
 									sender.score += collision_info.collider.score_value
 								collision_info.collider.nullify_score()
 		"EXPLODE":
-			$CollisionShape2D.disabled = true
-#			$AnimationPlayer.play("explode")
-#			yield($AnimationPlayer, "animation_finished")
-			queue_free()
+			if $ExplodeTimer.is_stopped():
+				$ExplodeTimer.wait_time = $Particles2D.lifetime
+				$Sprite.hide()
+				$CollisionShape2D.disabled = true
+				$Particles2D.emitting = true
+				$ExplodeTimer.start()
 
 func _on_Lifespan_timeout():
-	state = "EXPLODE"
+	if state != "EXPLODE":
+		state = "EXPLODE"
 
 func _on_Area2D_body_entered(body):
 	if "asteroid" in body.get_groups():
-		state = "EXPLODE"
-		body.take_hull_damage(damage)
-		if body.score_value > 0:
-			if sender and sender.get("score") != null:
-				#print("ADD SCORE")
-				if "asteroid" in body.get_groups():
-					sender.score += body.score_value * 2
-				else:
-					sender.score += body.score_value
-				body.nullify_score()
+		if state != "EXPLODE":
+			state = "EXPLODE"
+			body.take_hull_damage(damage)
+			if body.score_value > 0:
+				if sender and sender.get("score") != null:
+					#print("ADD SCORE")
+					if "asteroid" in body.get_groups():
+						sender.score += body.score_value * 2
+					else:
+						sender.score += body.score_value
+					body.nullify_score()
 
 				
 func my_rotation(angle):
 	rotate(angle)
 	rotate(deg2rad(rand_range(-dispersion, dispersion)))
+
+func _on_ExplodeTimer_timeout():
+	queue_free()

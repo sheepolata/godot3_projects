@@ -18,10 +18,13 @@ func _ready():
 	hull_point = hull_point_max
 
 func take_hull_damage(value : float) -> void:
-	print("take " + str(value) + " dmg")
+#	print("take " + str(value) + " dmg")
 	hull_point = max(0, hull_point - value)
 	if hull_point <= 0:
 		is_dead = true
+	elif has_node("MainCamera"):
+		get_node("MainCamera").shake_value = value
+		get_node("MainCamera").shake_decrease = value*0.05
 #	print(hull_point, "hp")
 
 func apply_forces_from_planets(delta : float):

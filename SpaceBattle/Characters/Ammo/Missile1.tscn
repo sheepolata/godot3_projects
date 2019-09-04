@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://Characters/Ammo/Missile1.gd" type="Script" id=1]
 [ext_resource path="res://Data/Sprites/missile1.png" type="Texture" id=2]
@@ -11,6 +11,8 @@ radius = 12.0
 radius = 12.0
 
 [sub_resource type="Animation" id=3]
+length = 0.5
+step = 0.05
 tracks/0/type = "value"
 tracks/0/path = NodePath("Explosion:frame")
 tracks/0/interp = 1
@@ -30,7 +32,7 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0, 1 ),
+"times": PoolRealArray( 0, 0.5 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 1,
 "values": [ true, false ]
@@ -65,12 +67,64 @@ tracks/0/keys = {
 "values": [ 0, 1, 2, 3, 2 ]
 }
 
+[sub_resource type="Gradient" id=5]
+colors = PoolColorArray( 0.415686, 0.415686, 0.415686, 1, 0.866667, 0.866667, 0.866667, 1 )
+
+[sub_resource type="GradientTexture" id=6]
+gradient = SubResource( 5 )
+
+[sub_resource type="Curve" id=7]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.286319 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=8]
+curve = SubResource( 7 )
+
+[sub_resource type="ParticlesMaterial" id=9]
+emission_shape = 2
+emission_box_extents = Vector3( 1, 2, 1 )
+flag_disable_z = true
+gravity = Vector3( -98, 0, 0 )
+angular_velocity = 90.0
+angular_velocity_random = 0.5
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale = 4.0
+scale_curve = SubResource( 8 )
+color_ramp = SubResource( 6 )
+
+[sub_resource type="Gradient" id=11]
+offsets = PoolRealArray( 0, 0.252475, 0.762376 )
+colors = PoolColorArray( 0.298039, 0.345098, 0.92549, 1, 0.854902, 0.67451, 0.219608, 1, 1, 0, 0, 1 )
+
+[sub_resource type="GradientTexture" id=12]
+gradient = SubResource( 11 )
+
+[sub_resource type="Curve" id=13]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.703381, 0.440682 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=14]
+curve = SubResource( 13 )
+
+[sub_resource type="ParticlesMaterial" id=10]
+flag_disable_z = true
+spread = 180.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 200.0
+initial_velocity_random = 0.75
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale = 4.0
+scale_curve = SubResource( 14 )
+color_ramp = SubResource( 12 )
+
 [node name="Missile1" type="KinematicBody2D"]
+scale = Vector2( 2, 2 )
 collision_layer = 0
 collision_mask = 4
 script = ExtResource( 1 )
-speed = 1250.0
+speed = 4000.0
 damage = 25.0
+accel = 1.2
 
 [node name="Sprite" type="Sprite" parent="."]
 rotation = 1.5708
@@ -99,5 +153,19 @@ texture = ExtResource( 3 )
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/explode = SubResource( 3 )
 anims/fly = SubResource( 4 )
+
+[node name="SmokeParticles" type="Particles2D" parent="."]
+position = Vector2( -12.5, 0 )
+z_index = -1
+amount = 24
+lifetime = 0.6
+process_material = SubResource( 9 )
+
+[node name="ExplosionParticles" type="Particles2D" parent="."]
+position = Vector2( 12, 0 )
+emitting = false
+amount = 150
+lifetime = 0.3
+process_material = SubResource( 10 )
 [connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
 [connection signal="timeout" from="Lifespan" to="." method="_on_Lifespan_timeout"]

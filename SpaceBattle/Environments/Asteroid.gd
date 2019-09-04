@@ -59,6 +59,7 @@ func _physics_process(delta):
 					STATE = "CRASH"
 				elif "player" in collision_info.collider.get_groups():
 					collision_info.collider.take_hull_damage(force)
+					
 					$CollisionShape2D.disabled = true
 					STATE = "EXPLODE"
 				elif "asteroid" in collision_info.collider.get_groups():

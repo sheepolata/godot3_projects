@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Characters/Ammo/FlakBullet.gd" type="Script" id=1]
 [ext_resource path="res://Data/Sprites/flak_bullet.png" type="Texture" id=2]
@@ -11,36 +11,12 @@ radius = 12.0
 
 [sub_resource type="Animation" id=3]
 tracks/0/type = "value"
-tracks/0/path = NodePath("Explosion:frame")
+tracks/0/path = NodePath("Sprite:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 1,
-"values": [ 0 ]
-}
-tracks/1/type = "value"
-tracks/1/path = NodePath("Explosion:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0, 1 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 1,
-"values": [ true, false ]
-}
-tracks/2/type = "value"
-tracks/2/path = NodePath("Sprite:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 1,
@@ -64,7 +40,25 @@ tracks/0/keys = {
 "values": [ 0, 1, 2, 3, 2 ]
 }
 
+[sub_resource type="Gradient" id=5]
+offsets = PoolRealArray( 0.445545, 1 )
+colors = PoolColorArray( 0.890196, 0.0784314, 0.0784314, 1, 0.917647, 0.901961, 0.407843, 1 )
+
+[sub_resource type="GradientTexture" id=6]
+gradient = SubResource( 5 )
+
+[sub_resource type="ParticlesMaterial" id=7]
+flag_disable_z = true
+spread = 180.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 100.0
+initial_velocity_random = 0.75
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+color_ramp = SubResource( 6 )
+
 [node name="FlakBullet" type="KinematicBody2D"]
+scale = Vector2( 0.75, 0.75 )
 collision_layer = 0
 collision_mask = 4
 script = ExtResource( 1 )
@@ -89,12 +83,19 @@ shape = SubResource( 2 )
 
 [node name="Lifespan" type="Timer" parent="."]
 
-[node name="Explosion" type="Sprite" parent="."]
-visible = false
-position = Vector2( 12, 0 )
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/explode = SubResource( 3 )
 anims/fly = SubResource( 4 )
+
+[node name="ExplodeTimer" type="Timer" parent="."]
+
+[node name="Particles2D" type="Particles2D" parent="."]
+z_index = -1
+emitting = false
+amount = 150
+lifetime = 0.3
+one_shot = true
+process_material = SubResource( 7 )
 [connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
 [connection signal="timeout" from="Lifespan" to="." method="_on_Lifespan_timeout"]
+[connection signal="timeout" from="ExplodeTimer" to="." method="_on_ExplodeTimer_timeout"]

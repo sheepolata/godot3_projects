@@ -1,11 +1,12 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Characters/Player/Player.gd" type="Script" id=1]
-[ext_resource path="res://Data/Sprites/Player_boat.png" type="Texture" id=2]
-[ext_resource path="res://Characters/Turrets/Turret.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Engine/UIPlayer.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Data/Sprites/stars_bg_far.png" type="Texture" id=5]
-[ext_resource path="res://Data/Sprites/stars_bg_close.png" type="Texture" id=6]
+[ext_resource path="res://Characters/Player/Camera2D.gd" type="Script" id=2]
+[ext_resource path="res://Data/Sprites/Player_boat.png" type="Texture" id=3]
+[ext_resource path="res://Characters/Turrets/Turret.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Engine/UIPlayer.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Data/Sprites/stars_bg_far.png" type="Texture" id=6]
+[ext_resource path="res://Data/Sprites/stars_bg_close.png" type="Texture" id=7]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 30.0
@@ -21,17 +22,18 @@ collision_layer = 6
 collision_mask = 6
 script = ExtResource( 1 )
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="MainCamera" type="Camera2D" parent="."]
 current = true
 zoom = Vector2( 0.25, 0.25 )
 drag_margin_left = 0.05
 drag_margin_top = 0.05
 drag_margin_right = 0.05
 drag_margin_bottom = 0.05
+script = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]
 rotation = 1.5708
-texture = ExtResource( 2 )
+texture = ExtResource( 3 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = 1.5708
@@ -40,10 +42,10 @@ shape = SubResource( 1 )
 [node name="turrets" type="Node2D" parent="."]
 editor/display_folded = true
 
-[node name="Turret1" parent="turrets" instance=ExtResource( 3 )]
+[node name="Turret1" parent="turrets" instance=ExtResource( 4 )]
 position = Vector2( 28, 0 )
 
-[node name="Turret" parent="turrets" instance=ExtResource( 3 )]
+[node name="Turret" parent="turrets" instance=ExtResource( 4 )]
 position = Vector2( -28, 0 )
 
 [node name="missiles_front" type="Node2D" parent="."]
@@ -56,7 +58,6 @@ cast_to = Vector2( 50, 0 )
 [node name="Cooldown_front" type="Timer" parent="missiles_front"]
 
 [node name="missiles_right" type="Node2D" parent="."]
-editor/display_folded = true
 
 [node name="Cooldown_right" type="Timer" parent="missiles_right"]
 
@@ -64,13 +65,15 @@ editor/display_folded = true
 position = Vector2( 38, 17 )
 
 [node name="RayCast2D2" type="RayCast2D" parent="missiles_right"]
-position = Vector2( 8, 17 )
+position = Vector2( -1, 17 )
+
+[node name="RayCast2D4" type="RayCast2D" parent="missiles_right"]
+position = Vector2( 19, 17 )
 
 [node name="RayCast2D3" type="RayCast2D" parent="missiles_right"]
 position = Vector2( -21, 17 )
 
 [node name="missiles_left" type="Node2D" parent="."]
-editor/display_folded = true
 
 [node name="Cooldown_left" type="Timer" parent="missiles_left"]
 
@@ -79,11 +82,15 @@ position = Vector2( -21, -17 )
 cast_to = Vector2( 0, -50 )
 
 [node name="RayCast2D2" type="RayCast2D" parent="missiles_left"]
-position = Vector2( 8, -17 )
+position = Vector2( -1, -17 )
 cast_to = Vector2( 0, -50 )
 
 [node name="RayCast2D3" type="RayCast2D" parent="missiles_left"]
 position = Vector2( 38, -17 )
+cast_to = Vector2( 0, -50 )
+
+[node name="RayCast2D4" type="RayCast2D" parent="missiles_left"]
+position = Vector2( 19, -17 )
 cast_to = Vector2( 0, -50 )
 
 [node name="TrailEffect_node" type="Node2D" parent="."]
@@ -101,7 +108,7 @@ position = Vector2( -72, -19 )
 [node name="WaveEffectSpawnPoint2" type="Position2D" parent="TrailEffect_node"]
 position = Vector2( -72, 19 )
 
-[node name="UILayer" parent="." instance=ExtResource( 4 )]
+[node name="UILayer" parent="." instance=ExtResource( 5 )]
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
 editor/display_folded = true
@@ -114,7 +121,7 @@ __meta__ = {
 }
 
 [node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer"]
-texture = ExtResource( 5 )
+texture = ExtResource( 6 )
 centered = false
 
 [node name="ParallaxLayer2" type="ParallaxLayer" parent="ParallaxBackground"]
@@ -125,7 +132,7 @@ __meta__ = {
 }
 
 [node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer2"]
-texture = ExtResource( 6 )
+texture = ExtResource( 7 )
 centered = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
