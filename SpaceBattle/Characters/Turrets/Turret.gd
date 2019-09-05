@@ -5,8 +5,12 @@ export(float) var laser_range : float = 600
 export(float) var laser_duration : float = 0
 export(float) var laser_damage : float = 10
 export(float) var rotation_speed : float = 180
+export(PackedScene) var bullet : PackedScene = null
+export(float) var bullet_cd : float = 0.2
 
 export(Vector2) var laser_random_offset_limits : Vector2 = Vector2(0, 0)
+
+var damage_bonus : float = 0
 
 var autotarget : bool = false
 var autotarget_groups : Array = []
@@ -21,6 +25,8 @@ func _ready():
 		$LaserCooldown.wait_time = laser_cooldown
 	if laser_duration > 0:
 		$LaserDuration.wait_time = laser_duration
+	if bullet_cd > 0:
+		$BulletCooldown.wait_time = bullet_cd
 
 	
 	$RayCast2D.position = $FirePoint.position
@@ -84,7 +90,19 @@ func _draw():
 			draw_line($RayCast2D.position, $RayCast2D.cast_to, Color.red, 3)
 
 func fire():
-	if ( ($LaserCooldown.is_stopped() or laser_cooldown <= 0) 
+	if bullet != null and $BulletCooldown.is_stopped():
+		var rot = rotation 
+		var ammo = bullet.instance()
+		add_child(ammo)
+		
+		ammo.position = position
+		ammo.speed += get_parent().get_parent().current_speeds.y
+		ammo.target_groups = ["asteroid", "enemy"]
+		ammo.my_rotation(to_global($RayCast2D.cast_to).angle())
+		ammo.sender = get_parent().get_parent()
+		ammo.damage += damage_bonus
+		
+	elif ( ($LaserCooldown.is_stopped() or laser_cooldown <= 0) 
 			and ($LaserDuration.is_stopped() or laser_duration <= 0)):
 		$RayCast2D.enabled = true
 		var rnd_offset = Vector2(rand_range(-laser_random_offset_limits.x/2, laser_random_offset_limits.x/2),
@@ -135,6 +153,11 @@ func _on_AutotargetRange_body_exited(body):
 	if body:
 		if body in possible_autotargets:
 			possible_autotargets.remove(possible_autotargets.find(body))
+
+func _on_BulletCooldown_timeout():
+	$BulletCooldown.stop()
+
+
 
 
 

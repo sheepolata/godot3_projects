@@ -11,6 +11,8 @@ export(int) var random_target_offset_range = 512
 
 export(int) var asteroid_spawn_radius = 2048
 
+var time : float = 0
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	randomize()
@@ -21,6 +23,8 @@ func _ready():
 #	$ParallaxBackground.scale = Vector2(player.max_zoom_out, player.max_zoom_out)
 
 func _process(delta):
+	time += delta
+	$UIWorldLayer/TimeLab.text = "%10.1f"%stepify(time, 0.1)
 	
 	for asteroid in asteroid_node.get_children():
 		if "asteroid" in asteroid.get_groups():

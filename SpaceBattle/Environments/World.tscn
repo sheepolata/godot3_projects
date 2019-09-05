@@ -1,8 +1,7 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Environments/World.gd" type="Script" id=1]
-[ext_resource path="res://Environments/Objects/Planet.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Characters/Player/Player.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Characters/Player/Player.tscn" type="PackedScene" id=2]
 
 [node name="World" type="Node2D"]
 script = ExtResource( 1 )
@@ -17,19 +16,23 @@ asteroid_spawn_radius = 4096
 
 [node name="Planets" type="Node" parent="."]
 
-[node name="Planet2" parent="Planets" instance=ExtResource( 2 )]
-position = Vector2( 3334.81, 1092.5 )
-rotation = 27.6036
-angular_velocity = 0.145312
-
 [node name="Asteroids" type="Node" parent="."]
 
 [node name="Spawner" type="Timer" parent="Asteroids"]
 wait_time = 5.0
 
-[node name="Player" parent="." instance=ExtResource( 3 )]
-position = Vector2( 743.395, 424.613 )
-front_missile_cd = 1.0
-right_missile_cd = 0.15
-left_missile_cd = 0.15
+[node name="Player" parent="." instance=ExtResource( 2 )]
+position = Vector2( 845.392, 510.545 )
+
+[node name="UIWorldLayer" type="CanvasLayer" parent="."]
+
+[node name="TimeLab" type="Label" parent="UIWorldLayer"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -240.0
+margin_top = 20.0
+margin_right = -200.0
+margin_bottom = 34.0
+rect_scale = Vector2( 4, 4 )
+text = "time"
 [connection signal="timeout" from="Asteroids/Spawner" to="." method="spaw_asteroid"]
