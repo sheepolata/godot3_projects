@@ -3,22 +3,20 @@
 [ext_resource path="res://Environments/Objects/Planet.gd" type="Script" id=1]
 [ext_resource path="res://Data/Sprites/Planet1.png" type="Texture" id=2]
 
-
 [sub_resource type="CircleShape2D" id=1]
 radius = 256.0
 
 [node name="Planet" type="StaticBody2D"]
-rotation = 63.2111
+rotation = 63.0611
 scale = Vector2( 0.989452, 0.989452 )
 z_index = -2
 script = ExtResource( 1 )
-angular_velocity = 0.0698481
-gravity = 500.0
+angular_velocity = 0.0270951
 
 [node name="Sprite" type="Sprite" parent="."]
-scale = Vector2( 0.904315, 0.904315 )
+scale = Vector2( 0.963951, 0.963951 )
 texture = ExtResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-scale = Vector2( 0.768668, 0.768668 )
+scale = Vector2( 0.819358, 0.819358 )
 shape = SubResource( 1 )

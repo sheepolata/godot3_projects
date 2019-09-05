@@ -26,7 +26,7 @@ func _ready():
 	
 	speed = rand_range(min_speed, max_speed)
 	
-	gravity_influence_factor = randf() * (4.0 - 0.5) + 0.2
+	gravity_influence_factor = rand_range(1.0, 10.0)
 	
 	force = pow((1+scale.x), 2) + speed*0.01
 	
@@ -43,9 +43,11 @@ func _physics_process(delta):
 		"DEFAULT":
 			$Sprite.rotate(rot_speed * delta)
 		
-			apply_forces_from_planets(delta)
+#			apply_forces_from_planets(delta)
+#			planets_gravity_application(delta)
 			
 			collision_info = move_and_collide(Vector2(speed * cos(get_angle_to(fly_direction)), speed * sin(get_angle_to(fly_direction))) * delta)
+#			ext_velocity = Vector2(speed * cos(get_angle_to(fly_direction)), speed * sin(get_angle_to(fly_direction))).normalized()
 			
 			var offset = 10.0
 			fly_direction = fly_direction + Vector2(

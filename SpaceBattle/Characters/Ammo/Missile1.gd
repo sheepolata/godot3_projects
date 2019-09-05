@@ -31,7 +31,8 @@ func _physics_process(delta):
 	match state:
 		"DEFAULT":
 			
-			apply_forces_from_planets(delta)
+#			apply_forces_from_planets(delta)
+#			planets_gravity_application(delta)
 			
 			if accel <= 0:
 				current_speed = speed
@@ -39,6 +40,7 @@ func _physics_process(delta):
 				current_speed = min(speed, current_speed + (speed*(1.0/accel)*delta))
 #			collision_info = move_and_collide(Vector2(current_speed * cos(rotation), current_speed * sin(rotation)) * delta)
 			collision_info = move_and_collide(Vector2(current_speed * cos(rotation), current_speed * sin(rotation)) * delta)
+			ext_velocity = Vector2(current_speed * cos(rotation), current_speed * sin(rotation)).normalized()
 			
 			if collision_info:
 				print("WHY!?")

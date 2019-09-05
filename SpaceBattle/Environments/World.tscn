@@ -10,19 +10,17 @@ __meta__ = {
 "_edit_lock_": true,
 "_edit_vertical_guides_": [  ]
 }
-max_nb_asteroid = 0
+max_nb_asteroid = 6
 asteroid_freq_limits = Vector2( 1, 2 )
 random_target_offset_range = 128
 asteroid_spawn_radius = 4096
 
 [node name="Planets" type="Node" parent="."]
 
-[node name="Planet" parent="Planets" instance=ExtResource( 2 )]
-position = Vector2( 2558.27, 1034.34 )
-rotation = 42.1933
-angular_velocity = 0.149821
-gravity_distance = 4096
-gravity = 100.0
+[node name="Planet2" parent="Planets" instance=ExtResource( 2 )]
+position = Vector2( 3334.81, 1092.5 )
+rotation = 27.6036
+angular_velocity = 0.145312
 
 [node name="Asteroids" type="Node" parent="."]
 
@@ -30,7 +28,7 @@ gravity = 100.0
 wait_time = 5.0
 
 [node name="Player" parent="." instance=ExtResource( 3 )]
-position = Vector2( 877.197, 473.518 )
+position = Vector2( 743.395, 424.613 )
 front_missile_cd = 1.0
 right_missile_cd = 0.15
 left_missile_cd = 0.15

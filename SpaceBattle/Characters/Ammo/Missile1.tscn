@@ -92,20 +92,20 @@ scale = 4.0
 scale_curve = SubResource( 8 )
 color_ramp = SubResource( 6 )
 
-[sub_resource type="Gradient" id=11]
+[sub_resource type="Gradient" id=10]
 offsets = PoolRealArray( 0, 0.252475, 0.762376 )
 colors = PoolColorArray( 0.298039, 0.345098, 0.92549, 1, 0.854902, 0.67451, 0.219608, 1, 1, 0, 0, 1 )
 
-[sub_resource type="GradientTexture" id=12]
-gradient = SubResource( 11 )
+[sub_resource type="GradientTexture" id=11]
+gradient = SubResource( 10 )
 
-[sub_resource type="Curve" id=13]
+[sub_resource type="Curve" id=12]
 _data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.703381, 0.440682 ), 0.0, 0.0, 0, 0 ]
 
-[sub_resource type="CurveTexture" id=14]
-curve = SubResource( 13 )
+[sub_resource type="CurveTexture" id=13]
+curve = SubResource( 12 )
 
-[sub_resource type="ParticlesMaterial" id=10]
+[sub_resource type="ParticlesMaterial" id=14]
 flag_disable_z = true
 spread = 180.0
 gravity = Vector3( 0, 0, 0 )
@@ -114,8 +114,8 @@ initial_velocity_random = 0.75
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 scale = 4.0
-scale_curve = SubResource( 14 )
-color_ramp = SubResource( 12 )
+scale_curve = SubResource( 13 )
+color_ramp = SubResource( 11 )
 
 [node name="Missile1" type="KinematicBody2D"]
 scale = Vector2( 2, 2 )
@@ -166,6 +166,6 @@ position = Vector2( 12, 0 )
 emitting = false
 amount = 150
 lifetime = 0.3
-process_material = SubResource( 10 )
+process_material = SubResource( 14 )
 [connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
 [connection signal="timeout" from="Lifespan" to="." method="_on_Lifespan_timeout"]

@@ -20,6 +20,7 @@ var state = "DEFAULT"
 
 onready var cam = $MainCamera
 var max_zoom_in = 1.6; var max_zoom_out = 3.2;
+#var max_zoom_in = 5; var max_zoom_out = 8;
 
 onready var trail_effect = $TrailEffect_node/TrailEffect
 
@@ -121,15 +122,13 @@ func _physics_process(delta : float):
 func default_state(delta : float):
 	var v = Utils.normalise(abs(current_speeds.y), max_zoom_in, max_zoom_out, 0, speed_max)
 	cam.zoom = cam.zoom.linear_interpolate(Vector2(v, v), delta)
-#	var d = Vector2(cos(rotation), sin(rotation))
-#	cam.offset_h = d.x
-#	cam.offset_v = d.y
+
 		
 	move_controls_loop()
 	
 	fire_control_loop()
 	
-	apply_forces_from_planets(delta)
+#	planets_gravity_application(delta)
 	movement_loop(delta)
 
 func update_UI(delta : float) -> void:
@@ -230,7 +229,8 @@ func movement_loop(delta : float):
 	#print(current_speeds)
 	
 	collision_info = move_and_collide(Vector2(current_speeds.y * cos(rotation), current_speeds.y * sin(rotation)) * delta)
-
+#	ext_velocity = Vector2(current_speeds.y * cos(rotation), current_speeds.y * sin(rotation)).normalized()
+	
 func basic_control_loop():
 	if Input.is_action_just_pressed("ui_cancel"):
 		get_tree().quit()
@@ -419,6 +419,11 @@ func dead_state(delta : float):
 	$CollisionShape2D.disabled = true
 	for t in turrets:
 		t.autotarget = false
+
+func take_hull_damage(value : float):
+	.take_hull_damage(value)
+	get_node("MainCamera").shake_value = value
+	get_node("MainCamera").shake_decrease = value*0.05
 
 func _draw():
 #	var arc_display_distance = 4096;
