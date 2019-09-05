@@ -1,12 +1,11 @@
-extends KinematicBody2D
+#extends KinematicBody2D
+extends "res://Engine/Gravity.gd"
 
 #var direction : Vector2 = Vector2.ZERO
 export(float) var speed : float = 1000
 var current_speed : float = 0
 export(float) var life_span : float = 4
 export(float) var damage = 50
-
-var collision_info : KinematicCollision2D = null
 
 var state = "DEFAULT"
 var target_groups : Array = []
@@ -31,6 +30,9 @@ func _physics_process(delta):
 	
 	match state:
 		"DEFAULT":
+			
+			apply_forces_from_planets(delta)
+			
 			if accel <= 0:
 				current_speed = speed
 			else:
@@ -84,6 +86,8 @@ func _on_Area2D_body_entered(body):
 				else:
 					sender.score += body.score_value
 				body.nullify_score()
+	elif "planet" in body.get_groups():
+		state = "EXPLODE"
 				
 func my_rotation(angle):
 	rotate(angle)

@@ -1,4 +1,4 @@
-extends "res://Engine/MovingSpaceObject.gd"
+extends "res://Engine/Ship.gd"
 
 var rot_speed : float = 0.0
 

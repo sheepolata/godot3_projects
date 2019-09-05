@@ -1,4 +1,4 @@
-extends "res://Engine/MovingSpaceObject.gd"
+extends "res://Engine/Ship.gd"
 
 var move_direction = Vector2.ZERO
 var current_speeds : Vector2 = Vector2.ZERO
@@ -56,8 +56,6 @@ var previous_arc_transparancy : float = 0.0; var previous_aim_missile_transparan
 func _ready():
 	._ready()
 	randomize()
-	
-	
 	
 #	$ParallaxBackground.scale = Vector2(max_zoom_out, max_zoom_out)
 	for pbg in $ParallaxBackground.get_children():

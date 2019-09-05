@@ -30,7 +30,7 @@ func _process(delta):
 func spaw_asteroid():
 	if asteroid_node.get_child_count() < (max_nb_asteroid + 1):
 
-		var ast = preload("res://Environments/Asteroid.tscn").instance()
+		var ast = preload("res://Environments/Objects/Asteroid.tscn").instance()
 		
 		asteroid_node.add_child(ast)
 		

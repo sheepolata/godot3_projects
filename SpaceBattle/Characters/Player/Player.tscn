@@ -58,6 +58,7 @@ cast_to = Vector2( 50, 0 )
 [node name="Cooldown_front" type="Timer" parent="missiles_front"]
 
 [node name="missiles_right" type="Node2D" parent="."]
+editor/display_folded = true
 
 [node name="Cooldown_right" type="Timer" parent="missiles_right"]
 
@@ -74,6 +75,7 @@ position = Vector2( 19, 17 )
 position = Vector2( -21, 17 )
 
 [node name="missiles_left" type="Node2D" parent="."]
+editor/display_folded = true
 
 [node name="Cooldown_left" type="Timer" parent="missiles_left"]
 
@@ -111,10 +113,9 @@ position = Vector2( -72, 19 )
 [node name="UILayer" parent="." instance=ExtResource( 5 )]
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
-editor/display_folded = true
 
 [node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
-motion_scale = Vector2( 0.1, 0.1 )
+motion_scale = Vector2( 0.12, 0.12 )
 motion_mirroring = Vector2( 1920, 1080 )
 __meta__ = {
 "_edit_lock_": true
@@ -125,7 +126,7 @@ texture = ExtResource( 6 )
 centered = false
 
 [node name="ParallaxLayer2" type="ParallaxLayer" parent="ParallaxBackground"]
-motion_scale = Vector2( 0.15, 0.15 )
+motion_scale = Vector2( 0.18, 0.18 )
 motion_mirroring = Vector2( 1920, 1080 )
 __meta__ = {
 "_edit_lock_": true
