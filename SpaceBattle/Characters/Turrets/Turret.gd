@@ -102,7 +102,8 @@ func fire():
 		var rot = global_rotation - deg2rad(90)
 		var ammo = bullet.instance()
 		
-		get_parent().get_parent().get_parent().add_child(ammo)
+#		get_parent().get_parent().get_parent().add_child(ammo)
+		get_tree().get_nodes_in_group("world")[0].add_child(ammo)
 
 		ammo.position = global_position + $RayCast2D.cast_to.rotated(rotation)
 		if get_parent().get_parent().get("current_speeds"):
@@ -156,7 +157,7 @@ func _on_AutotargetRange_body_entered(body : PhysicsBody2D):
 	var valid = false
 	for gr in autotarget_groups:
 		if gr in body.get_groups():
-			print(gr)
+#			print(gr)
 			valid = true
 			break
 	if valid:

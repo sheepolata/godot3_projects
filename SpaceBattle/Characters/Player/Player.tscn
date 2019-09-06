@@ -1,14 +1,12 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Characters/Player/Player.gd" type="Script" id=1]
-[ext_resource path="res://Characters/Ammo/Missile1.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Characters/Player/Camera2D.gd" type="Script" id=3]
-[ext_resource path="res://Data/Sprites/Player_boat.png" type="Texture" id=4]
-[ext_resource path="res://Characters/Turrets/Turret.tscn" type="PackedScene" id=5]
-[ext_resource path="res://Characters/Ammo/FlakBullet.tscn" type="PackedScene" id=6]
-[ext_resource path="res://Engine/UIPlayer.tscn" type="PackedScene" id=7]
-[ext_resource path="res://Data/Sprites/stars_bg_far.png" type="Texture" id=8]
-[ext_resource path="res://Data/Sprites/stars_bg_close.png" type="Texture" id=9]
+[ext_resource path="res://Characters/Player/Camera2D.gd" type="Script" id=2]
+[ext_resource path="res://Data/Sprites/Player_boat.png" type="Texture" id=3]
+[ext_resource path="res://Characters/Turrets/Turret.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Engine/UIPlayer.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Data/Sprites/stars_bg_far.png" type="Texture" id=6]
+[ext_resource path="res://Data/Sprites/stars_bg_close.png" type="Texture" id=7]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 30.0
@@ -25,9 +23,9 @@ collision_mask = 6
 script = ExtResource( 1 )
 speed = 128.0
 front_damage_multiplier = 1.5
-right_missile = ExtResource( 2 )
+right_missile_cd = 0.15
 right_damage_multiplier = 0.6
-left_missile = ExtResource( 2 )
+left_missile_cd = 0.15
 left_damage_multiplier = 0.6
 
 [node name="MainCamera" type="Camera2D" parent="."]
@@ -37,11 +35,11 @@ drag_margin_left = 0.05
 drag_margin_top = 0.05
 drag_margin_right = 0.05
 drag_margin_bottom = 0.05
-script = ExtResource( 3 )
+script = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]
 rotation = 1.5708
-texture = ExtResource( 4 )
+texture = ExtResource( 3 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = 1.5708
@@ -49,28 +47,21 @@ shape = SubResource( 1 )
 
 [node name="turrets" type="Node2D" parent="."]
 
-[node name="AntiAsteroidTurret" parent="turrets" instance=ExtResource( 5 )]
-position = Vector2( 33, 0 )
+[node name="AntiAsteroidTurret" parent="turrets" instance=ExtResource( 4 )]
+position = Vector2( 25, 0 )
 turret_range = 1200.0
 rotation_speed = 220.0
-bullet = ExtResource( 6 )
 bullet_cd = 0.1
 damage_bonus_multiplier = 0.5
 autotarget_groups = [ "asteroid" ]
 
-[node name="AntiAsteroidTurret2" parent="turrets" instance=ExtResource( 5 )]
-position = Vector2( -43, 0 )
+[node name="AntiAsteroidTurret2" parent="turrets" instance=ExtResource( 4 )]
+position = Vector2( -28, 0 )
 turret_range = 1200.0
 rotation_speed = 220.0
-bullet = ExtResource( 6 )
 bullet_cd = 0.1
 damage_bonus_multiplier = 0.5
 autotarget_groups = [ "asteroid" ]
-
-[node name="AntiMissile" parent="turrets" instance=ExtResource( 5 )]
-position = Vector2( -5, 0 )
-rotation_speed = 360.0
-autotarget_groups = [ "missile", "asteroid" ]
 
 [node name="missiles_front" type="Node2D" parent="."]
 editor/display_folded = true
@@ -120,7 +111,7 @@ position = Vector2( -72, -19 )
 [node name="WaveEffectSpawnPoint2" type="Position2D" parent="TrailEffect_node"]
 position = Vector2( -72, 19 )
 
-[node name="UILayer" parent="." instance=ExtResource( 7 )]
+[node name="UILayer" parent="." instance=ExtResource( 5 )]
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
 
@@ -132,7 +123,7 @@ __meta__ = {
 }
 
 [node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer"]
-texture = ExtResource( 8 )
+texture = ExtResource( 6 )
 centered = false
 
 [node name="ParallaxLayer2" type="ParallaxLayer" parent="ParallaxBackground"]
@@ -143,7 +134,7 @@ __meta__ = {
 }
 
 [node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer2"]
-texture = ExtResource( 9 )
+texture = ExtResource( 7 )
 centered = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

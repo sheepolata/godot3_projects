@@ -11,11 +11,18 @@ export(int) var random_target_offset_range = 512
 
 export(int) var asteroid_spawn_radius = 2048
 
+var nb_stations_killed : int setget set_nb_stations_killed
+export(int) var station_spawn_radius = 4096
+
 var time : float = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	randomize()
+	
+	add_to_group("world")
+	
+	self.nb_stations_killed = -1
 	
 	ast_timer.wait_time = rand_range(asteroid_freq_limits.x, asteroid_freq_limits.y)
 	ast_timer.start()
@@ -25,6 +32,12 @@ func _ready():
 func _process(delta):
 	time += delta
 	$UIWorldLayer/TimeLab.text = "%10.1f"%stepify(time, 0.1)
+	
+	if $Stations.get_child_count() == 0 or $Stations.get_children()[0].is_dead:
+		self.nb_stations_killed += 1
+		spawn_station()
+	else:
+		$UIWorldLayer/StationDirection.rect_rotation = rad2deg(player.position.angle_to_point($Stations.get_children()[0].position)) - 90
 	
 	for asteroid in asteroid_node.get_children():
 		if "asteroid" in asteroid.get_groups():
@@ -52,3 +65,39 @@ func spaw_asteroid():
 		ast.fly_direction = player.position + random_target_offset
 	
 	ast_timer.wait_time = rand_range(asteroid_freq_limits.x, asteroid_freq_limits.y)
+
+func spawn_station():
+	var st = preload("res://Characters/Enemies/Station.tscn").instance()
+	$Stations.add_child(st)
+	
+	var a = randf() * PI * 2
+	st.position = Vector2(player.position.x + station_spawn_radius * cos(a), 
+								player.position.y + station_spawn_radius * sin(a))
+
+func set_nb_stations_killed(value : int):
+	print("HEY")
+	nb_stations_killed = value
+	$UIWorldLayer/KillsLab.text = "Kills: %3d" % [nb_stations_killed]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
