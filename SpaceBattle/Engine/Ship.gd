@@ -8,6 +8,11 @@ var is_dead = false
 var default_score_value : int = 0
 var score_value : int = 0
 
+export(float) var speed = 0
+
+var repairs_available : bool = true
+export(float) var repair_factor = 0.2
+
 func _ready():
 	hull_point = hull_point_max
 
@@ -16,7 +21,6 @@ func take_hull_damage(value : float) -> void:
 	hull_point = max(0, hull_point - value)
 	if hull_point <= 0:
 		is_dead = true
-
 
 func nullify_score():
 	score_value = 0
@@ -47,6 +51,20 @@ func draw_circle_arc_poly( center, radius, angleFrom, angleTo, color ):
     draw_polygon(pointsArc, colors)
     pass
 
+func draw_empty_circle(circle_center : Vector2, circle_radius : Vector2, color : Color, resolution : float, width : float):
+	var draw_counter = 1
+	var line_origin = Vector2()
+	var line_end = Vector2()
+	line_origin = circle_radius + circle_center
+
+	while draw_counter <= 360:
+		line_end = circle_radius.rotated(deg2rad(draw_counter)) + circle_center
+		draw_line(line_origin, line_end, color, width)
+		draw_counter += 1 / resolution
+		line_origin = line_end
+
+	line_end = circle_radius.rotated(deg2rad(360)) + circle_center
+	draw_line(line_origin, line_end, color, width)
 	
 	
 	

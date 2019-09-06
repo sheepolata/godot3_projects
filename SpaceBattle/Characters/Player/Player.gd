@@ -4,7 +4,6 @@ var move_direction = Vector2.ZERO
 var current_speeds : Vector2 = Vector2.ZERO
 
 export(int) var speed_max = 800
-export(float, 0, 50) var speed = 128
 
 var thruster_stop : bool = false
 var rotation_stop : bool = false
@@ -29,18 +28,20 @@ onready var turrets : Array = $turrets.get_children()
 export var front_missile = preload("res://Characters/Ammo/Missile1.tscn")
 export(float) var front_missile_cd = 1.2
 var front_aim : bool = false
-export(float) var front_damage_bonus = 0
+export(float) var front_damage_multiplier = 1.0
 
 export var right_missile = preload("res://Characters/Ammo/FlakBullet.tscn")
 export(float) var right_missile_cd = 1.2
 var right_aim : bool = false
-export(float) var right_damage_bonus = 0
+export(float) var right_damage_multiplier = 1.0
 
 export var left_missile = preload("res://Characters/Ammo/FlakBullet.tscn")
 export(float) var left_missile_cd = 1.2
 #export(PackedScene) var left_missile
 var left_aim : bool = false
-export(float) var left_damage_bonus = 0
+export(float) var left_damage_multiplier = 1.0
+
+export(Array) var missiles_target_groups = ["asteroid", "enemy"]
 
 var default_aim_front : Vector2 = Vector2.ZERO
 var default_aim_left  : Vector2 = Vector2.ZERO
@@ -51,7 +52,6 @@ var side_aim_arc_angle_low = 40; var side_aim_arc_angle_high = 170;
 
 var _current_delta : float = 0
 var previous_arc_transparancy : float = 0.0; var previous_aim_missile_transparancy : float = 0.0;
-
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -74,7 +74,6 @@ func _ready():
 	$UILayer/ScoreAdd.text = ""
 	
 	for t in turrets:
-		t.autotarget_groups.append("asteroid")
 		t.autotarget = true
 	
 	$missiles_front/Cooldown_front.wait_time = front_missile_cd
@@ -123,11 +122,12 @@ func default_state(delta : float):
 	var v = Utils.normalise(abs(current_speeds.y), max_zoom_in, max_zoom_out, 0, speed_max)
 	cam.zoom = cam.zoom.linear_interpolate(Vector2(v, v), delta)
 
-		
+	if repairs_available:
+		hull_point = min(hull_point + repair_factor*delta, hull_point_max)
+
 	move_controls_loop()
 	
 	fire_control_loop()
-	
 #	planets_gravity_application(delta)
 	movement_loop(delta)
 
@@ -138,6 +138,8 @@ func update_UI(delta : float) -> void:
 	$UILayer/VBoxContainer/SpeedInfo.rect_scale = Vector2(3, 3)
 	
 	$UILayer/VBoxContainer/HullPoints.text = "Hull : " + str(round((hull_point/hull_point_max) * 100)) + "%"
+	if repairs_available:
+		$UILayer/VBoxContainer/HullPoints.text += " (R)"
 	$UILayer/VBoxContainer/HullPoints.rect_scale = Vector2(3, 3)
 	
 	$UILayer/Score.text = str(score) + " Pts"
@@ -277,7 +279,8 @@ func fire_control_loop():
 #		for t in turrets:
 #			t.autotarget = false
 #			t.fire()
-
+	
+	
 	var relative_angle = rad2deg(get_angle_to(get_global_mouse_position()))
 	if Input.is_action_pressed("aim_missiles"):
 		if relative_angle > -front_aim_arc_angle and relative_angle < front_aim_arc_angle:
@@ -338,10 +341,10 @@ func fire_control_loop():
 					get_parent().add_child(missile)
 					missile.position = m.global_position
 					missile.speed += current_speeds.y
-					missile.target_groups = ["asteroid", "enemy"]
+					missile.target_groups = missiles_target_groups
 					missile.my_rotation(rot)
 					missile.sender = self
-					missile.damage += front_damage_bonus
+					missile.damage *= front_damage_multiplier
 	
 				$missiles_front/Cooldown_front.start()
 		
@@ -355,10 +358,10 @@ func fire_control_loop():
 					get_parent().add_child(missile)
 					missile.position = m.global_position
 					missile.speed += current_speeds.y
-					missile.target_groups = ["asteroid", "enemy"]
+					missile.target_groups = missiles_target_groups
 					missile.my_rotation(rot)
 					missile.sender = self
-					missile.damage += right_damage_bonus
+					missile.damage *= right_damage_multiplier
 	
 				$missiles_right/Cooldown_right.start()
 		
@@ -372,10 +375,10 @@ func fire_control_loop():
 					get_parent().add_child(missile)
 					missile.position = m.global_position
 					missile.speed += current_speeds.y
-					missile.target_groups = ["asteroid", "enemy"]
+					missile.target_groups = missiles_target_groups
 					missile.my_rotation(rot)
 					missile.sender = self
-					missile.damage += left_damage_bonus
+					missile.damage *= left_damage_multiplier
 	
 				$missiles_left/Cooldown_left.start()
 
@@ -422,10 +425,16 @@ func dead_state(delta : float):
 
 func take_hull_damage(value : float):
 	.take_hull_damage(value)
-	get_node("MainCamera").shake_value = value
+	repairs_available = false
+	$RepairTimer.start()
+	get_node("MainCamera").shake_value = value*10
 	get_node("MainCamera").shake_decrease = value*0.05
 
 func _draw():
+#	for t in $turrets.get_children():
+#		draw_empty_circle(t.position, Vector2(t.turret_range, t.turret_range), Color(1, 0, 0, 0.5), 0.2, 1)
+#		draw_circle(t.position, t.turret_range, Color(1, 0, 0, 0.5))
+	
 #	var arc_display_distance = 4096;
 	var _front = front_missile.instance()
 	var arc_display_distance_front = _front.get("speed") * _front.get("life_span")
@@ -517,6 +526,9 @@ func _on_Cooldown_left_timeout():
 func _on_Cooldown_front_timeout():
 	$missiles_front/Cooldown_front.stop()
 
+func _on_RepairTimer_timeout():
+	repairs_available = true
+
 func _on_UILayer_ScoreAddDisplay_timeout(_timer):
 	_timer.stop()
 	$UILayer/ScoreAdd.text = ""
@@ -542,4 +554,5 @@ func set_score(value):
 	
 	
 	
+
 

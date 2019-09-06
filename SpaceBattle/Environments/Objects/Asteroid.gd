@@ -3,7 +3,6 @@ extends "res://Engine/Ship.gd"
 var rot_speed : float = 0.0
 
 var fly_direction : Vector2 = Vector2.ZERO
-var speed : float = 150
 
 var STATE = "DEFAULT"
 
@@ -59,7 +58,8 @@ func _physics_process(delta):
 				if "planets" in collision_info.collider.get_groups():
 					$CollisionShape2D.disabled = true
 					STATE = "CRASH"
-				elif "player" in collision_info.collider.get_groups():
+				elif ("player" in collision_info.collider.get_groups()
+					or "enemy" in collision_info.collider.get_groups()):
 					collision_info.collider.take_hull_damage(force)
 					
 					$CollisionShape2D.disabled = true

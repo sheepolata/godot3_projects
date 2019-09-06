@@ -17,7 +17,7 @@ _global_script_class_icons={
 
 config/name="SpaceBattle"
 run/main_scene="res://Engine/HelpScreen.tscn"
-config/icon="res://icon.png"
+config/icon="res://i2con.png"
 
 [autoload]
 

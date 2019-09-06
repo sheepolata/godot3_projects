@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Environments/World.gd" type="Script" id=1]
-[ext_resource path="res://Characters/Player/Player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Characters/Enemies/Station.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Characters/Player/Player.tscn" type="PackedScene" id=3]
 
 [node name="World" type="Node2D"]
 script = ExtResource( 1 )
@@ -9,8 +10,7 @@ __meta__ = {
 "_edit_lock_": true,
 "_edit_vertical_guides_": [  ]
 }
-max_nb_asteroid = 6
-asteroid_freq_limits = Vector2( 1, 2 )
+max_nb_asteroid = 0
 random_target_offset_range = 128
 asteroid_spawn_radius = 4096
 
@@ -21,7 +21,12 @@ asteroid_spawn_radius = 4096
 [node name="Spawner" type="Timer" parent="Asteroids"]
 wait_time = 5.0
 
-[node name="Player" parent="." instance=ExtResource( 2 )]
+[node name="Stations" type="Node" parent="."]
+
+[node name="Station" parent="Stations" instance=ExtResource( 2 )]
+position = Vector2( 3949.54, 500.191 )
+
+[node name="Player" parent="." instance=ExtResource( 3 )]
 position = Vector2( 845.392, 510.545 )
 
 [node name="UIWorldLayer" type="CanvasLayer" parent="."]

@@ -20,6 +20,7 @@ var sender
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	add_to_group("ammo")
+	add_to_group("missile")
 	$Lifespan.wait_time = life_span
 	$Lifespan.start()
 	$AnimationPlayer.play("fly")
@@ -41,26 +42,7 @@ func _physics_process(delta):
 #			collision_info = move_and_collide(Vector2(current_speed * cos(rotation), current_speed * sin(rotation)) * delta)
 			collision_info = move_and_collide(Vector2(current_speed * cos(rotation), current_speed * sin(rotation)) * delta)
 			ext_velocity = Vector2(current_speed * cos(rotation), current_speed * sin(rotation)).normalized()
-			
-			if collision_info:
-				print("WHY!?")
-				var ok : bool = false
-				for _t_group in target_groups:
-					if _t_group in collision_info.collider.get_groups():
-						ok = true
-						break
-				if ok:
-					state = "EXPLODE"
-					if collision_info.collider.has_method("take_hull_damage"):
-						collision_info.collider.take_hull_damage(damage)
-						if collision_info.collider.get("is_dead") and collision_info.collider.score_value > 0:
-							if sender and sender.get("score") != null:
-								#print("ADD SCORE")
-								if "asteroid" in collision_info.collider.get_groups():
-									sender.score += collision_info.collider.score_value * 2
-								else:
-									sender.score += collision_info.collider.score_value
-								collision_info.collider.nullify_score()
+
 		"EXPLODE":
 			$SmokeParticles.hide()
 			$SmokeParticles.emitting = false
@@ -77,19 +59,17 @@ func _on_Lifespan_timeout():
 	state = "EXPLODE"
 
 func _on_Area2D_body_entered(body):
-	if "asteroid" in body.get_groups():
-		state = "EXPLODE"
-		body.take_hull_damage(damage)
-		if body.score_value > 0:
-			if sender and sender.get("score") != null:
-				#print("ADD SCORE")
-				if "asteroid" in body.get_groups():
-					sender.score += body.score_value * 2
-				else:
+	if sender != null and body != sender:
+		if state != "EXPLODE":
+			state = "EXPLODE"
+			body.take_hull_damage(damage)
+			if body.get("is_dead") and body.score_value > 0:
+				if sender and sender.get("score") != null:
 					sender.score += body.score_value
-				body.nullify_score()
+					body.nullify_score()
 	elif "planet" in body.get_groups():
-		state = "EXPLODE"
+		if state != "EXPLODE":
+			state = "EXPLODE"
 				
 func my_rotation(angle):
 	rotate(angle)

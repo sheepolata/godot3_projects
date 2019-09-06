@@ -1,12 +1,14 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Characters/Player/Player.gd" type="Script" id=1]
-[ext_resource path="res://Characters/Player/Camera2D.gd" type="Script" id=2]
-[ext_resource path="res://Data/Sprites/Player_boat.png" type="Texture" id=3]
-[ext_resource path="res://Characters/Turrets/Turret.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Engine/UIPlayer.tscn" type="PackedScene" id=5]
-[ext_resource path="res://Data/Sprites/stars_bg_far.png" type="Texture" id=6]
-[ext_resource path="res://Data/Sprites/stars_bg_close.png" type="Texture" id=7]
+[ext_resource path="res://Characters/Ammo/Missile1.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Characters/Player/Camera2D.gd" type="Script" id=3]
+[ext_resource path="res://Data/Sprites/Player_boat.png" type="Texture" id=4]
+[ext_resource path="res://Characters/Turrets/Turret.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Characters/Ammo/FlakBullet.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Engine/UIPlayer.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Data/Sprites/stars_bg_far.png" type="Texture" id=8]
+[ext_resource path="res://Data/Sprites/stars_bg_close.png" type="Texture" id=9]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 30.0
@@ -21,6 +23,12 @@ loop = true
 collision_layer = 6
 collision_mask = 6
 script = ExtResource( 1 )
+speed = 128.0
+front_damage_multiplier = 1.5
+right_missile = ExtResource( 2 )
+right_damage_multiplier = 0.6
+left_missile = ExtResource( 2 )
+left_damage_multiplier = 0.6
 
 [node name="MainCamera" type="Camera2D" parent="."]
 current = true
@@ -29,11 +37,11 @@ drag_margin_left = 0.05
 drag_margin_top = 0.05
 drag_margin_right = 0.05
 drag_margin_bottom = 0.05
-script = ExtResource( 2 )
+script = ExtResource( 3 )
 
 [node name="Sprite" type="Sprite" parent="."]
 rotation = 1.5708
-texture = ExtResource( 3 )
+texture = ExtResource( 4 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = 1.5708
@@ -41,11 +49,28 @@ shape = SubResource( 1 )
 
 [node name="turrets" type="Node2D" parent="."]
 
-[node name="Turret1" parent="turrets" instance=ExtResource( 4 )]
-position = Vector2( 28, 0 )
+[node name="AntiAsteroidTurret" parent="turrets" instance=ExtResource( 5 )]
+position = Vector2( 33, 0 )
+turret_range = 1200.0
+rotation_speed = 220.0
+bullet = ExtResource( 6 )
+bullet_cd = 0.1
+damage_bonus_multiplier = 0.5
+autotarget_groups = [ "asteroid" ]
 
-[node name="Turret" parent="turrets" instance=ExtResource( 4 )]
-position = Vector2( -28, 0 )
+[node name="AntiAsteroidTurret2" parent="turrets" instance=ExtResource( 5 )]
+position = Vector2( -43, 0 )
+turret_range = 1200.0
+rotation_speed = 220.0
+bullet = ExtResource( 6 )
+bullet_cd = 0.1
+damage_bonus_multiplier = 0.5
+autotarget_groups = [ "asteroid" ]
+
+[node name="AntiMissile" parent="turrets" instance=ExtResource( 5 )]
+position = Vector2( -5, 0 )
+rotation_speed = 360.0
+autotarget_groups = [ "missile", "asteroid" ]
 
 [node name="missiles_front" type="Node2D" parent="."]
 editor/display_folded = true
@@ -64,12 +89,6 @@ editor/display_folded = true
 [node name="RayCast2D" type="RayCast2D" parent="missiles_right"]
 position = Vector2( 38, 17 )
 
-[node name="RayCast2D2" type="RayCast2D" parent="missiles_right"]
-position = Vector2( -1, 17 )
-
-[node name="RayCast2D4" type="RayCast2D" parent="missiles_right"]
-position = Vector2( 19, 17 )
-
 [node name="RayCast2D3" type="RayCast2D" parent="missiles_right"]
 position = Vector2( -21, 17 )
 
@@ -82,16 +101,8 @@ editor/display_folded = true
 position = Vector2( -21, -17 )
 cast_to = Vector2( 0, -50 )
 
-[node name="RayCast2D2" type="RayCast2D" parent="missiles_left"]
-position = Vector2( -1, -17 )
-cast_to = Vector2( 0, -50 )
-
 [node name="RayCast2D3" type="RayCast2D" parent="missiles_left"]
 position = Vector2( 38, -17 )
-cast_to = Vector2( 0, -50 )
-
-[node name="RayCast2D4" type="RayCast2D" parent="missiles_left"]
-position = Vector2( 19, -17 )
 cast_to = Vector2( 0, -50 )
 
 [node name="TrailEffect_node" type="Node2D" parent="."]
@@ -109,7 +120,7 @@ position = Vector2( -72, -19 )
 [node name="WaveEffectSpawnPoint2" type="Position2D" parent="TrailEffect_node"]
 position = Vector2( -72, 19 )
 
-[node name="UILayer" parent="." instance=ExtResource( 5 )]
+[node name="UILayer" parent="." instance=ExtResource( 7 )]
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
 
@@ -121,7 +132,7 @@ __meta__ = {
 }
 
 [node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer"]
-texture = ExtResource( 6 )
+texture = ExtResource( 8 )
 centered = false
 
 [node name="ParallaxLayer2" type="ParallaxLayer" parent="ParallaxBackground"]
@@ -132,16 +143,20 @@ __meta__ = {
 }
 
 [node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer2"]
-texture = ExtResource( 7 )
+texture = ExtResource( 9 )
 centered = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/bg_anim = SubResource( 2 )
 
 [node name="CrashTween" type="Tween" parent="."]
+
+[node name="RepairTimer" type="Timer" parent="."]
+wait_time = 5.0
 [connection signal="timeout" from="missiles_front/Cooldown_front" to="." method="_on_Cooldown_front_timeout"]
 [connection signal="timeout" from="missiles_right/Cooldown_right" to="." method="_on_Cooldown_right_timeout"]
 [connection signal="timeout" from="missiles_left/Cooldown_left" to="." method="_on_Cooldown_left_timeout"]
 [connection signal="timeout" from="TrailEffect_node/TrailEffect" to="." method="_on_WaterEffect_timeout"]
 [connection signal="ScoreAddDisplay_timeout" from="UILayer" to="." method="_on_UILayer_ScoreAddDisplay_timeout"]
 [connection signal="tween_all_completed" from="CrashTween" to="." method="_on_CrashTween_tween_all_completed"]
+[connection signal="timeout" from="RepairTimer" to="." method="_on_RepairTimer_timeout"]

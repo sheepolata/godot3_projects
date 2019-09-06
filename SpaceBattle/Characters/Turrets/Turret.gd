@@ -1,7 +1,7 @@
 extends Sprite
 
 export(float) var laser_cooldown : float = 0
-export(float) var laser_range : float = 600
+export(float) var turret_range : float = 600
 export(float) var laser_duration : float = 0
 export(float) var laser_damage : float = 10
 export(float) var rotation_speed : float = 180
@@ -10,10 +10,10 @@ export(float) var bullet_cd : float = 0.2
 
 export(Vector2) var laser_random_offset_limits : Vector2 = Vector2(0, 0)
 
-var damage_bonus : float = 0
+export(float) var damage_bonus_multiplier : float = 1.0
 
-var autotarget : bool = false
-var autotarget_groups : Array = []
+export var autotarget : bool = false
+export var autotarget_groups : Array = []
 var possible_autotargets : Array = []
 var target_position : Vector2 = Vector2.ZERO
 var autotarget_speed_factor : float = 1.0
@@ -31,16 +31,21 @@ func _ready():
 	
 	$RayCast2D.position = $FirePoint.position
 	
-	if laser_range > 0:
-		$RayCast2D.cast_to = Vector2(0, -laser_range)
-	else:
-		$RayCast2D.cast_to = get_local_mouse_position()
+	if bullet == null:
+		if turret_range > 0:
+			$RayCast2D.cast_to = Vector2(0, -turret_range)
+		else:
+			$RayCast2D.cast_to = get_local_mouse_position()
 	
 	$RayCast2D.enabled = false
 	$RayCast2D.add_exception(get_parent())
 	$RayCast2D.add_exception(get_parent().get_parent())
 	
-	$AutotargetRange/CollisionShape2D.shape.radius = laser_range
+	var shape = CircleShape2D.new()
+	shape.radius = turret_range
+	$AutotargetRange/CollisionShape2D.shape = shape
+	
+#	print($AutotargetRange/CollisionShape2D.shape.radius)
 	
 #	rotation = deg2rad(90)
 	
@@ -68,7 +73,7 @@ func _process(delta):
 	
 	if autotarget and _t and Utils.near(rad2deg(get_angle_to(_t.position)), -90, 2):
 		fire()
-	
+			
 	if $RayCast2D.is_colliding():
 		if $RayCast2D.get_collider() and $RayCast2D.get_collider().has_method("take_hull_damage"):
 			$RayCast2D.get_collider().take_hull_damage(laser_damage * delta)
@@ -78,7 +83,9 @@ func _process(delta):
 					$RayCast2D.get_collider().nullify_score()
 	
 func _draw():
-#	draw_circle(Vector2.ZERO, $AutotargetRange/CollisionShape2D.shape.radius, Color.green)
+	
+#	draw_circle(Vector2.ZERO, $AutotargetRange/CollisionShape2D.shape.radius, Color(0, 1, 0, 0.25))
+
 	if $RayCast2D.enabled:
 #		draw_line($RayCast2D.position, $RayCast2D.cast_to, Color.red, 3)
 		if $RayCast2D.is_colliding() and $RayCast2D.get_collider():
@@ -91,24 +98,29 @@ func _draw():
 
 func fire():
 	if bullet != null and $BulletCooldown.is_stopped():
-		var rot = rotation 
+#		var rot = get_global_mouse_position().angle_to_point(global_position) 
+		var rot = global_rotation - deg2rad(90)
 		var ammo = bullet.instance()
-		add_child(ammo)
 		
-		ammo.position = position
-		ammo.speed += get_parent().get_parent().current_speeds.y
-		ammo.target_groups = ["asteroid", "enemy"]
-		ammo.my_rotation(to_global($RayCast2D.cast_to).angle())
+		get_parent().get_parent().get_parent().add_child(ammo)
+
+		ammo.position = global_position + $RayCast2D.cast_to.rotated(rotation)
+		if get_parent().get_parent().get("current_speeds"):
+			ammo.speed += get_parent().get_parent().current_speeds.y
+		ammo.target_groups = autotarget_groups
+		ammo.my_rotation(rot)
 		ammo.sender = get_parent().get_parent()
-		ammo.damage += damage_bonus
+		ammo.damage *= damage_bonus_multiplier
 		
-	elif ( ($LaserCooldown.is_stopped() or laser_cooldown <= 0) 
+		$BulletCooldown.start()
+		
+	elif (bullet == null and ($LaserCooldown.is_stopped() or laser_cooldown <= 0) 
 			and ($LaserDuration.is_stopped() or laser_duration <= 0)):
 		$RayCast2D.enabled = true
 		var rnd_offset = Vector2(rand_range(-laser_random_offset_limits.x/2, laser_random_offset_limits.x/2),
 								rand_range(-laser_random_offset_limits.y/2, laser_random_offset_limits.y/2))
-		if laser_range > 0:
-			$RayCast2D.cast_to = Vector2(0, -laser_range)
+		if turret_range > 0:
+			$RayCast2D.cast_to = Vector2(0, -turret_range)
 		else:
 			$RayCast2D.cast_to = get_local_mouse_position()
 		$RayCast2D.cast_to += rnd_offset
@@ -144,6 +156,7 @@ func _on_AutotargetRange_body_entered(body : PhysicsBody2D):
 	var valid = false
 	for gr in autotarget_groups:
 		if gr in body.get_groups():
+			print(gr)
 			valid = true
 			break
 	if valid:

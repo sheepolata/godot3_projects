@@ -37,25 +37,6 @@ func _physics_process(delta):
 #			collision_info = move_and_collide(Vector2(current_speed * cos(rotation), current_speed * sin(rotation)) * delta)
 			collision_info = move_and_collide(Vector2(current_speed * cos(rotation), current_speed * sin(rotation)) * delta)
 			
-			if collision_info:
-				print("WHY!?")
-				var ok : bool = false
-				for _t_group in target_groups:
-					if _t_group in collision_info.collider.get_groups():
-						ok = true
-						break
-				if ok:
-					state = "EXPLODE"
-					if collision_info.collider.has_method("take_hull_damage"):
-						collision_info.collider.take_hull_damage(damage)
-						if collision_info.collider.get("is_dead") and collision_info.collider.score_value > 0:
-							if sender and sender.get("score") != null:
-								#print("ADD SCORE")
-								if "asteroid" in collision_info.collider.get_groups():
-									sender.score += collision_info.collider.score_value * 2
-								else:
-									sender.score += collision_info.collider.score_value
-								collision_info.collider.nullify_score()
 		"EXPLODE":
 			if $ExplodeTimer.is_stopped():
 				$ExplodeTimer.wait_time = $Particles2D.lifetime
@@ -69,17 +50,13 @@ func _on_Lifespan_timeout():
 		state = "EXPLODE"
 
 func _on_Area2D_body_entered(body):
-	if "asteroid" in body.get_groups():
+	if sender != null and body != sender:
 		if state != "EXPLODE":
 			state = "EXPLODE"
 			body.take_hull_damage(damage)
-			if body.score_value > 0:
+			if body.get("is_dead") and body.score_value > 0:
 				if sender and sender.get("score") != null:
-					#print("ADD SCORE")
-					if "asteroid" in body.get_groups():
-						sender.score += body.score_value * 2
-					else:
-						sender.score += body.score_value
+					sender.score += body.score_value
 					body.nullify_score()
 
 				

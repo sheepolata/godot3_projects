@@ -1,0 +1,62 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Characters/Enemies/Station.gd" type="Script" id=1]
+[ext_resource path="res://Data/Sprites/station1.png" type="Texture" id=2]
+[ext_resource path="res://Characters/Turrets/Turret.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Characters/Ammo/FlakBullet.tscn" type="PackedScene" id=4]
+
+[node name="Station" type="KinematicBody2D"]
+collision_layer = 6
+collision_mask = 6
+script = ExtResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="."]
+scale = Vector2( 2, 2 )
+z_index = -1
+texture = ExtResource( 2 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+scale = Vector2( 2, 2 )
+polygon = PoolVector2Array( 0.419403, -127.593, -126.795, -0.165421, -1.09573, 125.797, 126.975, -0.955994 )
+
+[node name="turrets" type="Node2D" parent="."]
+
+[node name="Turret" parent="turrets" instance=ExtResource( 3 )]
+position = Vector2( -192.087, 1.08072 )
+turret_range = 1600.0
+rotation_speed = 360.0
+bullet = ExtResource( 4 )
+bullet_cd = 0.1
+damage_bonus_multiplier = 0.35
+autotarget = true
+autotarget_groups = [ "player", "asteroid" ]
+
+[node name="Turret2" parent="turrets" instance=ExtResource( 3 )]
+position = Vector2( 1.08067, -190.671 )
+turret_range = 1600.0
+rotation_speed = 360.0
+bullet = ExtResource( 4 )
+bullet_cd = 0.1
+damage_bonus_multiplier = 0.35
+autotarget = true
+autotarget_groups = [ "player", "asteroid" ]
+
+[node name="Turret3" parent="turrets" instance=ExtResource( 3 )]
+position = Vector2( 193.285, -1.12434 )
+turret_range = 1600.0
+rotation_speed = 360.0
+bullet = ExtResource( 4 )
+bullet_cd = 0.1
+damage_bonus_multiplier = 0.35
+autotarget = true
+autotarget_groups = [ "player", "asteroid" ]
+
+[node name="Turret4" parent="turrets" instance=ExtResource( 3 )]
+position = Vector2( -1.7083, 190.335 )
+turret_range = 1600.0
+rotation_speed = 360.0
+bullet = ExtResource( 4 )
+bullet_cd = 0.1
+damage_bonus_multiplier = 0.35
+autotarget = true
+autotarget_groups = [ "player", "asteroid" ]
