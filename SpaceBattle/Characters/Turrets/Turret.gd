@@ -52,27 +52,50 @@ func _ready():
 func _process(delta):
 	update()
 	
-	var _t = get_closest_target()
-	if not autotarget:
-		 target_position = get_global_mouse_position()
-	else:
-		if _t:
-			target_position = get_closest_target().position
-	var _spd_factor
-	if autotarget:
-		_spd_factor = autotarget_speed_factor
-#		look_at(target_position)
-#		rotate(deg2rad(90))
-	else:
-		_spd_factor = 1.0
-#		var rot_delta = Utils.slide(0, rad2deg(get_angle_to(target_position)) + 90, (rotation_speed) * delta)
+#	var _t = get_closest_target()
+#	if not autotarget:
+#		 target_position = get_global_mouse_position()
+#	else:
+#		if _t:
+#			target_position = get_closest_target().position
+#	var _spd_factor
+#	if autotarget:
+#		_spd_factor = autotarget_speed_factor
+##		look_at(target_position)
+##		rotate(deg2rad(90))
+#	else:
+#		_spd_factor = 1.0
+##		var rot_delta = Utils.slide(0, rad2deg(get_angle_to(target_position)) + 90, (rotation_speed) * delta)
+##		rotate(deg2rad(rot_delta))
+#
+#	if _t:
+#		var rot_delta = Utils.slide(0, rad2deg(get_angle_to(target_position)) + 90, (rotation_speed) * delta * _spd_factor)
+#		rotate(deg2rad(rot_delta))
+#
+#		if autotarget and Utils.near(rad2deg(get_angle_to(_t.position)), -90, 2):
+#			fire()
+#	else:
+#		var rot_delta = Utils.slide(0, 90, (rotation_speed) * delta * _spd_factor)
 #		rotate(deg2rad(rot_delta))
 		
-	var rot_delta = Utils.slide(0, rad2deg(get_angle_to(target_position)) + 90, (rotation_speed) * delta * _spd_factor)
-	rotate(deg2rad(rot_delta))
+	########
+	if not autotarget:
+		target_position = get_global_mouse_position()
+		var rot_delta = Utils.slide(0, rad2deg(get_angle_to(target_position)) + 90, (rotation_speed) * delta * autotarget_speed_factor)
+		rotate(deg2rad(rot_delta))
+	else:
+		var _t = get_closest_target()
+		if _t:
+			target_position = _t.position
+			
+			
+			
+			var rot_delta = Utils.slide(0, rad2deg(get_angle_to(target_position)) + 90, (rotation_speed) * delta * autotarget_speed_factor)
+			rotate(deg2rad(rot_delta))
+			
+			if autotarget and Utils.near(rad2deg(get_angle_to(target_position)), -90, 2):
+				fire()
 	
-	if autotarget and _t and Utils.near(rad2deg(get_angle_to(_t.position)), -90, 2):
-		fire()
 			
 	if $RayCast2D.is_colliding():
 		if $RayCast2D.get_collider() and $RayCast2D.get_collider().has_method("take_hull_damage"):
