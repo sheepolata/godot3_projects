@@ -9,6 +9,7 @@ var default_score_value : int = 0
 var score_value : int = 0
 
 export(float) var speed = 0
+var direction : float = 0
 
 var repairs_available : bool = true
 export(float) var repair_factor = 0.2

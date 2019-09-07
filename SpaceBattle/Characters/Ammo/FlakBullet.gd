@@ -21,6 +21,9 @@ export(float, 0, 180) var dispersion = 0
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	add_to_group("ammo")
+	
+	life_span += rand_range(-life_span*0.1, life_span*0.1)
+	
 	$Lifespan.wait_time = life_span
 	$Lifespan.start()
 	

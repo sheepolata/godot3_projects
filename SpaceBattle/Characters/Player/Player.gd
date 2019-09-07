@@ -227,6 +227,7 @@ func movement_loop(delta : float):
 			current_speeds.y = min(0, current_speeds.y + speed * delta * 4)
 	
 #	rotation_degrees += current_speeds.x * delta
+	direction = rotation_degrees
 	rotate(deg2rad(current_speeds.x) * delta)
 	#print(current_speeds)
 	
@@ -445,7 +446,7 @@ func _draw():
 	var _left = left_missile.instance()
 	var arc_display_distance_left  = _left.get("speed")  * _left.get("life_span")
 	_left.queue_free()
-	var _t = min(0.1, previous_arc_transparancy + 0.1*_current_delta*(1/0.2))
+	var _t = min(0.05, previous_arc_transparancy + 0.05*_current_delta*(1/0.2))
 	var _t2 = min(.5, previous_aim_missile_transparancy + .5*_current_delta*(1/0.2))
 	var _cone_color = Color(1, 1, 1, _t)
 	var _missile_aim_color = Color(1, 0, 0, _t2)

@@ -48,37 +48,12 @@ func _ready():
 #	print($AutotargetRange/CollisionShape2D.shape.radius)
 	
 #	rotation = deg2rad(90)
-	
+
+var draw_actual_target : = Vector2.ZERO
+
 func _process(delta):
 	update()
 	
-#	var _t = get_closest_target()
-#	if not autotarget:
-#		 target_position = get_global_mouse_position()
-#	else:
-#		if _t:
-#			target_position = get_closest_target().position
-#	var _spd_factor
-#	if autotarget:
-#		_spd_factor = autotarget_speed_factor
-##		look_at(target_position)
-##		rotate(deg2rad(90))
-#	else:
-#		_spd_factor = 1.0
-##		var rot_delta = Utils.slide(0, rad2deg(get_angle_to(target_position)) + 90, (rotation_speed) * delta)
-##		rotate(deg2rad(rot_delta))
-#
-#	if _t:
-#		var rot_delta = Utils.slide(0, rad2deg(get_angle_to(target_position)) + 90, (rotation_speed) * delta * _spd_factor)
-#		rotate(deg2rad(rot_delta))
-#
-#		if autotarget and Utils.near(rad2deg(get_angle_to(_t.position)), -90, 2):
-#			fire()
-#	else:
-#		var rot_delta = Utils.slide(0, 90, (rotation_speed) * delta * _spd_factor)
-#		rotate(deg2rad(rot_delta))
-		
-	########
 	if not autotarget:
 		target_position = get_global_mouse_position()
 		var rot_delta = Utils.slide(0, rad2deg(get_angle_to(target_position)) + 90, (rotation_speed) * delta * autotarget_speed_factor)
@@ -86,15 +61,35 @@ func _process(delta):
 	else:
 		var _t = get_closest_target()
 		if _t:
-			target_position = _t.position
+			target_position = _t.global_position
 			
-			
+			if bullet != null:
+				var bullet_speed : float = bullet.instance().speed
+				var target_speed : float = 0
+				if _t.get("current_speeds") != null:
+					target_speed = _t.current_speeds.y
+				else:
+					target_speed = _t.speed
+				var target_direction : float = _t.direction
+				
+				var dist_to_target : float = global_position.distance_to(target_position)
+				var time_to_target : float = dist_to_target / bullet_speed
+				
+				var new_target : Vector2 = target_position + Vector2(
+														target_speed*time_to_target*cos(deg2rad(target_direction)),
+														target_speed*time_to_target*sin(deg2rad(target_direction))
+													)
+				
+				target_position = new_target
+				draw_actual_target = target_position
 			
 			var rot_delta = Utils.slide(0, rad2deg(get_angle_to(target_position)) + 90, (rotation_speed) * delta * autotarget_speed_factor)
 			rotate(deg2rad(rot_delta))
 			
 			if autotarget and Utils.near(rad2deg(get_angle_to(target_position)), -90, 2):
 				fire()
+		else:
+			draw_actual_target = Vector2.ZERO
 	
 			
 	if $RayCast2D.is_colliding():
@@ -108,6 +103,8 @@ func _process(delta):
 func _draw():
 	
 #	draw_circle(Vector2.ZERO, $AutotargetRange/CollisionShape2D.shape.radius, Color(0, 1, 0, 0.25))
+#	if draw_actual_target != Vector2.ZERO:
+#		draw_circle(to_local(draw_actual_target), 5, Color.red)
 
 	if $RayCast2D.enabled:
 #		draw_line($RayCast2D.position, $RayCast2D.cast_to, Color.red, 3)

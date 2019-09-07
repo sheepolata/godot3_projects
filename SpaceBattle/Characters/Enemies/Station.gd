@@ -32,12 +32,13 @@ func take_hull_damage(value):
 	
 func _draw():
 	draw_circle(Vector2.ZERO, 128 * (hull_point/hull_point_max), Color(1, 0, 0, 0.35))
-	for t in $turrets.get_children():
-#		draw_empty_circle(t.position, Vector2(t.turret_range, t.turret_range), Color(1, 0, 0, 0.5), 0.2, 1)
-		draw_circle(t.position, t.turret_range, Color(1, 0, 0, 0.02))
-#		var r = t.get_node("AutotargetRange/CollisionShape2D"),shape.radius
-#		$AutotargetRange/CollisionShape2D.shape.radius
-#		draw_empty_circle(t.position, Vector2(r, r), Color(1, 0, 0, 0.5), 0.2, 1)
+	
+#	for t in $turrets.get_children():
+##		draw_empty_circle(t.position, Vector2(t.turret_range, t.turret_range), Color(1, 0, 0, 0.5), 0.2, 1)
+#		draw_circle(t.position, t.turret_range, Color(1, 0, 0, 0.02))
+##		var r = t.get_node("AutotargetRange/CollisionShape2D"),shape.radius
+##		$AutotargetRange/CollisionShape2D.shape.radius
+##		draw_empty_circle(t.position, Vector2(r, r), Color(1, 0, 0, 0.5), 0.2, 1)
 
 
 

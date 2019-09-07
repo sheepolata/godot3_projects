@@ -45,10 +45,11 @@ func _physics_process(delta):
 #			apply_forces_from_planets(delta)
 #			planets_gravity_application(delta)
 			
+			direction = rad2deg(get_angle_to(fly_direction))
 			collision_info = move_and_collide(Vector2(speed * cos(get_angle_to(fly_direction)), speed * sin(get_angle_to(fly_direction))) * delta)
 #			ext_velocity = Vector2(speed * cos(get_angle_to(fly_direction)), speed * sin(get_angle_to(fly_direction))).normalized()
 			
-			var offset = 10.0
+			var offset = 100.0
 			fly_direction = fly_direction + Vector2(
 												offset*cos(get_angle_to(fly_direction)), 
 												offset*sin(get_angle_to(fly_direction))
