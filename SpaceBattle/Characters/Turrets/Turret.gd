@@ -36,6 +36,10 @@ func _ready():
 			$RayCast2D.cast_to = Vector2(0, -turret_range)
 		else:
 			$RayCast2D.cast_to = get_local_mouse_position()
+	else:
+		var _b = bullet.instance()
+		turret_range = _b.speed * _b.life_span
+		_b.queue_free()
 	
 	$RayCast2D.enabled = false
 	$RayCast2D.add_exception(get_parent())

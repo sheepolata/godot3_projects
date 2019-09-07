@@ -47,8 +47,8 @@ var default_aim_front : Vector2 = Vector2.ZERO
 var default_aim_left  : Vector2 = Vector2.ZERO
 var default_aim_right : Vector2 = Vector2.ZERO
 
-var front_aim_arc_angle = 15
-var side_aim_arc_angle_low = 40; var side_aim_arc_angle_high = 170;
+var front_aim_arc_angle = 10
+var side_aim_arc_angle_low = 40; var side_aim_arc_angle_high = 165;
 
 var _current_delta : float = 0
 var previous_arc_transparancy : float = 0.0; var previous_aim_missile_transparancy : float = 0.0;
@@ -341,7 +341,7 @@ func fire_control_loop():
 					var missile = front_missile.instance()
 					get_parent().add_child(missile)
 					missile.position = m.global_position
-					missile.speed += current_speeds.y
+#					missile.speed += current_speeds.y
 					missile.target_groups = missiles_target_groups
 					missile.my_rotation(rot)
 					missile.sender = self
@@ -358,7 +358,7 @@ func fire_control_loop():
 					var missile = right_missile.instance()
 					get_parent().add_child(missile)
 					missile.position = m.global_position
-					missile.speed += current_speeds.y
+#					missile.speed += current_speeds.y
 					missile.target_groups = missiles_target_groups
 					missile.my_rotation(rot)
 					missile.sender = self
@@ -375,7 +375,7 @@ func fire_control_loop():
 					var missile = left_missile.instance()
 					get_parent().add_child(missile)
 					missile.position = m.global_position
-					missile.speed += current_speeds.y
+#					missile.speed += current_speeds.y
 					missile.target_groups = missiles_target_groups
 					missile.my_rotation(rot)
 					missile.sender = self
