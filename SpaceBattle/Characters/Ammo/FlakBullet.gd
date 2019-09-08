@@ -1,22 +1,4 @@
-extends KinematicBody2D
-
-#var direction : Vector2 = Vector2.ZERO
-export(float) var speed : float = 1500
-var current_speed : float = 0
-export(float) var life_span : float = 1
-export(float) var damage = 4
-
-var collision_info : KinematicCollision2D = null
-
-var state = "DEFAULT"
-var target_groups : Array = []
-
-#How many second does if take to reach max speed
-export(float) var accel = 0
-
-var sender
-
-export(float, 0, 180) var dispersion = 0
+extends "res://Characters/Ammo/Ammo.gd"
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -26,8 +8,6 @@ func _ready():
 	
 	$Lifespan.wait_time = life_span
 	$Lifespan.start()
-	
-	$CollisionShape2D.disabled = true
 
 func _physics_process(delta):
 	
@@ -44,7 +24,7 @@ func _physics_process(delta):
 			if $ExplodeTimer.is_stopped():
 				$ExplodeTimer.wait_time = $Particles2D.lifetime
 				$Sprite.hide()
-				$CollisionShape2D.disabled = true
+				$Area2D/CollisionShape2D.disabled = true
 				$Particles2D.emitting = true
 				$ExplodeTimer.start()
 
@@ -58,14 +38,9 @@ func _on_Area2D_body_entered(body):
 			state = "EXPLODE"
 			body.take_hull_damage(damage)
 			if body.get("is_dead") and body.score_value > 0:
-				if sender and sender.get("score") != null:
+				if sender != null and sender.get("score") != null:
 					sender.score += body.score_value
 					body.nullify_score()
-
-				
-func my_rotation(angle):
-	rotate(angle)
-	rotate(deg2rad(rand_range(-dispersion, dispersion)))
 
 func _on_ExplodeTimer_timeout():
 	queue_free()

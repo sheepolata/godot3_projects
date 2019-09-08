@@ -133,7 +133,7 @@ func fire():
 		if get_parent().get_parent().get("current_speeds"):
 			ammo.speed += get_parent().get_parent().current_speeds.y
 		ammo.target_groups = autotarget_groups
-		ammo.my_rotation(rot)
+		ammo.initial_rotation(rot)
 		ammo.sender = get_parent().get_parent()
 		ammo.damage *= damage_bonus_multiplier
 		

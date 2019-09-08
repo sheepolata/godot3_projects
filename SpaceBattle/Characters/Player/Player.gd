@@ -25,17 +25,17 @@ onready var trail_effect = $TrailEffect_node/TrailEffect
 
 onready var turrets : Array = $turrets.get_children()
 
-export var front_missile = preload("res://Characters/Ammo/Missile1.tscn")
+export(PackedScene) var front_missile = preload("res://Characters/Ammo/Missile.tscn")
 export(float) var front_missile_cd = 1.2
 var front_aim : bool = false
 export(float) var front_damage_multiplier = 1.0
 
-export var right_missile = preload("res://Characters/Ammo/FlakBullet.tscn")
+export(PackedScene) var right_missile = preload("res://Characters/Ammo/FlakBullet.tscn")
 export(float) var right_missile_cd = 1.2
 var right_aim : bool = false
 export(float) var right_damage_multiplier = 1.0
 
-export var left_missile = preload("res://Characters/Ammo/FlakBullet.tscn")
+export(PackedScene) var left_missile = preload("res://Characters/Ammo/FlakBullet.tscn")
 export(float) var left_missile_cd = 1.2
 #export(PackedScene) var left_missile
 var left_aim : bool = false
@@ -343,7 +343,7 @@ func fire_control_loop():
 					missile.position = m.global_position
 #					missile.speed += current_speeds.y
 					missile.target_groups = missiles_target_groups
-					missile.my_rotation(rot)
+					missile.initial_rotation(rot)
 					missile.sender = self
 					missile.damage *= front_damage_multiplier
 	
@@ -360,7 +360,7 @@ func fire_control_loop():
 					missile.position = m.global_position
 #					missile.speed += current_speeds.y
 					missile.target_groups = missiles_target_groups
-					missile.my_rotation(rot)
+					missile.initial_rotation(rot)
 					missile.sender = self
 					missile.damage *= right_damage_multiplier
 	
@@ -377,7 +377,7 @@ func fire_control_loop():
 					missile.position = m.global_position
 #					missile.speed += current_speeds.y
 					missile.target_groups = missiles_target_groups
-					missile.my_rotation(rot)
+					missile.initial_rotation(rot)
 					missile.sender = self
 					missile.damage *= left_damage_multiplier
 	

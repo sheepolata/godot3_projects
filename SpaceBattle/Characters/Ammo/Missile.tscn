@@ -1,6 +1,6 @@
 [gd_scene load_steps=18 format=2]
 
-[ext_resource path="res://Characters/Ammo/Missile1.gd" type="Script" id=1]
+[ext_resource path="res://Characters/Ammo/Missile.gd" type="Script" id=1]
 [ext_resource path="res://Data/Sprites/missile1.png" type="Texture" id=2]
 [ext_resource path="res://Data/Sprites/missile1_explosion.png" type="Texture" id=3]
 
@@ -112,13 +112,14 @@ spread = 180.0
 gravity = Vector3( 0, 0, 0 )
 initial_velocity = 200.0
 initial_velocity_random = 0.75
+angular_velocity = 1.0
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 scale = 4.0
 scale_curve = SubResource( 13 )
 color_ramp = SubResource( 11 )
 
-[node name="Missile1" type="KinematicBody2D"]
+[node name="Missile" type="KinematicBody2D"]
 scale = Vector2( 2, 2 )
 collision_layer = 0
 collision_mask = 4
