@@ -139,7 +139,10 @@ func update_UI(delta : float) -> void:
 	
 	$UILayer/VBoxContainer/HullPoints.text = "Hull : " + str(round((hull_point/hull_point_max) * 100)) + "%"
 	if repairs_available:
-		$UILayer/VBoxContainer/HullPoints.text += " (R)"
+		$UILayer/VBoxContainer/HullPoints.text += " (R)" 
+	$UILayer/VBoxContainer/HullPoints.text += " Shield : " + str(round(($Shield.shield_current/$Shield.shield_max) * 100)) + "%"
+	if $Shield.regen_active:
+		$UILayer/VBoxContainer/HullPoints.text += " (R)" 
 	$UILayer/VBoxContainer/HullPoints.rect_scale = Vector2(3, 3)
 	
 	$UILayer/Score.text = str(score) + " Pts"

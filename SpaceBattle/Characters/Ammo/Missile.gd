@@ -9,6 +9,7 @@ func _ready():
 	$AnimationPlayer.play("fly")
 	
 	$CollisionShape2D.disabled = true
+	
 
 func _physics_process(delta):
 	
@@ -38,18 +39,12 @@ func _physics_process(delta):
 			yield($AnimationPlayer, "animation_finished")
 			queue_free()
 
-func _on_Lifespan_timeout():
-	state = "EXPLODE"
-
 func _on_Area2D_body_entered(body):
+	if not "ship" in body.get_groups():
+		return
 	if sender != null and body != sender:
-		if state != "EXPLODE":
-			state = "EXPLODE"
-			body.take_hull_damage(damage)
-			if  body.get("is_dead") and body.score_value > 0:
-				if sender != null and sender.get("score") != null:
-					sender.score += body.score_value
-					body.nullify_score()
+		explode_and_deal_damage(body)
+		
 	elif "planet" in body.get_groups():
 		if state != "EXPLODE":
 			state = "EXPLODE"

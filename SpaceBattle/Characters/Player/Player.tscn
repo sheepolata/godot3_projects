@@ -1,12 +1,13 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Characters/Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://Characters/Player/Camera2D.gd" type="Script" id=2]
 [ext_resource path="res://Data/Sprites/Player_boat.png" type="Texture" id=3]
-[ext_resource path="res://Characters/Turrets/Turret.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Engine/UIPlayer.tscn" type="PackedScene" id=5]
-[ext_resource path="res://Data/Sprites/stars_bg_far.png" type="Texture" id=6]
-[ext_resource path="res://Data/Sprites/stars_bg_close.png" type="Texture" id=7]
+[ext_resource path="res://Characters/Shield.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Characters/Turrets/Turret.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Engine/UIPlayer.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Data/Sprites/stars_bg_far.png" type="Texture" id=7]
+[ext_resource path="res://Data/Sprites/stars_bg_close.png" type="Texture" id=8]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 30.0
@@ -43,20 +44,22 @@ script = ExtResource( 2 )
 rotation = 1.5708
 texture = ExtResource( 3 )
 
+[node name="Shield" parent="." instance=ExtResource( 4 )]
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = 1.5708
 shape = SubResource( 1 )
 
 [node name="turrets" type="Node2D" parent="."]
 
-[node name="AntiAsteroidTurret" parent="turrets" instance=ExtResource( 4 )]
+[node name="AntiAsteroidTurret" parent="turrets" instance=ExtResource( 5 )]
 position = Vector2( 25, 0 )
 rotation_speed = 220.0
 bullet_cd = 0.1
 damage_bonus_multiplier = 0.5
 autotarget_groups = [ "asteroid" ]
 
-[node name="AntiAsteroidTurret2" parent="turrets" instance=ExtResource( 4 )]
+[node name="AntiAsteroidTurret2" parent="turrets" instance=ExtResource( 5 )]
 position = Vector2( -28, 0 )
 rotation_speed = 220.0
 bullet_cd = 0.1
@@ -111,7 +114,7 @@ position = Vector2( -72, -19 )
 [node name="WaveEffectSpawnPoint2" type="Position2D" parent="TrailEffect_node"]
 position = Vector2( -72, 19 )
 
-[node name="UILayer" parent="." instance=ExtResource( 5 )]
+[node name="UILayer" parent="." instance=ExtResource( 6 )]
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
 
@@ -123,7 +126,7 @@ __meta__ = {
 }
 
 [node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer"]
-texture = ExtResource( 6 )
+texture = ExtResource( 7 )
 centered = false
 
 [node name="ParallaxLayer2" type="ParallaxLayer" parent="ParallaxBackground"]
@@ -134,7 +137,7 @@ __meta__ = {
 }
 
 [node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer2"]
-texture = ExtResource( 7 )
+texture = ExtResource( 8 )
 centered = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

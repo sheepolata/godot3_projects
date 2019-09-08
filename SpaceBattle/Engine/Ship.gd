@@ -15,6 +15,7 @@ var repairs_available : bool = true
 export(float) var repair_factor = 0.2
 
 func _ready():
+	add_to_group("ship")
 	hull_point = hull_point_max
 
 func take_hull_damage(value : float) -> void:

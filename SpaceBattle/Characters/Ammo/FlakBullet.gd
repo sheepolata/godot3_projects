@@ -30,19 +30,11 @@ func _physics_process(delta):
 				$Particles2D.emitting = true
 				$ExplodeTimer.start()
 
-func _on_Lifespan_timeout():
-	if state != "EXPLODE":
-		state = "EXPLODE"
-
 func _on_Area2D_body_entered(body):
+	if not "ship" in body.get_groups():
+		return
 	if sender != null and body != sender:
-		if state != "EXPLODE":
-			state = "EXPLODE"
-			body.take_hull_damage(damage)
-			if body.get("is_dead") and body.score_value > 0:
-				if sender != null and sender.get("score") != null:
-					sender.score += body.score_value
-					body.nullify_score()
+		explode_and_deal_damage(body)
 
 func _on_ExplodeTimer_timeout():
 	queue_free()
