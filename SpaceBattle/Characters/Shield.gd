@@ -34,10 +34,6 @@ func _on_Area2D_area_entered(area):
 		ammo.explode()
 		#Take shield damage
 		shield_current = max(0, shield_current - ammo.damage)
-		if shield_current == 0:
-			$Area2D/CollisionShape2D.disabled = true
-		else:
-			$Area2D/CollisionShape2D.disabled = false
 		#cancel regen
 		regen_active = false
 		$RegenCooldown.start()
