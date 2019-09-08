@@ -2,7 +2,7 @@ extends "res://Characters/Ammo/Ammo.gd"
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	add_to_group("ammo")
+	._ready()
 	add_to_group("missile")
 	$Lifespan.wait_time = life_span
 	$Lifespan.start()

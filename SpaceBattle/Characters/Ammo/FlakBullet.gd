@@ -2,12 +2,14 @@ extends "res://Characters/Ammo/Ammo.gd"
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	add_to_group("ammo")
+	._ready()
 	
 	life_span += rand_range(-life_span*0.1, life_span*0.1)
 	
 	$Lifespan.wait_time = life_span
 	$Lifespan.start()
+	
+	$CollisionShape2D.disabled = true
 
 func _physics_process(delta):
 	

@@ -17,6 +17,8 @@ var sender
 
 export(float, 0, 180) var dispersion = 0
 
+func _ready():
+	add_to_group("ammo")
 
 func initial_rotation(angle):
 	rotate(angle)

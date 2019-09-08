@@ -8,7 +8,7 @@ export(int) var speed_max = 800
 var thruster_stop : bool = false
 var rotation_stop : bool = false
 
-export(int, 0, 90) var turn_speed_max = 120
+export(int) var turn_speed_max = 120
 export(float) var turn_speed = 180
 
 var score : int = 0 setget set_score
@@ -197,8 +197,6 @@ func collision_check():
 #			print("OOPS")
 
 func movement_loop(delta : float):
-	#var motion = move_direction.normalized() * speed_max
-	#move_and_slide(motion, Vector2(0, 0))
 	
 	if current_speeds.x == 0 and current_speeds.y != 0:
 		rotation_stop = false
@@ -210,11 +208,11 @@ func movement_loop(delta : float):
 		current_speeds.x = min(current_speeds.x + move_direction.x * turn_speed * delta, turn_speed_max)
 	elif move_direction.x < 0:
 		current_speeds.x = max(current_speeds.x + move_direction.x * turn_speed * delta, -turn_speed_max)
-	elif rotation_stop:
+	else:#if rotation_stop:
 		if current_speeds.x > 0:
-			current_speeds.x = max(0, current_speeds.x - turn_speed * delta * 2)
+			current_speeds.x = max(0, current_speeds.x - turn_speed * delta )
 		else:
-			current_speeds.x = min(0, current_speeds.x + turn_speed * delta * 2)
+			current_speeds.x = min(0, current_speeds.x + turn_speed * delta )
 	
 	if move_direction.y > 0:
 		current_speeds.y = min(current_speeds.y + move_direction.y * speed * (1+(current_speeds.y/speed_max)*2) * delta, speed_max)
@@ -226,13 +224,10 @@ func movement_loop(delta : float):
 		else:
 			current_speeds.y = min(0, current_speeds.y + speed * delta * 4)
 	
-#	rotation_degrees += current_speeds.x * delta
 	direction = rotation_degrees
 	rotate(deg2rad(current_speeds.x) * delta)
-	#print(current_speeds)
 	
 	collision_info = move_and_collide(Vector2(current_speeds.y * cos(rotation), current_speeds.y * sin(rotation)) * delta)
-#	ext_velocity = Vector2(current_speeds.y * cos(rotation), current_speeds.y * sin(rotation)).normalized()
 	
 func basic_control_loop():
 	if Input.is_action_just_pressed("ui_cancel"):
