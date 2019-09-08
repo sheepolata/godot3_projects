@@ -1,13 +1,15 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Characters/Player/Player.gd" type="Script" id=1]
-[ext_resource path="res://Characters/Player/Camera2D.gd" type="Script" id=2]
-[ext_resource path="res://Data/Sprites/Player_boat.png" type="Texture" id=3]
-[ext_resource path="res://Characters/Shield.tscn" type="PackedScene" id=4]
-[ext_resource path="res://Characters/Turrets/Turret.tscn" type="PackedScene" id=5]
-[ext_resource path="res://Engine/UIPlayer.tscn" type="PackedScene" id=6]
-[ext_resource path="res://Data/Sprites/stars_bg_far.png" type="Texture" id=7]
-[ext_resource path="res://Data/Sprites/stars_bg_close.png" type="Texture" id=8]
+[ext_resource path="res://Characters/Ammo/FlakBullet.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Characters/Ammo/Missile.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Characters/Player/Camera2D.gd" type="Script" id=4]
+[ext_resource path="res://Data/Sprites/Player_boat.png" type="Texture" id=5]
+[ext_resource path="res://Characters/Shield.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Characters/Turrets/Turret.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Engine/UIPlayer.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Data/Sprites/stars_bg_far.png" type="Texture" id=9]
+[ext_resource path="res://Data/Sprites/stars_bg_close.png" type="Texture" id=10]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 30.0
@@ -25,11 +27,13 @@ script = ExtResource( 1 )
 speed = 128.0
 turn_speed_max = 90
 turn_speed = 150.0
-front_damage_multiplier = 1.5
-right_missile_cd = 0.15
-right_damage_multiplier = 0.6
-left_missile_cd = 0.15
-left_damage_multiplier = 0.6
+front_missile = ExtResource( 2 )
+front_missile_cd = 0.15
+front_damage_multiplier = 1.2
+right_missile = ExtResource( 3 )
+right_damage_multiplier = 0.5
+left_missile = ExtResource( 3 )
+left_damage_multiplier = 0.5
 
 [node name="MainCamera" type="Camera2D" parent="."]
 current = true
@@ -38,13 +42,13 @@ drag_margin_left = 0.05
 drag_margin_top = 0.05
 drag_margin_right = 0.05
 drag_margin_bottom = 0.05
-script = ExtResource( 2 )
+script = ExtResource( 4 )
 
 [node name="Sprite" type="Sprite" parent="."]
 rotation = 1.5708
-texture = ExtResource( 3 )
+texture = ExtResource( 5 )
 
-[node name="Shield" parent="." instance=ExtResource( 4 )]
+[node name="Shield" parent="." instance=ExtResource( 6 )]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = 1.5708
@@ -52,14 +56,14 @@ shape = SubResource( 1 )
 
 [node name="turrets" type="Node2D" parent="."]
 
-[node name="AntiAsteroidTurret" parent="turrets" instance=ExtResource( 5 )]
+[node name="AntiAsteroidTurret" parent="turrets" instance=ExtResource( 7 )]
 position = Vector2( 25, 0 )
 rotation_speed = 220.0
 bullet_cd = 0.1
 damage_bonus_multiplier = 0.5
 autotarget_groups = [ "asteroid" ]
 
-[node name="AntiAsteroidTurret2" parent="turrets" instance=ExtResource( 5 )]
+[node name="AntiAsteroidTurret2" parent="turrets" instance=ExtResource( 7 )]
 position = Vector2( -28, 0 )
 rotation_speed = 220.0
 bullet_cd = 0.1
@@ -67,9 +71,16 @@ damage_bonus_multiplier = 0.5
 autotarget_groups = [ "asteroid" ]
 
 [node name="missiles_front" type="Node2D" parent="."]
-editor/display_folded = true
 
 [node name="RayCast2D" type="RayCast2D" parent="missiles_front"]
+position = Vector2( 62, 10 )
+cast_to = Vector2( 50, 0 )
+
+[node name="RayCast2D2" type="RayCast2D" parent="missiles_front"]
+position = Vector2( 62, -10 )
+cast_to = Vector2( 50, 0 )
+
+[node name="RayCast2D3" type="RayCast2D" parent="missiles_front"]
 position = Vector2( 62, 0 )
 cast_to = Vector2( 50, 0 )
 
@@ -114,7 +125,7 @@ position = Vector2( -72, -19 )
 [node name="WaveEffectSpawnPoint2" type="Position2D" parent="TrailEffect_node"]
 position = Vector2( -72, 19 )
 
-[node name="UILayer" parent="." instance=ExtResource( 6 )]
+[node name="UILayer" parent="." instance=ExtResource( 8 )]
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
 
@@ -126,7 +137,7 @@ __meta__ = {
 }
 
 [node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer"]
-texture = ExtResource( 7 )
+texture = ExtResource( 9 )
 centered = false
 
 [node name="ParallaxLayer2" type="ParallaxLayer" parent="ParallaxBackground"]
@@ -137,7 +148,7 @@ __meta__ = {
 }
 
 [node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer2"]
-texture = ExtResource( 8 )
+texture = ExtResource( 10 )
 centered = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

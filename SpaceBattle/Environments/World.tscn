@@ -10,7 +10,7 @@ __meta__ = {
 "_edit_lock_": true,
 "_edit_vertical_guides_": [  ]
 }
-max_nb_asteroid = 6
+max_nb_asteroid = 4
 random_target_offset_range = 128
 asteroid_spawn_radius = 4096
 
@@ -66,4 +66,8 @@ margin_right = 1720.0
 margin_bottom = 95.0
 rect_scale = Vector2( 3, 3 )
 text = "kills"
+
+[node name="DifficultyUpper" type="Timer" parent="."]
+wait_time = 60.0
 [connection signal="timeout" from="Asteroids/Spawner" to="." method="spaw_asteroid"]
+[connection signal="timeout" from="DifficultyUpper" to="." method="_on_DifficultyUpper_timeout"]

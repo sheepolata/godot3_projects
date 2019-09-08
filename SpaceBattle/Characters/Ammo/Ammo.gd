@@ -2,8 +2,8 @@ extends KinematicBody2D
 
 export(float) var speed : float = 1500
 var current_speed : float = 0
-export(float) var life_span : float = 1
-export(float) var damage = 4
+export(float) var life_span : float = 0
+export(float) var damage = 0
 
 var collision_info : KinematicCollision2D = null
 
@@ -29,7 +29,7 @@ func explode_and_deal_damage(body):
 		state = "EXPLODE"
 		body.take_hull_damage(damage)
 		if body.get("is_dead") and body.score_value > 0:
-			if sender != null and sender.get("score") != null:
+			if sender != null and not sender.is_queued_for_deletion() and sender.get("score") != null:
 				sender.score += body.score_value
 				body.nullify_score()
 

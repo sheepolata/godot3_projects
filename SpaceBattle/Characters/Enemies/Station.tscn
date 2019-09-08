@@ -9,6 +9,7 @@
 collision_layer = 6
 collision_mask = 6
 script = ExtResource( 1 )
+speed = 75.0
 
 [node name="Sprite" type="Sprite" parent="."]
 scale = Vector2( 2, 2 )
@@ -26,7 +27,7 @@ position = Vector2( -192.087, 1.08072 )
 turret_range = 0.0
 rotation_speed = 360.0
 bullet = ExtResource( 4 )
-damage_bonus_multiplier = 0.35
+damage_bonus_multiplier = 0.15
 autotarget = true
 autotarget_groups = [ "player", "asteroid" ]
 
@@ -35,7 +36,7 @@ position = Vector2( 1.08067, -190.671 )
 turret_range = 0.0
 rotation_speed = 360.0
 bullet = ExtResource( 4 )
-damage_bonus_multiplier = 0.35
+damage_bonus_multiplier = 0.15
 autotarget = true
 autotarget_groups = [ "player", "asteroid" ]
 
@@ -44,7 +45,7 @@ position = Vector2( 193.285, -1.12434 )
 turret_range = 0.0
 rotation_speed = 360.0
 bullet = ExtResource( 4 )
-damage_bonus_multiplier = 0.35
+damage_bonus_multiplier = 0.15
 autotarget = true
 autotarget_groups = [ "player", "asteroid" ]
 
@@ -53,6 +54,6 @@ position = Vector2( -1.7083, 190.335 )
 turret_range = 0.0
 rotation_speed = 360.0
 bullet = ExtResource( 4 )
-damage_bonus_multiplier = 0.35
+damage_bonus_multiplier = 0.15
 autotarget = true
 autotarget_groups = [ "player", "asteroid" ]

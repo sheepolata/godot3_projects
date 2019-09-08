@@ -20,7 +20,8 @@ func _process(delta):
 	modulate.a = shield_norm
 
 func _on_Area2D_body_entered(body):
-	print("test")
+#	print("test")
+	pass
 
 
 func _on_Area2D_area_entered(area):
@@ -29,7 +30,8 @@ func _on_Area2D_area_entered(area):
 		
 	if (area.get_parent() != null 
 			and "ammo" in area.get_parent().get_groups() 
-			and not "missile" in area.get_parent().get_groups()):
+			and not "missile" in area.get_parent().get_groups()
+			and get_parent() != area.get_parent().sender):
 		var ammo = area.get_parent()
 		ammo.explode()
 		#Take shield damage

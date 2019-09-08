@@ -21,6 +21,15 @@ func _physics_process(delta):
 		
 	match state:
 		"DEFAULT":
+			var player = get_tree().get_nodes_in_group("player")[0]
+			
+			var dir_to_player = (player.global_position.angle_to_point(global_position))
+			
+			move_and_collide(Vector2(
+							speed * cos(dir_to_player) * delta,
+							speed * sin(dir_to_player) * delta
+					))
+			
 			rotate(deg2rad(rotation_speed) * delta)
 			hull_point = min(hull_point + repair_factor*delta, hull_point_max)
 		"EXPLODE":
