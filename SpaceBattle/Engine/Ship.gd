@@ -29,9 +29,8 @@ func take_damage(value : float) -> void:
 	if hull_point <= 0:
 		is_dead = true
 		
-	if has_node("Camera2D"):
-		get_node("MainCamera").shake_value = value
-		get_node("MainCamera").shake_decrease = value*0.05
+	if has_node("MainCamera"):
+		get_node("MainCamera").apply_shake(value)
 
 func nullify_score():
 	score_value = 0

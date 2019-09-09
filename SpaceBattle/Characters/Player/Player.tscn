@@ -38,11 +38,14 @@ left_damage_multiplier = 0.5
 [node name="MainCamera" type="Camera2D" parent="."]
 current = true
 zoom = Vector2( 0.25, 0.25 )
+drag_margin_h_enabled = false
+drag_margin_v_enabled = false
 drag_margin_left = 0.05
 drag_margin_top = 0.05
 drag_margin_right = 0.05
 drag_margin_bottom = 0.05
 script = ExtResource( 4 )
+max_shake = 25.0
 
 [node name="Sprite" type="Sprite" parent="."]
 rotation = 1.5708
