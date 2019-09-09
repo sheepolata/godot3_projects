@@ -4,8 +4,8 @@
 [ext_resource path="res://Data/Sprites/laser_shot.png" type="Texture" id=2]
 
 [sub_resource type="CapsuleShape2D" id=1]
-radius = 9.31052
-height = 13.4086
+radius = 7.43541
+height = 12.1154
 
 [sub_resource type="Animation" id=2]
 length = 0.2
@@ -39,7 +39,7 @@ tracks/0/keys = {
 "values": [ 0, 1, 2, 3, 2 ]
 }
 
-[sub_resource type="CapsuleShape2D" id=7]
+[sub_resource type="CapsuleShape2D" id=4]
 radius = 3.10323
 height = 10.5636
 
@@ -50,7 +50,7 @@ collision_mask = 8
 script = ExtResource( 1 )
 speed = 2500.0
 life_span = 0.5
-damage = 6.0
+damage = 4.0
 
 [node name="Sprite" type="Sprite" parent="."]
 rotation = 1.5708
@@ -74,7 +74,7 @@ anims/fly = SubResource( 3 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = 1.5708
-shape = SubResource( 7 )
+shape = SubResource( 4 )
 [connection signal="area_entered" from="Area2D" to="." method="_on_Area2D_area_entered"]
 [connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
 [connection signal="timeout" from="Lifespan" to="." method="_on_Lifespan_timeout"]

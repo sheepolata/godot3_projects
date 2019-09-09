@@ -344,9 +344,6 @@ func fire_control_loop():
 					missile.initial_rotation(rot)
 					missile.sender = self
 					missile.damage *= front_damage_multiplier
-#					missile.add_collision_exception_with(self)
-#					missile.add_collision_exception_with($Shield)
-#					missile.get_node("Area2D").add_collision_exception_with(self)
 	
 				$missiles_front/Cooldown_front.start()
 		

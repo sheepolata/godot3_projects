@@ -12,6 +12,8 @@ export(Vector2) var laser_random_offset_limits : Vector2 = Vector2(0, 0)
 
 export(float) var damage_bonus_multiplier : float = 1.0
 
+export(float) var turret_dispersion : float = 0
+
 export var autotarget : bool = false
 export var autotarget_groups : Array = []
 var possible_autotargets : Array = []
@@ -136,6 +138,7 @@ func fire():
 		if get_parent().get_parent().get("current_speeds"):
 			ammo.speed += get_parent().get_parent().current_speeds.y
 		ammo.target_groups = autotarget_groups
+		ammo.dispersion += turret_dispersion
 		ammo.initial_rotation(rot)
 		ammo.sender = get_parent().get_parent()
 		ammo.damage *= damage_bonus_multiplier

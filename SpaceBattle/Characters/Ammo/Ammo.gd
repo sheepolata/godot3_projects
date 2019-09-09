@@ -15,13 +15,11 @@ export(float) var accel = 0
 
 var sender setget set_sender
 
-export(float, 0, 180) var dispersion = 0
+export(float, 0, 180) var dispersion = 0 setget set_dispersion
 
 func _ready():
 	add_to_group("ammo")
 	
-	
-
 func explode():
 	if state != "EXPLODE":
 		state = "EXPLODE"
@@ -44,6 +42,9 @@ func set_sender(new_sender):
 		if sender.has_node("Shield"):
 			add_collision_exception_with(sender.get_node("Shield"))
 
+func set_dispersion(value):
+	dispersion = clamp(value, 0, 180)
+	
 func initial_rotation(angle):
 	rotate(angle)
 	rotate(deg2rad(rand_range(-dispersion, dispersion)))
