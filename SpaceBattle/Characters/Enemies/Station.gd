@@ -35,8 +35,8 @@ func _physics_process(delta):
 		"EXPLODE":
 			queue_free()
 	
-func take_hull_damage(value):
-	.take_hull_damage(value)
+func take_damage(value):
+	.take_damage(value)
 #	print("%10.2f / %f" % [hull_point, hull_point_max])
 	
 func _draw():

@@ -140,7 +140,9 @@ fullscreen={
 
 2d_physics/layer_1="planets"
 2d_physics/layer_2="ships"
-2d_physics/layer_3="weapons"
+2d_physics/layer_3="energy_weapons"
+2d_physics/layer_4="shield"
+2d_physics/layer_5="projectiles"
 
 [rendering]
 

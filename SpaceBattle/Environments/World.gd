@@ -43,7 +43,7 @@ func _process(delta):
 			up_difficulty()
 	else:
 		$UIWorldLayer/StationDirection.rect_rotation = rad2deg(player.position.angle_to_point($Stations.get_children()[0].position)) - 90
-	
+
 	for asteroid in asteroid_node.get_children():
 		if "asteroid" in asteroid.get_groups():
 			if player.position.distance_to(asteroid.position) > asteroid_spawn_radius*2:

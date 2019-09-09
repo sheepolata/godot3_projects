@@ -19,6 +19,8 @@ export(float, 0, 180) var dispersion = 0
 
 func _ready():
 	add_to_group("ammo")
+	
+	
 
 func explode():
 	if state != "EXPLODE":
@@ -27,11 +29,13 @@ func explode():
 func explode_and_deal_damage(body):
 	if state != "EXPLODE":
 		state = "EXPLODE"
-		body.take_hull_damage(damage)
+		body.take_damage(damage)
 		if body.get("is_dead") and body.score_value > 0:
-			if sender != null and not sender.is_queued_for_deletion() and sender.get("score") != null:
-				sender.score += body.score_value
-				body.nullify_score()
+			if sender != null :
+				if not sender.is_queued_for_deletion():
+					if sender.get("score") != null:
+						sender.score += body.score_value
+						body.nullify_score()
 
 func initial_rotation(angle):
 	rotate(angle)

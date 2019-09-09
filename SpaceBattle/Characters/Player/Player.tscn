@@ -21,8 +21,8 @@ length = 2.0
 loop = true
 
 [node name="Player" type="KinematicBody2D"]
-collision_layer = 6
-collision_mask = 6
+collision_layer = 2
+collision_mask = 2
 script = ExtResource( 1 )
 speed = 128.0
 turn_speed_max = 90
@@ -58,14 +58,16 @@ shape = SubResource( 1 )
 
 [node name="AntiAsteroidTurret" parent="turrets" instance=ExtResource( 7 )]
 position = Vector2( 25, 0 )
-rotation_speed = 220.0
+turret_range = 800.0
+rotation_speed = 360.0
 bullet_cd = 0.1
 damage_bonus_multiplier = 0.5
 autotarget_groups = [ "asteroid" ]
 
 [node name="AntiAsteroidTurret2" parent="turrets" instance=ExtResource( 7 )]
 position = Vector2( -28, 0 )
-rotation_speed = 220.0
+turret_range = 800.0
+rotation_speed = 360.0
 bullet_cd = 0.1
 damage_bonus_multiplier = 0.5
 autotarget_groups = [ "asteroid" ]

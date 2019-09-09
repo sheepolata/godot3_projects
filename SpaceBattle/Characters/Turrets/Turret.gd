@@ -68,7 +68,9 @@ func _process(delta):
 			target_position = _t.global_position
 			
 			if bullet != null:
-				var bullet_speed : float = bullet.instance().speed
+				var _ammo_info = bullet.instance()
+				var bullet_speed : float = _ammo_info.speed
+				_ammo_info.free()
 				var target_speed : float = 0
 				if _t.get("current_speeds") != null:
 					target_speed = _t.current_speeds.y
@@ -84,6 +86,7 @@ func _process(delta):
 														target_speed*time_to_target*sin(deg2rad(target_direction))
 													)
 				
+				
 				target_position = new_target
 				draw_actual_target = target_position
 			
@@ -97,8 +100,8 @@ func _process(delta):
 	
 			
 	if $RayCast2D.is_colliding():
-		if $RayCast2D.get_collider() and $RayCast2D.get_collider().has_method("take_hull_damage"):
-			$RayCast2D.get_collider().take_hull_damage(laser_damage * delta)
+		if $RayCast2D.get_collider() and $RayCast2D.get_collider().has_method("take_damage"):
+			$RayCast2D.get_collider().take_damage(laser_damage * delta)
 			if $RayCast2D.get_collider().is_dead:
 				if get_parent().get_parent().get("score") != null:
 					get_parent().get_parent().score += $RayCast2D.get_collider().score_value
@@ -136,6 +139,8 @@ func fire():
 		ammo.initial_rotation(rot)
 		ammo.sender = get_parent().get_parent()
 		ammo.damage *= damage_bonus_multiplier
+		
+		ammo.add_collision_exception_with(get_parent().get_parent())
 		
 		$BulletCooldown.start()
 		

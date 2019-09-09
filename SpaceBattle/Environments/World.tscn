@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Environments/World.gd" type="Script" id=1]
-[ext_resource path="res://Characters/Player/Player.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Data/Sprites/arrow_white.png" type="Texture" id=3]
+[ext_resource path="res://Characters/Enemies/Station.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Characters/Player/Player.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Data/Sprites/arrow_white.png" type="Texture" id=4]
 
 [node name="World" type="Node2D"]
 script = ExtResource( 1 )
@@ -10,7 +11,6 @@ __meta__ = {
 "_edit_lock_": true,
 "_edit_vertical_guides_": [  ]
 }
-max_nb_asteroid = 4
 random_target_offset_range = 128
 asteroid_spawn_radius = 4096
 
@@ -23,7 +23,19 @@ wait_time = 5.0
 
 [node name="Stations" type="Node" parent="."]
 
-[node name="Player" parent="." instance=ExtResource( 2 )]
+[node name="Station" parent="Stations" instance=ExtResource( 2 )]
+position = Vector2( 4326, 971 )
+
+[node name="Station2" parent="Stations" instance=ExtResource( 2 )]
+position = Vector2( 3707, 2720 )
+
+[node name="Station3" parent="Stations" instance=ExtResource( 2 )]
+position = Vector2( 2156, 2756 )
+
+[node name="Station4" parent="Stations" instance=ExtResource( 2 )]
+position = Vector2( 2893, 569 )
+
+[node name="Player" parent="." instance=ExtResource( 3 )]
 position = Vector2( 747, 378 )
 
 [node name="UIWorldLayer" type="CanvasLayer" parent="."]
@@ -46,7 +58,7 @@ anchor_bottom = 1.0
 margin_left = -256.0
 margin_top = -256.0
 rect_pivot_offset = Vector2( 128, 128 )
-texture = ExtResource( 3 )
+texture = ExtResource( 4 )
 
 [node name="StaDir" type="Label" parent="UIWorldLayer"]
 margin_left = 1638.0

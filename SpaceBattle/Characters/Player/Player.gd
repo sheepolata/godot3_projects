@@ -211,7 +211,7 @@ func movement_loop(delta : float):
 		current_speeds.x = min(current_speeds.x + move_direction.x * turn_speed * delta, turn_speed_max)
 	elif move_direction.x < 0:
 		current_speeds.x = max(current_speeds.x + move_direction.x * turn_speed * delta, -turn_speed_max)
-	else:#if rotation_stop:
+	elif rotation_stop:
 		if current_speeds.x > 0:
 			current_speeds.x = max(0, current_speeds.x - turn_speed * delta )
 		else:
@@ -344,6 +344,9 @@ func fire_control_loop():
 					missile.initial_rotation(rot)
 					missile.sender = self
 					missile.damage *= front_damage_multiplier
+#					missile.add_collision_exception_with(self)
+#					missile.add_collision_exception_with($Shield)
+#					missile.get_node("Area2D").add_collision_exception_with(self)
 	
 				$missiles_front/Cooldown_front.start()
 		
@@ -422,12 +425,10 @@ func dead_state(delta : float):
 	for t in turrets:
 		t.autotarget = false
 
-func take_hull_damage(value : float):
-	.take_hull_damage(value)
+func take_damage(value : float):
+	.take_damage(value)
 	repairs_available = false
 	$RepairTimer.start()
-	get_node("MainCamera").shake_value = value*10
-	get_node("MainCamera").shake_decrease = value*0.05
 
 func _draw():
 #	for t in $turrets.get_children():

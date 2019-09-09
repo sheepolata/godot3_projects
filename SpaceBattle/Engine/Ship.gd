@@ -18,11 +18,20 @@ func _ready():
 	add_to_group("ship")
 	hull_point = hull_point_max
 
-func take_hull_damage(value : float) -> void:
+func take_damage(value : float) -> void:
 #	print("take " + str(value) + " dmg")
+#	if has_node("Shield"):
+#		if get_node("Shield").active():
+#			get_node("Shield").take_damage(value)
+#			return
+			
 	hull_point = max(0, hull_point - value)
 	if hull_point <= 0:
 		is_dead = true
+		
+	if has_node("Camera2D"):
+		get_node("MainCamera").shake_value = value
+		get_node("MainCamera").shake_decrease = value*0.05
 
 func nullify_score():
 	score_value = 0
