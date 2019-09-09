@@ -10,6 +10,8 @@ func _ready():
 	$Lifespan.start()
 	
 	$CollisionShape2D.disabled = false
+	
+#	add_collision_exception_with(sender)
 
 func _physics_process(delta):
 	

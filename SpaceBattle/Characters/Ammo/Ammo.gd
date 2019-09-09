@@ -13,7 +13,7 @@ var target_groups : Array = []
 #How many second does if take to reach max speed
 export(float) var accel = 0
 
-var sender
+var sender setget set_sender
 
 export(float, 0, 180) var dispersion = 0
 
@@ -36,6 +36,13 @@ func explode_and_deal_damage(body):
 					if sender.get("score") != null:
 						sender.score += body.score_value
 						body.nullify_score()
+
+func set_sender(new_sender):
+	sender = new_sender
+	if sender != null:
+		add_collision_exception_with(sender)
+		if sender.has_node("Shield"):
+			add_collision_exception_with(sender.get_node("Shield"))
 
 func initial_rotation(angle):
 	rotate(angle)
