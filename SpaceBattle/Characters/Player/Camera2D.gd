@@ -6,21 +6,20 @@ var shake_decrease = 0
 export(float) var max_shake : float = 18.5
 export(float) var damage_limit_up : float = 25
 
-export(float) var aim_offset_factor : float = 0.15
+export(float) var aim_offset_factor : float = 0.2
+export(float) var slide_speed : float = 500
 
 onready var max_aim_offset_x : float = get_viewport_rect().size.x * aim_offset_factor
 onready var max_aim_offset_y : float = get_viewport_rect().size.y * aim_offset_factor
 
 func _process(delta):
+	var goal_offset : Vector2 = Vector2.ZERO
 	
 	if Input.is_action_pressed("aim_missiles"):
 		var aim_offset : Vector2 = get_aim_offset_from_mouse()
-		offset = aim_offset
-		
-		#TODO Move cam offset toward aim_offset
-	else:
-		#TODO Move cam offset toward (0,0)
-		pass
+		goal_offset = aim_offset
+	
+	offset = Utils.move_vector_toward(offset, goal_offset, slide_speed*delta)
 	
 	if shake_value > 0:
 		shake_value = clamp(shake_value, 0, max_shake)

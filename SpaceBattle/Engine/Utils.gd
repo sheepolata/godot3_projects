@@ -36,8 +36,11 @@ func is_between(a, x, y):
 func near(a, b, offset) -> bool:
 	return is_between(a, b-offset, b+offset)
 	
+func move_vector_toward(from : Vector2, to : Vector2, step : float):
+	var _x = slide(from.x, to.x, step)
+	var _y = slide(from.y, to.y, step)
 	
-
+	return Vector2(_x, _y)
 
 
 
