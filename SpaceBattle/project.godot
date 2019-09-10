@@ -15,9 +15,9 @@ _global_script_class_icons={
 
 [application]
 
-config/name="SpaceBattle"
+config/name="Yet Another Space Shooter"
 run/main_scene="res://Engine/HelpScreen.tscn"
-config/icon="res://i2con.png"
+config/icon="res://my_icon.png"
 
 [autoload]
 
@@ -35,6 +35,7 @@ gdscript/warnings/return_value_discarded=false
 window/size/width=1920
 window/size/height=1080
 window/size/resizable=false
+window/size/fullscreen=true
 window/size/test_width=960
 window/size/test_height=540
 window/stretch/mode="2d"

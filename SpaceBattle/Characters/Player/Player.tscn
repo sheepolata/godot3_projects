@@ -78,6 +78,7 @@ bullet_cd = 0.1
 damage_bonus_multiplier = 0.5
 
 [node name="missiles_front" type="Node2D" parent="."]
+editor/display_folded = true
 
 [node name="RayCast2D" type="RayCast2D" parent="missiles_front"]
 position = Vector2( 62, 10 )
