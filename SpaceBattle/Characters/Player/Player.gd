@@ -19,7 +19,7 @@ var state = "DEFAULT"
 
 onready var cam = $MainCamera
 var max_zoom_in = 1.6; var max_zoom_out = 3.2;
-#var max_zoom_in = 5; var max_zoom_out = 8;
+#var max_zoom_in = 1.6; var max_zoom_out = 8;
 
 onready var trail_effect = $TrailEffect_node/TrailEffect
 
