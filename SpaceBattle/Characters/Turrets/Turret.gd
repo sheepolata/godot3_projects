@@ -1,24 +1,29 @@
 extends Sprite
 
+export var __G_E_N_E_R_I_C__ = "----------";
+export(float) var rotation_speed : float = 180
+export var autotarget : bool = false
+export var autotarget_groups : Array = []
+
+export var __L_A_S_E_R__ = "----------";
 export(float) var laser_cooldown : float = 0
 export(float) var turret_range : float = 600
 export(float) var laser_duration : float = 0
 export(float) var laser_damage : float = 10
-export(float) var rotation_speed : float = 180
-export(PackedScene) var bullet : PackedScene = null
-export(float) var bullet_cd : float = 0.2
-
+export(float) var laser_speed : float = 0
 export(Vector2) var laser_random_offset_limits : Vector2 = Vector2(0, 0)
 
+export var __B_U_L_L_E_T__ = "----------";
+export(PackedScene) var bullet : PackedScene = null
+export(float) var bullet_cd : float = 0.2
 export(float) var damage_bonus_multiplier : float = 1.0
-
 export(float) var turret_dispersion : float = 0
 
-export var autotarget : bool = false
-export var autotarget_groups : Array = []
 var possible_autotargets : Array = []
 var target_position : Vector2 = Vector2.ZERO
 var autotarget_speed_factor : float = 1.0
+
+var laser_cast_to_goal : Vector2 = Vector2.ZERO
 
 func _ready():
 	add_to_group("turret")
@@ -34,10 +39,16 @@ func _ready():
 	$RayCast2D.position = $FirePoint.position
 	
 	if bullet == null:
-		if turret_range > 0:
-			$RayCast2D.cast_to = Vector2(0, -turret_range)
+		if laser_speed > 0:
+			if turret_range > 0:
+				laser_cast_to_goal = Vector2(0, -turret_range)
+			else:
+				laser_cast_to_goal = get_local_mouse_position()
 		else:
-			$RayCast2D.cast_to = get_local_mouse_position()
+			if turret_range > 0:
+				$RayCast2D.cast_to = Vector2(0, -turret_range)
+			else:
+				$RayCast2D.cast_to = get_local_mouse_position()
 	else:
 		var _b = bullet.instance()
 		turret_range = _b.speed * _b.life_span
@@ -96,7 +107,9 @@ func _process(delta):
 			rotate(deg2rad(rot_delta))
 			
 			if autotarget and Utils.near(rad2deg(get_angle_to(target_position)), -90, 2):
-				fire()
+				fire(delta)
+			else:
+				$RayCast2D.cast_to = Vector2.ZERO
 		else:
 			draw_actual_target = Vector2.ZERO
 	
@@ -104,19 +117,18 @@ func _process(delta):
 	if $RayCast2D.is_colliding():
 		if $RayCast2D.get_collider() and $RayCast2D.get_collider().has_method("take_damage"):
 			$RayCast2D.get_collider().take_damage(laser_damage * delta)
-			if $RayCast2D.get_collider().is_dead:
-				if get_parent().get_parent().get("score") != null:
-					get_parent().get_parent().score += $RayCast2D.get_collider().score_value
-					$RayCast2D.get_collider().nullify_score()
+			if $RayCast2D.get_collider().get("is_dead") != null:
+				if $RayCast2D.get_collider().is_dead:
+					if get_parent().get_parent().get("score") != null:
+						get_parent().get_parent().score += $RayCast2D.get_collider().score_value
+						$RayCast2D.get_collider().nullify_score()
 	
 func _draw():
 	
 #	draw_circle(Vector2.ZERO, $AutotargetRange/CollisionShape2D.shape.radius, Color(0, 1, 0, 0.25))
 #	if draw_actual_target != Vector2.ZERO:
 #		draw_circle(to_local(draw_actual_target), 5, Color.red)
-
 	if $RayCast2D.enabled:
-#		draw_line($RayCast2D.position, $RayCast2D.cast_to, Color.red, 3)
 		if $RayCast2D.is_colliding() and $RayCast2D.get_collider():
 #			print("HIT SMTH")
 			draw_line($RayCast2D.position, to_local($RayCast2D.get_collision_point()), Color.red, 3)
@@ -124,8 +136,9 @@ func _draw():
 		else:
 #			print("HIT NOTHING")
 			draw_line($RayCast2D.position, $RayCast2D.cast_to, Color.red, 3)
+			pass
 
-func fire():
+func fire(delta : float):
 	if bullet != null and $BulletCooldown.is_stopped():
 #		var rot = get_global_mouse_position().angle_to_point(global_position) 
 		var rot = global_rotation - deg2rad(90)
@@ -152,12 +165,22 @@ func fire():
 		$RayCast2D.enabled = true
 		var rnd_offset = Vector2(rand_range(-laser_random_offset_limits.x/2, laser_random_offset_limits.x/2),
 								rand_range(-laser_random_offset_limits.y/2, laser_random_offset_limits.y/2))
-		if turret_range > 0:
-			$RayCast2D.cast_to = Vector2(0, -turret_range)
-		else:
-			$RayCast2D.cast_to = get_local_mouse_position()
-		$RayCast2D.cast_to += rnd_offset
 		
+		if laser_speed > 0:
+			if turret_range > 0:
+				laser_cast_to_goal = Vector2(0, -turret_range)
+			else:
+				laser_cast_to_goal = get_local_mouse_position()
+			laser_cast_to_goal += rnd_offset
+			
+			$RayCast2D.cast_to = Utils.move_vector_toward($RayCast2D.cast_to, laser_cast_to_goal, laser_speed*delta)
+		else:
+			if turret_range > 0:
+				$RayCast2D.cast_to = Vector2(0, -turret_range)
+			else:
+				$RayCast2D.cast_to = get_local_mouse_position()
+			$RayCast2D.cast_to += rnd_offset
+			
 		if laser_duration > 0:
 			$LaserDuration.start()
 		else:

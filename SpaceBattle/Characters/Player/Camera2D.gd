@@ -3,7 +3,7 @@ extends Camera2D
 var shake_value = 0
 var shake_decrease = 0
 
-export(float) var max_shake : float = 18.5
+export(float) var max_shake : float = 25
 export(float) var damage_limit_up : float = 25
 
 export(float) var aim_offset_factor : float = 0.2

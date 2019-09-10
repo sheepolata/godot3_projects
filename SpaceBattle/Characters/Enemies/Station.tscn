@@ -24,54 +24,55 @@ polygon = PoolVector2Array( 0.419403, -127.593, -126.795, -0.165421, -1.09573, 1
 
 [node name="Turret" parent="turrets" instance=ExtResource( 3 )]
 position = Vector2( -192.087, 1.08072 )
-turret_range = 0.0
 rotation_speed = 220.0
+autotarget = true
+autotarget_groups = [ "player" ]
+turret_range = 0.0
 bullet = ExtResource( 4 )
 bullet_cd = 1.35
 damage_bonus_multiplier = 0.8
 turret_dispersion = 10.0
-autotarget = true
-autotarget_groups = [ "player" ]
 
 [node name="Turret2" parent="turrets" instance=ExtResource( 3 )]
 position = Vector2( 1.08067, -190.671 )
-turret_range = 0.0
 rotation_speed = 220.0
+autotarget = true
+autotarget_groups = [ "player" ]
+turret_range = 0.0
 bullet = ExtResource( 4 )
 bullet_cd = 1.35
 damage_bonus_multiplier = 0.8
 turret_dispersion = 10.0
-autotarget = true
-autotarget_groups = [ "player" ]
 
 [node name="Turret3" parent="turrets" instance=ExtResource( 3 )]
 position = Vector2( 193.285, -1.12434 )
-turret_range = 0.0
 rotation_speed = 220.0
+autotarget = true
+autotarget_groups = [ "player" ]
+turret_range = 0.0
 bullet = ExtResource( 4 )
 bullet_cd = 1.35
 damage_bonus_multiplier = 0.8
 turret_dispersion = 10.0
-autotarget = true
-autotarget_groups = [ "player" ]
 
 [node name="Turret4" parent="turrets" instance=ExtResource( 3 )]
 position = Vector2( -1.7083, 190.335 )
-turret_range = 0.0
 rotation_speed = 220.0
+autotarget = true
+autotarget_groups = [ "player" ]
+turret_range = 0.0
 bullet = ExtResource( 4 )
 bullet_cd = 1.35
 damage_bonus_multiplier = 0.8
 turret_dispersion = 10.0
-autotarget = true
-autotarget_groups = [ "player" ]
 
 [node name="AntiAsteroid" parent="turrets" instance=ExtResource( 3 )]
 scale = Vector2( 2, 2 )
-turret_range = 800.0
-laser_damage = 15.0
 rotation_speed = 360.0
-bullet_cd = 1.0
-damage_bonus_multiplier = 0.35
 autotarget = true
 autotarget_groups = [ "asteroid" ]
+turret_range = 800.0
+laser_damage = 15.0
+laser_speed = 2500.0
+bullet_cd = 1.0
+damage_bonus_multiplier = 0.35

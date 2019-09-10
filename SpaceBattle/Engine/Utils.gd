@@ -8,9 +8,13 @@ func normalise(x, a, b, minx, maxx):
 	
 #From a to b, step n
 func slide(a,b, n):
-    if abs(a-b) < n:  return b
-    if a > b:  return a-n
-    if b > a:  return a+n
+	if abs(a-b) < n:  
+		return b
+	if a > b:  
+		return a-n
+	if b > a:  
+		return a+n
+	return -1
 	
 # returns the difference (in degrees) between angle1 and angle 2
 # the given angles must be in the range [0, 360)
